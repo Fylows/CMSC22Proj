@@ -18,6 +18,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,18 +35,21 @@ public class Main extends Application {
 	@Override
     public void start(Stage stage) {
 		// The root we add to scene, we add everything here
-		Group b = new Group();
 		
 		// by default canvas is 0x0
 		Canvas canvas = new Canvas(1920,1080);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		// getClass() gets our class, then gets the Resource named "cat", then we make it an External form
 		Image im1 = new Image(getClass().getResource("cat.jpg").toExternalForm());
-		
+		Button act = new Button("Tite");
+		act.setOnAction(e -> {
+			Alert a = new Alert(AlertType.ERROR);
+			a.showAndWait();
+		});
 		
 		gc.drawImage(im1, 0, 0);
-		b.getChildren().add(canvas);
-		
+
+		VBox b = new VBox(10, act, canvas);
 		// adding root to scene after 
 		Scene sc = new Scene(b, 400, 400);
 		stage.setScene(sc);
