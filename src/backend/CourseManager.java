@@ -16,18 +16,16 @@ public class CourseManager {
 	 * an Enum to get the different degrees
 	 */
 	private enum Degree {
-		BSCS,
-		MSCS,
-		PHCS,
-		MSIT
+		BSCS, MSCS,	PHD, MSIT
 	}
+	
 	/**
 	 * courseDegreeMap
 	 * 
 	 * An Immutable map that consists of all courses from ICT, mapped to their respective degrees
 	 */
 	private static Map<String, Degree> courseDegreeMap = Map.ofEntries(
-			// Bachelors
+			// Bachelor of Science in Computer Science (BSCS)
 			Map.entry("CMSC 2", Degree.BSCS),
 			Map.entry("CMSC 11", Degree.BSCS),
 			Map.entry("CMSC 12", Degree.BSCS),
@@ -62,7 +60,7 @@ public class CourseManager {
 			Map.entry("CMSC 199", Degree.BSCS),
 			Map.entry("CMSC 200", Degree.BSCS),
 			
-			// Masters
+			// Master of Science in Computer Science (MSCS)
 			Map.entry("CMSC 214", Degree.MSCS),
 			Map.entry("CMSC 215", Degree.MSCS),
 			Map.entry("CMSC 227", Degree.MSCS),
@@ -78,45 +76,48 @@ public class CourseManager {
 			Map.entry("CMSC 291", Degree.MSCS),
 			Map.entry("CMSC 299", Degree.MSCS),
 			Map.entry("CMSC 300", Degree.MSCS),
-			
-			// Doctorate
-			Map.entry("CMSC 214", Degree.PHCS),
-			Map.entry("CMSC 215", Degree.PHCS),
-			Map.entry("CMSC 227", Degree.PHCS),
-			Map.entry("CMSC 241", Degree.PHCS),
-			Map.entry("CMSC 244", Degree.PHCS),
-			Map.entry("CMSC 245", Degree.PHCS),
-			Map.entry("CMSC 250", Degree.PHCS),
-			Map.entry("CMSC 265", Degree.PHCS),
-			Map.entry("CMSC 271", Degree.PHCS),
-			Map.entry("CMSC 272", Degree.PHCS),
-			Map.entry("CMSC 280", Degree.PHCS),
-			Map.entry("CMSC 290", Degree.PHCS),
-			Map.entry("CMSC 291", Degree.PHCS),
-			Map.entry("CMSC 299", Degree.PHCS),
-			Map.entry("CMSC 300", Degree.PHCS),
-			
-			// Masters IT
+		
+			// Master of Information Technology (MIT)
 			Map.entry("IT 210", Degree.MSIT),
 			Map.entry("IT 226", Degree.MSIT),
 			Map.entry("IT 227", Degree.MSIT),
 			Map.entry("IT 238", Degree.MSIT),
 			Map.entry("IT 280", Degree.MSIT),
 			Map.entry("IT 295", Degree.MSIT),
-			Map.entry("IT 299", Degree.MSIT)
+			Map.entry("IT 299", Degree.MSIT),
+			
+			// PhD Computer Science (PhD)
+			Map.entry("CMSC 341", Degree.PHD),
+			Map.entry("CMSC 342", Degree.PHD),
+			Map.entry("CMSC 391", Degree.PHD),
+			Map.entry("CMSC 399", Degree.PHD),
+			Map.entry("CMSC 400", Degree.PHD)
+						
 	);
 	
-	
-	/**
-	 *  Maps of the different degrees with their respective courses
-	 */
-	private static Map<String, Course> BSCS  = new HashMap<>();
-	private static Map<String, Course> MSCS  = new HashMap<>();
-	private static Map<String, Course> PHCS  = new HashMap<>();
-	private static Map<String, Course> MSIT  = new HashMap<>();
+	// Maps of the different degrees with their respective courses
+	private static Map<String, Course> BSCS = new HashMap<>();
+	private static Map<String, Course> MSCS = new HashMap<>();
+	private static Map<String, Course> PHD = new HashMap<>();
+	private static Map<String, Course> MSIT = new HashMap<>();
 	// TODO add a observable list when doing UI
 	
-	
+	// Temporary Initializer (placeholder until file handling is okay)
+	static {
+		for (String courseCode : courseDegreeMap.keySet()) { // Loops through every course code defined in the course-degree map
+			Degree degree = courseDegreeMap.get(courseCode); // Get the degree associated with this course (BSCS, MSCS, PHD, MSIT)
+
+			// Temporary only placeholder data — replace with CSV loading later
+			Course c = new Course(courseCode, "TBA Title", 3);
+
+			switch (degree) { // Add the course to the appropriate Map based on its degree
+				case BSCS -> BSCS.put(courseCode, c); // Use -> for a cleaner switch case look
+				case MSCS -> MSCS.put(courseCode, c);
+				case PHD -> PHD.put(courseCode, c);
+				case MSIT -> MSIT.put(courseCode, c);
+			}
+		}
+	}
 	
 	/**
 	 * getCourse
@@ -127,21 +128,18 @@ public class CourseManager {
 	 * @param	the degree of the course
 	 * @return	returns the course of the given course code
 	 */
+	
+	// Getters
 	public static Course getCourse(String courseCode, String degree) {
-		switch(degree) {
-			case "BSCS":
-				return BSCS.get(courseCode);
-			case "MSCS":
-				return MSCS.get(courseCode);
-			case "PHCS":
-				return PHCS.get(courseCode);
-			case "MSIT":
-				return MSIT.get(courseCode);
-		}
-		return null;
+		return switch (degree) {
+			case "BSCS" -> BSCS.get(courseCode);
+			case "MSCS" -> MSCS.get(courseCode);
+			case "PHD" -> PHD.get(courseCode);
+			case "MSIT" -> MSIT.get(courseCode);
+			default -> null; // If the degree does not match any known category, return null
+		};
 	}
-	
-	
+		
 	/**
 	 * getCourseDegree
 	 * 
@@ -151,6 +149,11 @@ public class CourseManager {
 	 * @return	returns the degree of the given course code
 	 */
 	public static String getCourseDegree(String courseCode) {
-		return courseDegreeMap.get(courseCode).name();
+		Degree d = courseDegreeMap.get(courseCode);
+		if (d == null) {
+			return null; // Return null if course not found
+		}
+
+		return d.name(); // Return the course if found
 	}
 }
