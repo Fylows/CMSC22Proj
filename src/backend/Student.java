@@ -1,8 +1,11 @@
 package backend;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Student {
+public class Student implements Serializable {
+	private static final long serialVersionUID = 1L;
+    
 	private String firstName, middleName, lastName, suffix; // Student's name
 	private String email; // Student's email
 	private String birthday; // Student's birthday

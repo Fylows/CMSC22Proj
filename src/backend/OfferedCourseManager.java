@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OfferedCourseManager implements Serializable {
@@ -63,56 +63,78 @@ public class OfferedCourseManager implements Serializable {
     /* ================================
        CSV LOADING
        ================================= */
-    
-    // Paths to CSVs
-    private static final String BSCS_CSV = "src/dataset/bscs.csv";
-    private static final String MSCS_CSV = "src/dataset/mscs.csv";
-    private static final String MSIT_CSV = "src/dataset/msit.csv";
-    private static final String PHD_CSV  = "src/dataset/phd.csv";
-    private static final String OFFERING_CSV = "src/dataset/course_offering.csv";
 
     /**
      * Loads courses from the 4 degree-specific CSVs
      */
     public static Map<String, Course> loadCourses() {
-        Map<String, Course> courseMap = new HashMap<>();
-        String[] files = {BSCS_CSV, MSCS_CSV, MSIT_CSV, PHD_CSV};
+        Map<String, Course> courseMap = new LinkedHashMap<>(); // Linked HashMap to preserve the order
+        String[] files = {"/dataset/ics_cmsc_courses.csv", "/dataset/ics_mit_courses.csv", "/dataset/ics_mscs_courses.csv", "/dataset/ics_phd_courses.csv"};
 
-        for (String path : files) {
-            try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        for (String resourcePath : files) {
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(OfferedCourseManager.class.getResourceAsStream(resourcePath)))) {
+              
                 String line;
                 while ((line = br.readLine()) != null) {
-                    // Skip empty lines or headers
                     if (line.isBlank() || line.toLowerCase().contains("code")) continue;
 
+                    // Split line by commas
                     String[] parts = line.split(",");
-                    if (parts.length < 4) continue; // Expect code, title, units, description
+                    if (parts.length < 4) continue;
 
+                    // Code = first field
                     String code = parts[0].trim();
-                    String title = parts[1].trim();
-                    int units = Integer.parseInt(parts[2].trim());
-                    String desc = parts[3].trim();
 
+                    // Units = second-to-last field
+                    String unitStr = parts[parts.length - 2].trim();
+                    int units = 1;
+                    try {
+                        units = Integer.parseInt(unitStr);
+                    } catch (NumberFormatException e) {
+                        if (unitStr.contains("-")) {
+                            String[] range = unitStr.split("-");
+                            try {
+                                units = Integer.parseInt(range[1].trim()); // take max
+                            } catch (NumberFormatException ex) {
+                                units = 1;
+                            }
+                        } else {
+                            units = 1;
+                        }
+                    }
+
+                    // Title = everything from index 1 to parts.length-3
+                    StringBuilder titleBuilder = new StringBuilder();
+                    for (int i = 1; i <= parts.length - 3; i++) {
+                        if (i > 1) titleBuilder.append(","); // keep commas in title
+                        titleBuilder.append(parts[i].trim());
+                    }
+                    String title = titleBuilder.toString();
+
+                    // Description = last field
+                    String desc = parts[parts.length - 1].trim();
+
+                    // Create course
                     Course c = new Course(code, title, units);
-                    // Optionally, add description to Course class later
                     courseMap.put(code, c);
                 }
-            } catch (IOException e) {
-                System.out.println("Error loading CSV " + path + ": " + e.getMessage());
+
+            } catch (Exception e) {
+                System.out.println("Error loading CSV " + resourcePath + ": " + e.getMessage());
             }
         }
 
         return courseMap;
     }
 
-    /**
-     * Loads offered courses from the offering CSV, merging with Course info
-     */
     public static ArrayList<OfferedCourse> loadOfferedCoursesFromCSV() {
         ArrayList<OfferedCourse> list = new ArrayList<>();
         Map<String, Course> courseMap = loadCourses(); // Load all course info first
 
-        try (BufferedReader br = new BufferedReader(new FileReader(OFFERING_CSV))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(OfferedCourseManager.class.getResourceAsStream("/dataset/course_offerings.csv")))) {
+
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.isBlank() || line.toLowerCase().contains("code")) continue;
@@ -127,11 +149,12 @@ public class OfferedCourseManager implements Serializable {
                 String days = parts[5].trim();
                 String room = parts[6].trim();
 
-                Course baseCourse = courseMap.getOrDefault(code, new Course(code, parts[1].trim(), Integer.parseInt(parts[2].trim())));
+                Course baseCourse = courseMap.getOrDefault(code, 
+                        new Course(code, parts[1].trim(), Integer.parseInt(parts[2].trim())));
                 OfferedCourse oc = new OfferedCourse(baseCourse, section, times, days, room);
                 list.add(oc);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Error loading course offering CSV: " + e.getMessage());
         }
 

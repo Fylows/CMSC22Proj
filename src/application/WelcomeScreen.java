@@ -1,5 +1,8 @@
 package application;
 
+import java.util.ArrayList;
+
+import backend.*;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -66,6 +69,23 @@ public class WelcomeScreen {
 		Button login = new Button("Log-In"); // Log-in button
 		styleButton(signup);
 		styleButton(login);
+		
+		// Unedited
+		ArrayList<Student> students = StudentManager.loadStudents();
+		StudentManager manager = new StudentManager(students);
+
+		// Sign Up button action
+		signup.setOnAction(e -> {
+		    SignUpScreen signUp = new SignUpScreen(stage, manager); // pass stage and manager
+		    signUp.show(); // show modal
+		});
+
+		// Log In button action
+		login.setOnAction(e -> {
+		    LoginScreen loginScreen = new LoginScreen(stage, manager); // pass stage and manager
+		    loginScreen.show(); // show modal
+		});
+		// End
 
 		// Add a spacer to create visual separation before buttons
 		Region spacer = new Region();

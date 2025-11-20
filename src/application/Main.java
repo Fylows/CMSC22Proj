@@ -17,7 +17,7 @@ public class Main extends Application {
 	@Override
     public void start(Stage stage) {
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Uploading Kurasu Icon for app 
-			stage.setTitle("❀ クラス | Kurasu"); // Sets the title to Kurasu
+			stage.setTitle(" クラス | Kurasu"); // Sets the title to Kurasu
 			
 			new LoadingScreen(stage).show(); // Show loading screen
 	    }

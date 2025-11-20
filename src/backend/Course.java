@@ -1,6 +1,9 @@
 package backend;
 
-public class Course {
+import java.io.Serializable;
+
+public class Course implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String courseCode; // Code for the course (ex: CMSC 22)
 	private String courseTitle; // Name of the course (ex: Object-Oriented Programming)
 	private String type; // 
