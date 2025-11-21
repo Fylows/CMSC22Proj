@@ -13,10 +13,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class LoginScreen {
-
-    private Stage popupStage;      // login popup window
-    private Stage ownerStage;      // reference to WelcomeScreen
-    private StudentManager manager;
+	private Stage popupStage;      // login popup window
+	private Stage ownerStage;      // reference to WelcomeScreen
+	private StudentManager manager;
 
     public LoginScreen(Stage ownerStage, StudentManager manager) {
         this.ownerStage = ownerStage;

@@ -83,17 +83,10 @@ public class OfferedCourseManager implements Serializable {
 					if (parts.length < 4) continue; // Must contain code, title, units, description, if one is missing, skip
 
 					String code = parts[0].trim(); // Trims the course code
-					
-					// Trims the course name (some names have commas)
-					StringBuilder titleBuilder = new StringBuilder();
-					for (int i = 1; i < parts.length - 2; i++) {
-						if (i > 1) titleBuilder.append(", "); // Restores the commas in the text
-						titleBuilder.append(parts[i].trim());
-				    }
-					String title = titleBuilder.toString(); // Assigns the fixed title
+					String title = parts[1].trim(); // Trims the course name
 
 					// For trimming the units (some units have range)
-					String unitStr = parts[parts.length - 2].trim();
+					String unitStr = parts[2].trim();
 					int units = 1; // Default units if parsing fails
 					try {
 						units = Integer.parseInt(unitStr); // Parsing the units normally
@@ -108,7 +101,14 @@ public class OfferedCourseManager implements Serializable {
 						} 
 					}
 
-					String description = parts[parts.length - 1].trim(); // For trimming the description (will be at the last index)
+					// For trimming the description (some description have commas)
+					StringBuilder descBuilder = new StringBuilder();
+					for (int i = 3; i < parts.length; i++) {
+						if (i > 3) descBuilder.append(","); // Restores the commas in the text
+						descBuilder.append(parts[i].trim()); 
+					}
+					String description = descBuilder.toString(); // Assigns the fixed description
+
 
 					Course c = new Course(code, title, units, description); // Creates the Course object from parsed values
 					courseMap.put(code, c); // Inserts into the map (overwrites duplicates)
