@@ -101,24 +101,7 @@ public class CourseManager {
 	private static Map<String, Course> PHD = new HashMap<>();
 	private static Map<String, Course> MSIT = new HashMap<>();
 	// TODO add a observable list when doing UI
-	
-	// Temporary Initializer (placeholder until file handling is okay)
-	static {
-		for (String courseCode : courseDegreeMap.keySet()) { // Loops through every course code defined in the course-degree map
-			Degree degree = courseDegreeMap.get(courseCode); // Get the degree associated with this course (BSCS, MSCS, PHD, MSIT)
 
-			// Temporary only placeholder data — replace with CSV loading later
-			Course c = new Course(courseCode, "TBA Title", 3);
-
-			switch (degree) { // Add the course to the appropriate Map based on its degree
-				case BSCS -> BSCS.put(courseCode, c); // Use -> for a cleaner switch case look
-				case MSCS -> MSCS.put(courseCode, c);
-				case PHD -> PHD.put(courseCode, c);
-				case MSIT -> MSIT.put(courseCode, c);
-			}
-		}
-	}
-	
 	/**
 	 * getCourse
 	 * 
@@ -139,15 +122,7 @@ public class CourseManager {
 			default -> null; // If the degree does not match any known category, return null
 		};
 	}
-		
-	/**
-	 * getCourseDegree
-	 * 
-	 * gets the degree given a course code
-	 * 
-	 * @param	course code to find the degree of
-	 * @return	returns the degree of the given course code
-	 */
+
 	public static String getCourseDegree(String courseCode) {
 		Degree d = courseDegreeMap.get(courseCode);
 		if (d == null) {

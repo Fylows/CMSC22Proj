@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class OfferedCourse implements Serializable {
     private static final long serialVersionUID = 1L;
+    
 	private Course baseCourse; // The course or subject to be offered
 	private String section, times, days, room; // Information about the offered course
 

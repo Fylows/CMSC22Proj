@@ -6,22 +6,22 @@ public class Course implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String courseCode; // Code for the course (ex: CMSC 22)
 	private String courseTitle; // Name of the course (ex: Object-Oriented Programming)
-	private String type; // 
+	private String type; // In which degree does the course belong to (ex: BSCS, MSCS)
 	private int units; // Total units for the course subject
-	
-	// NOTE: I think missing pa sha ng description?
+	private String description;  // Course description from CSV
 	
 	// Constructor
-	public Course (String code, String title, int units){
+	public Course (String code, String title, int units, String description){
 		this.courseCode = code;
 		this.courseTitle = title;
 		this.units = units;
+		this.description = description;
 		this.type = CourseManager.getCourseDegree(code);
 	}
 	
 	// View State
 	public void viewState() {
-		System.out.printf("Course code: %s, Course title: %s, units: %d\n", this.courseCode, this.courseTitle, this.units);
+		System.out.printf("Course code: %s, title: %s, units: %d, description: %s\n", this.courseCode, this.courseTitle, this.units, this.description);
 	}
 	
 	// Getters
@@ -29,5 +29,6 @@ public class Course implements Serializable {
 	public String getCourseCode() { return courseCode; }
 	public String getCourseTitle() { return courseTitle; }
 	public int getUnits() { return units; }
+	public String getDescription() { return description; }
 
 }

@@ -6,125 +6,130 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class StudentManager implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	private ArrayList<Student> students; // List of registered students
+	private static final Path STORAGE_PATH = Path.of("students.txt");
 
-    private static final long serialVersionUID = 1L;
-    private ArrayList<Student> students;
+	// Constructor
+	public StudentManager(ArrayList<Student> students) {
+		this.students = students;
+	}
 
-    // Degrees for validation
-    private static final String[] VALID_DEGREES = {"BSCS", "MSCS", "MSIT", "PHD"};
+	// Getters
+	public ArrayList<Student> getStudents() {
+		return students;
+	}
 
-    // Constructor
-    public StudentManager(ArrayList<Student> students) {
-        this.students = students;
-    }
+    // Persistence Functions (saving/loading)
+	// Saves the entire StudentManager object to a file
+	public void save(Path path) {
+		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(path))) { // Put in the try block so it automatically closes at the end
+			out.writeObject(this); // Writes all the students
+		} catch (IOException e) {
+			e.printStackTrace(); // Prints a detailed error report to the console
+		}
+	}
 
-    public ArrayList<Student> getStudents() {
-        return students;
-    }
+	// Load a StudentManager from a file (returns null if something fails)
+	public static StudentManager load(Path path) {
+		if (!Files.exists(path)) return null; // If file does not exist, return null
+		
+		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) { // Put in the try block so it automatically closes at the end
+			StudentManager manager = (StudentManager) in.readObject(); // Read the serialized StudentManager object
+			return manager; // Return the loaded object
+		} catch (IOException | ClassNotFoundException e) {
+			return null; // Return nothing if file is unreadable or corrupted
+		}
+	}
 
-    // ---------------- PERSISTENCE ----------------
-    public void save(Path path) {
-        try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(path))) {
-            out.writeObject(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	// Helper method that saves only the students list to the file "students.txt"
+	public static void saveStudents(ArrayList<Student> students) {
+		StudentManager handler = new StudentManager(students);
+		handler.save(STORAGE_PATH); // Save to file named students.txt
+	}
 
-    public static StudentManager load(Path path) {
-        if (!Files.exists(path)) return null;
-        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) {
-            return (StudentManager) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            return null;
-        }
-    }
+	// Helper method that loads saved students from file
+	public static ArrayList<Student> loadStudents() {
+		StudentManager handler = load(STORAGE_PATH);
+		if (handler == null) return new ArrayList<>(); // Return empty list if loading fails
+		return handler.getStudents(); // Return list of students if successful
+	}
 
-    // Helper: save only students list
-    public static void saveStudents(ArrayList<Student> students) {
-        StudentManager handler = new StudentManager(students);
-        handler.save(Path.of("students.txt"));
-    }
+	// Update the information for the student (used after a successful sign-up, and student is asked for completed courses)
+	public void updateStudent(Student updatedStudent) {
+		for (int i = 0; i < students.size(); i++) { // Loop through the students to look for the email
+			if (students.get(i).getEmail().equalsIgnoreCase(updatedStudent.getEmail())) { // Find matching email
+				students.set(i, updatedStudent); // Update record
+				break;
+			}
+		}
+		saveStudents(students); // Persist all students
+	}
 
-    // Helper: load only students list
-    public static ArrayList<Student> loadStudents() {
-        StudentManager handler = load(Path.of("students.txt"));
-        if (handler == null) return new ArrayList<>();
-        return handler.getStudents();
-    }
-    
- // Update an existing student and save to file
-    public void updateStudent(Student updatedStudent) {
-        for (int i = 0; i < students.size(); i++) {
-            if (students.get(i).getEmail().equalsIgnoreCase(updatedStudent.getEmail())) {
-                students.set(i, updatedStudent); // replace old student
-                break;
-            }
-        }
-        saveStudents(students); // persist all students
-    }
+	// Logic for Sign-Up Screen
+	public String signUp(String firstName, String middleName, String lastName, String suffix,
+						String email, String birthday, String sex, String password, String degree) {
 
+		// Checks if the required fields (those with *) are not empty
+		if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || birthday.isBlank()
+				|| sex.isBlank() || password.isBlank() || degree.isBlank()) {
+			return "Please fill in all required fields.";
+		}
 
-    // ---------------- SIGN-UP ----------------
-    public String signUp(String firstName, String middleName, String lastName, String suffix,
-                         String email, String birthday, String sex, String password, String degree) {
+		// Checks if email is in a valid up.edu.ph format
+		if (!email.matches("^[\\w.-]+@up\\.edu\\.ph$")) { // ^ start while $ end of string; accepts letters and numbers before @up.edu.ph
+			return "Invalid email format.";
+		}
 
-        // 1. Check required fields
-        if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || birthday.isBlank()
-                || sex.isBlank() || password.isBlank() || degree.isBlank()) {
-            return "Please fill in all required fields.";
-        }
+		// Password must have a minimum length of 6 characters
+		if (password.length() < 6) {
+			return "Password must be at least 6 characters.";
+		}
 
-        // 2. Email format check
-        if (!email.matches("^[\\w.-]+@up\\.edu\\.ph$")) {
-        	return "Invalid email format.";
-        }
-        
-        // 3. Password length
-        if (password.length() < 6) return "Password must be at least 6 characters.";
+		// Checks if email already exists
+		if (findByEmail(email) != null) {
+			return "Email is already registered. Try adding numbers";
+		}
 
-        // 4. Degree validation
-        boolean validDegree = false;
-        for (String d : VALID_DEGREES) {
-            if (degree.equalsIgnoreCase(d)) {
-                validDegree = true;
-                degree = d; // normalize
-                break;
-            }
-        }
-        if (!validDegree) return "Invalid degree selected.";
+		// Creates the new student
+		Student newStudent = new Student(firstName, middleName, lastName, suffix, email, birthday, sex, password, degree);
+		students.add(newStudent);
+		saveStudents(students); // Saves the student after signing-up
 
-        // 5. Check if email already exists
-        if (findByEmail(email) != null) return "Email is already registered.";
+		return "SUCCESS";
+	}
 
-        // 6. Add new student
-        Student newStudent = new Student(firstName, middleName, lastName, suffix, email, birthday, sex, password, degree);
-        students.add(newStudent);
-        saveStudents(students);
+	// Logic for Log-In Screen
+	public String login(String email, String password) {
+		if (email.isBlank() || password.isBlank()) { // Both email and password fields must be not empty
+			return "Please enter both email and password.";
+		}
 
-        return "SUCCESS";
-    }
+		Student s = findByEmail(email); // Looks if student account is valid
+		if (s == null) { // If email is not found, return null
+			return "Email not found."; 
+		}
 
-    // ---------------- LOGIN ----------------
-    public String login(String email, String password) {
-        if (email.isBlank() || password.isBlank()) return "Please enter both email and password.";
+		if (!s.getPassword().equals(password)) { // If email exists but password is incorrect
+			return "Incorrect password.";
+		}
 
-        Student s = findByEmail(email);
-        if (s == null) return "Email not found.";
-        if (!s.getPassword().equals(password)) return "Incorrect password.";
+		return "SUCCESS";
+	}
 
-        return "SUCCESS";
-    }
+    // Finds the student using their UP mail
+	private Student findByEmail(String email) {
+		for (Student s : students) { // Loops through each student
+			if (s.getEmail().equalsIgnoreCase(email)) {
+				return s;
+			}
+		}
+		return null; // Return null if not found
+	}
 
-    // ---------------- HELPER ----------------
-    private Student findByEmail(String email) {
-        for (Student s : students) {
-            if (s.getEmail().equalsIgnoreCase(email)) return s;
-        }
-        return null;
-    }
-
-    public Student getStudentByEmail(String email) {
-        return findByEmail(email);
-    }
+	// For proper encapsulation
+	public Student getStudentByEmail(String email) {
+		return findByEmail(email);
+	}
 }

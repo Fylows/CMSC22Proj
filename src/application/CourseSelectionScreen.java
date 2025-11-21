@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.nio.file.Path;
@@ -63,8 +64,13 @@ public class CourseSelectionScreen {
 	public void show() {
         Stage popup = new Stage();
         popup.initOwner(ownerStage);
-        popup.initModality(null); // Or APPLICATION_MODAL if you want
+        popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Course Selection");
+        
+     // Prevent the user from closing the popup manually
+        popup.setOnCloseRequest(event -> {
+            event.consume(); // ignores the close button
+        });
 
         VBox root = new VBox(10);
         root.setStyle("-fx-padding: 20;");
