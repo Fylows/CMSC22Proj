@@ -52,6 +52,18 @@ public class StudentManager implements Serializable {
         if (handler == null) return new ArrayList<>();
         return handler.getStudents();
     }
+    
+ // Update an existing student and save to file
+    public void updateStudent(Student updatedStudent) {
+        for (int i = 0; i < students.size(); i++) {
+            if (students.get(i).getEmail().equalsIgnoreCase(updatedStudent.getEmail())) {
+                students.set(i, updatedStudent); // replace old student
+                break;
+            }
+        }
+        saveStudents(students); // persist all students
+    }
+
 
     // ---------------- SIGN-UP ----------------
     public String signUp(String firstName, String middleName, String lastName, String suffix,

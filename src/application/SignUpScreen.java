@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -14,40 +15,49 @@ import javafx.stage.Stage;
 public class SignUpScreen {
 
     private Stage popupStage;
+    private Stage ownerStage;  // <-- the actual welcome screen
     private StudentManager studentManager;
 
     // Fixed widths
-    private final double FULL_WIDTH = 300;  
-    private final double HALF_WIDTH = 145;  
+    private final double FULL_WIDTH = 300;
+    private final double HALF_WIDTH = 145;
 
-    public SignUpScreen(Stage owner, StudentManager studentManager) {
+    public SignUpScreen(Stage ownerStage, StudentManager studentManager) {
+        this.ownerStage = ownerStage;       // keep reference to WelcomeScreen
         this.popupStage = new Stage();
         this.studentManager = studentManager;
 
-        popupStage.initOwner(owner);
+        popupStage.initOwner(ownerStage);  // still modal
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.setResizable(false);
         popupStage.setTitle("Sign Up");
+
+        // Icon
+        popupStage.getIcons().add(
+            new Image(getClass().getResourceAsStream("/resources/logo.png"))
+        );
     }
+
 
     public void show() {
 
-        // Root
+        // ROOT LAYER
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(25));
         root.setStyle("-fx-background-color: #ffc2d1;");
 
+        // FORM CONTAINER
         VBox form = new VBox(15);
-        form.setAlignment(Pos.TOP_CENTER);
+        form.setAlignment(Pos.TOP_LEFT);       // <-- LEFT-ALIGNED
         form.setPadding(new Insets(25));
         form.setStyle("-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 20;");
 
-        // Font
+        // FONTS
         Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 32);
         Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 14);
         Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
 
-        // Header
+        // TITLE + SUBTITLE
         Label title = new Label("Sign-Up");
         title.setFont(poppinsBold);
         title.setStyle("-fx-text-fill: #000000;");
@@ -56,7 +66,7 @@ public class SignUpScreen {
         subtitle.setFont(interItalic);
         subtitle.setStyle("-fx-text-fill: #444444;");
 
-        // Input
+        // INPUT FIELDS
         TextField firstName = createField("First Name: *", inter, HALF_WIDTH);
         TextField middleName = createField("Middle Name", inter, HALF_WIDTH);
 
@@ -95,17 +105,17 @@ public class SignUpScreen {
         Label msgLabel = new Label();
         msgLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
 
-        // HBoxes for paired rows
+        // ROWS (LEFT-ALIGNED)
         HBox nameRow = new HBox(10, firstName, middleName);
-        nameRow.setAlignment(Pos.CENTER);
+        nameRow.setAlignment(Pos.TOP_LEFT);
 
         HBox lastRow = new HBox(10, lastName, suffix);
-        lastRow.setAlignment(Pos.CENTER);
+        lastRow.setAlignment(Pos.TOP_LEFT);
 
         HBox birthRow = new HBox(10, birthday, sexBox);
-        birthRow.setAlignment(Pos.CENTER);
+        birthRow.setAlignment(Pos.TOP_LEFT);
 
-        // Sign Up 
+        // SIGN UP BUTTON
         Button signUpBtn = new Button("Sign Up");
         signUpBtn.setPrefWidth(FULL_WIDTH);
         signUpBtn.setStyle(
@@ -116,21 +126,28 @@ public class SignUpScreen {
                 "-fx-background-radius: 12;"
         );
 
-        // Hover effect
         signUpBtn.setOnMouseEntered(e ->
-                signUpBtn.setStyle("-fx-background-color: #ff85ac; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 12;"));
+                signUpBtn.setStyle("-fx-background-color: #ff85ac; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 12;")
+        );
         signUpBtn.setOnMouseExited(e ->
-                signUpBtn.setStyle("-fx-background-color: #fb6f92; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 12;"));
+                signUpBtn.setStyle("-fx-background-color: #fb6f92; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px; -fx-background-radius: 12;")
+        );
 
+        // LOGIN HYPERLINK
         Hyperlink loginLink = new Hyperlink("Already have an account? Log in instead");
         loginLink.setStyle("-fx-font-family: 'Inter'; -fx-font-size: 13px;");
         loginLink.setOnAction(e -> {
-            LoginScreen login = new LoginScreen(popupStage, studentManager);
-            login.show();
+            popupStage.close();  // close the sign-up popup
+            new LoginScreen(ownerStage, studentManager).show(); // login knows the real welcome screen
         });
-        
-        
-        //
+
+
+        // CENTER ONLY BUTTON + HYPERLINK
+        VBox centerBox = new VBox(10);
+        centerBox.setAlignment(Pos.CENTER);     // <-- CENTERED
+        centerBox.getChildren().addAll(signUpBtn, loginLink);
+
+        // ASSEMBLE EVERYTHING
         form.getChildren().addAll(
                 title, subtitle,
                 nameRow,
@@ -141,8 +158,7 @@ public class SignUpScreen {
                 password,
                 confirmPassword,
                 msgLabel,
-                signUpBtn,
-                loginLink
+                centerBox     // <-- ONLY THIS PART CENTERED
         );
 
         root.setCenter(form);
@@ -151,8 +167,9 @@ public class SignUpScreen {
         popupStage.setScene(scene);
         popupStage.show();
 
-        // Logic 
+        // SIGN UP ACTION
         signUpBtn.setOnAction(e -> {
+
             msgLabel.setText("");
 
             if (!password.getText().equals(confirmPassword.getText())) {
@@ -161,7 +178,10 @@ public class SignUpScreen {
             }
 
             String result = studentManager.signUp(
-                    firstName.getText(), middleName.getText(), lastName.getText(), suffix.getText(),
+                    firstName.getText(),
+                    middleName.getText(),
+                    lastName.getText(),
+                    suffix.getText(),
                     email.getText(),
                     birthday.getValue() == null ? "" : birthday.getValue().toString(),
                     sexBox.getValue() == null ? "" : sexBox.getValue(),
@@ -176,12 +196,12 @@ public class SignUpScreen {
 
             Student student = studentManager.getStudentByEmail(email.getText().trim());
 
-            CourseSelectionScreen courseSelection = new CourseSelectionScreen(popupStage, student);
-            courseSelection.show();
+            popupStage.close();
+            new CourseSelectionScreen(ownerStage, student).show();
         });
     }
 
-    // Creates a styled TextField with font + width
+    // Helper — Creates styled TextFields
     private TextField createField(String prompt, Font font, double width) {
         TextField tf = new TextField();
         tf.setPromptText(prompt);

@@ -19,14 +19,12 @@ public class LoginScreen {
     private StudentManager manager;
 
     public LoginScreen(Stage ownerStage, StudentManager manager) {
-        this.ownerStage = ownerStage; 
+        this.ownerStage = ownerStage;
+        this.popupStage = new Stage();
         this.manager = manager;
 
-        popupStage = new Stage();
         popupStage.initOwner(ownerStage);
         popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setResizable(false);
-
         popupStage.setTitle("Log In");
     }
 
