@@ -22,7 +22,7 @@ public class WelcomeScreen {
 
 	// Running the screen
 	public void show() {
-		StackPane root = new StackPane(); // Added a stackpane for easier layouting
+		StackPane root = new StackPane(); // Added a StackPane for easier layouting
 
 		// Layout for background
 		Pane bgPane = new Pane(); 
