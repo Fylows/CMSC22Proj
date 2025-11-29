@@ -1,4 +1,4 @@
-package application;
+package frontend;
 
 import backend.Student;
 import backend.StudentManager;

@@ -1,6 +1,7 @@
 package backend;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Course implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -9,6 +10,7 @@ public class Course implements Serializable {
 	private String type; // In which degree does the course belong to (ex: BSCS, MSCS)
 	private int units; // Total units for the course subject
 	private String description;  // Course description from CSV
+	private ArrayList<String> prereq = new ArrayList<String>();
 	
 	// Constructor
 	public Course (String code, String title, int units, String description){
@@ -19,6 +21,7 @@ public class Course implements Serializable {
 		this.type = CourseManager.getCourseDegree(code);
 	}
 	
+	public void addPrereq(String course) { prereq.add(course); }
 	// View State
 	public void viewState() {
 		System.out.printf("Course code: %s, title: %s, units: %d, description: %s\n", this.courseCode, this.courseTitle, this.units, this.description);

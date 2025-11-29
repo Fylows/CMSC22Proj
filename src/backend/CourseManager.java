@@ -1,6 +1,7 @@
 package backend;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,6 +95,51 @@ public class CourseManager {
 			Map.entry("CMSC 400", Degree.PHD)
 						
 	);
+	/**
+	 * prereqMap
+	 * 
+	 * An Immutable map that consists of the prerequisites of all the courses
+	 * 
+	 */
+	public static Map<String, List<String>> prereqMap = Map.ofEntries(
+			// Bachelor of Science in Computer Science (BSCS)
+			Map.entry("CMSC 21", List.of("CMSC 12")),
+			Map.entry("CMSC 57", List.of("CMSC 56")),
+			
+			Map.entry("CMSC 22", List.of("CMSC 12")),
+			Map.entry("CMSC 123", List.of("CMSC 21","CMSC 57")),
+			Map.entry("CMSC 130", List.of("CMSC 57")),
+			
+			Map.entry("CMSC 23", List.of("CMSC 22")),
+			Map.entry("CMSC 100", List.of("CMSC 22")),
+			Map.entry("CMSC 127", List.of("CMSC 22")),
+			Map.entry("CMSC 131", List.of("CMSC 21")),
+			
+			Map.entry("CMSC 125", List.of("CMSC 123")),
+			Map.entry("CMSC 124", List.of("CMSC 123")),
+			Map.entry("CMSC 141", List.of("CMSC 123")),
+			Map.entry("CMSC 170", List.of("CMSC 123")),
+			Map.entry("CMSC 132", List.of("CMSC 131")),
+			
+			Map.entry("CMSC 137", List.of("CMSC 137")),
+			Map.entry("CMSC 128", List.of("CMSC 123")),
+			Map.entry("CMSC 142", List.of("CMSC 123")),
+			Map.entry("CMSC 174", List.of("CMSC 123")),
+			Map.entry("CMSC 180", List.of("CMSC 132")),
+	
+			
+			// Master of Science in Computer Science (MSCS)
+			Map.entry("CMSC 245", List.of("CMSC 244")),
+	
+	
+			// Master of Information Technology (MIT)
+			Map.entry("IT 227", List.of("IT 210", "IT 226")),
+			Map.entry("IT 280", List.of("IT 238"))
+
+			// PhD Computer Science (PhD)
+		);
+	
+
 	
 	// Maps of the different degrees with their respective courses
 	private static Map<String, Course> BSCS = new HashMap<>();
@@ -102,6 +148,8 @@ public class CourseManager {
 	private static Map<String, Course> MSIT = new HashMap<>();
 	// TODO add a observable list when doing UI
 
+	
+	
 	/**
 	 * getCourse
 	 * 
@@ -128,7 +176,6 @@ public class CourseManager {
 		if (d == null) {
 			return null; // Return null if course not found
 		}
-
 		return d.name(); // Return the course if found
 	}
 }

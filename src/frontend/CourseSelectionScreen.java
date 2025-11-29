@@ -1,7 +1,8 @@
-package application;
+package frontend;
 
 import backend.OfferedCourseManager;
 import backend.Course;
+import backend.CourseManager;
 import backend.Student;
 import backend.StudentManager;
 import javafx.util.Duration;
@@ -33,15 +34,13 @@ import java.util.*;
 public class CourseSelectionScreen {
 	private Stage ownerStage; // The actual WelcomeScreen
 	private Student student; // The student created after signing-up
-	private Map<String, List<String>> prerequisites = new HashMap<>(); // Prerequisite relationships
-
+	
 	// Constructor
 	public CourseSelectionScreen(Stage ownerStage, Student student) {
 		this.ownerStage = ownerStage;
 		this.student = student;
 		
 		// There is no this.pop-upStage = new Stage() since this screen replaces the SignUpScreen
-		setupPrerequisites(); // Load prerequisite rules for all course codes
 	}
 
 	// Running the screen
@@ -268,46 +267,13 @@ public class CourseSelectionScreen {
 		popup.show(); // Show the pop-up screen
 	}
 
-	private void setupPrerequisites() {
-		// BSCS Curriculum Prerequisites
-		prerequisites.put("CMSC 21", List.of("CMSC 12"));
-		prerequisites.put("CMSC 57", List.of("CMSC 56"));
 
-		prerequisites.put("CMSC 22", List.of("CMSC 12"));
-		prerequisites.put("CMSC 123", List.of("CMSC 21", "CMSC 57"));
-		prerequisites.put("CMSC 130", List.of("CMSC 57"));
-		prerequisites.put("CMSC 150", List.of("CMSC 21"));
 
-		prerequisites.put("CMSC 23", List.of("CMSC 22"));
-		prerequisites.put("CMSC 100", List.of("CMSC 22"));
-		prerequisites.put("CMSC 127", List.of("CMSC 22"));
-		prerequisites.put("CMSC 131", List.of("CMSC 21"));
-
-		prerequisites.put("CMSC 132", List.of("CMSC 131"));
-		prerequisites.put("CMSC 124", List.of("CMSC 123"));
-		prerequisites.put("CMSC 125", List.of("CMSC 123"));
-		prerequisites.put("CMSC 141", List.of("CMSC 123"));
-		prerequisites.put("CMSC 170", List.of("CMSC 123"));
-
-		prerequisites.put("CMSC 128", List.of("CMSC 123"));
-		prerequisites.put("CMSC 142", List.of("CMSC 123"));
-		prerequisites.put("CMSC 137", List.of("CMSC 123"));
-		prerequisites.put("CMSC 173", List.of("CMSC 123"));
-		prerequisites.put("CMSC 180", List.of("CMSC 132"));
-
-		// MSCS Curriculum Prerequisites (not including pre-reqs of BSCS)
-		prerequisites.put("CMSC 245", List.of("CMSC 244"));
-
-		// MIT Curriculum Prerequisites (not including pre-reqs of BSCS)
-		prerequisites.put("IT 227", List.of("IT 210", "IT 226"));
-		prerequisites.put("IT 280", List.of("IT 238"));
-	}
-
-	// Enables/disables CheckBoxes depending on whether their prerequisites are checked
+	// Enables/disables CheckBoxes depending on whether their prer`equisites are checked
 	private void handlePrerequisites(ObservableList<CheckBox> checkboxes) {
 		for (CheckBox cb : checkboxes) { // Loop through every course checkbox
 			String code = cb.getText(); // Get the course code shown on the checkbox
-			List<String> prereqs = prerequisites.get(code); // Look up its prerequisites
+			List<String> prereqs = CourseManager.prereqMap.get(code); // Look up its prerequisites
 
 			if (prereqs == null || prereqs.isEmpty()) { // If there are no prerequisite
 				cb.setDisable(false); // Always enabled

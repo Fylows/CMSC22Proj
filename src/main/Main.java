@@ -7,8 +7,9 @@
 	 *
 	 ***********************************************************/
 
-package application;
+package main;
 
+import frontend.LoadingScreen;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -18,11 +19,11 @@ public class Main extends Application {
     public void start(Stage stage) {
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Uploading Kurasu Icon for app 
 			stage.setTitle(" クラス | Kurasu"); // Sets the title to Kurasu
-			
-			new LoadingScreen(stage).show(); // Show loading screen
+			LoadingScreen ld = new LoadingScreen(stage);
+			ld.show(); // Show loading screen
 	    }
 
-		public static void main(String[] args) {
+		public static void Main(String[] args) {
 			launch(args); // Starts the JavaFX application
 		}
 	}

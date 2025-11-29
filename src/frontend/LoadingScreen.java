@@ -1,4 +1,4 @@
-package application;
+package frontend;
 
 import javafx.animation.*;
 import javafx.geometry.*;
