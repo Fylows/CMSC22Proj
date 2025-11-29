@@ -2,12 +2,13 @@ package backend;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Course implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String courseCode; // Code for the course (ex: CMSC 22)
 	private String courseTitle; // Name of the course (ex: Object-Oriented Programming)
-	private String type; // In which degree does the course belong to (ex: BSCS, MSCS)
+	Set<String> String type; // In which degree does the course belong to (ex: BSCS, MSCS)
 	private int units; // Total units for the course subject
 	private String description;  // Course description from CSV
 	private ArrayList<String> prereq = new ArrayList<String>();
@@ -18,7 +19,7 @@ public class Course implements Serializable {
 		this.courseTitle = title;
 		this.units = units;
 		this.description = description;
-		this.type = CourseManager.getCourseDegree(code);
+		this.type = CourseManager.courseDegreeMap.get(code);
 	}
 	
 	public void addPrereq(String course) { prereq.add(course); }
