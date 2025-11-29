@@ -23,7 +23,7 @@ public class Main extends Application {
 			ld.show(); // Show loading screen
 	    }
 
-		public static void Main(String[] args) {
+		public static void main(String[] args) {
 			launch(args); // Starts the JavaFX application
 		}
 	}

@@ -17,7 +17,7 @@ public class CourseManager {
 	 * Degree
 	 * an Enum to get the different degrees
 	 */
-	private enum Degree {
+	public enum Degree {
 		BSCS, MSCS,	PHD, MSIT
 	}
 	
@@ -31,24 +31,24 @@ public class CourseManager {
 			Map.entry("CMSC 2", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 11", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 12", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 21", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 22", Set.of(Degree.BSCS)),
+			Map.entry("CMSC 21", Set.of(Degree.BSCS, Degree.MSCS)),
+			Map.entry("CMSC 22", Set.of(Degree.BSCS, Degree.MSCS, Degree.MSIT)),
 			Map.entry("CMSC 23", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 56", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 57", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 100", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 123", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 124", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 125", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 127", Set.of(Degree.BSCS)),
+			Map.entry("CMSC 123", Set.of(Degree.BSCS, Degree.MSCS)),
+			Map.entry("CMSC 124", Set.of(Degree.BSCS, Degree.MSCS)),
+			Map.entry("CMSC 125", Set.of(Degree.BSCS, Degree.MSCS)),
+			Map.entry("CMSC 127", Set.of(Degree.BSCS, Degree.MSIT)),
 			Map.entry("CMSC 128", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 129", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 130", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 131", Set.of(Degree.BSCS)),
+			Map.entry("CMSC 131", Set.of(Degree.BSCS, Degree.MSCS)),
 			Map.entry("CMSC 132", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 137", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 141", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 142", Set.of(Degree.BSCS)),
+			Map.entry("CMSC 141", Set.of(Degree.BSCS, Degree.MSCS)),
+			Map.entry("CMSC 142", Set.of(Degree.BSCS, Degree.MSCS)),
 			Map.entry("CMSC 150", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 161", Set.of(Degree.BSCS)),
 			Map.entry("CMSC 165", Set.of(Degree.BSCS)),
@@ -63,12 +63,12 @@ public class CourseManager {
 			Map.entry("CMSC 200", Set.of(Degree.BSCS)),
 			
 			// Master of Science in Computer Science (MSCS)
-			Map.entry("CMSC 214", Set.of(Degree.MSCS)),
+			Map.entry("CMSC 214", Set.of(Degree.MSCS, Degree.MSIT)),
 			Map.entry("CMSC 215", Set.of(Degree.MSCS, Degree.MSIT)),
 			Map.entry("CMSC 227", Set.of(Degree.MSCS)),
 			Map.entry("CMSC 241", Set.of(Degree.MSCS, Degree.PHD)),
-			Map.entry("CMSC 244", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 245", Set.of(Degree.MSCS)),
+			Map.entry("CMSC 244", Set.of(Degree.MSCS, Degree.PHD)),
+			Map.entry("CMSC 245", Set.of(Degree.MSCS, Degree.PHD)),
 			Map.entry("CMSC 250", Set.of(Degree.MSCS)),
 			Map.entry("CMSC 265", Set.of(Degree.MSCS)),
 			Map.entry("CMSC 271", Set.of(Degree.MSCS)),

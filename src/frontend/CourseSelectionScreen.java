@@ -31,6 +31,8 @@ import javafx.stage.StageStyle;
 import java.nio.file.Path;
 import java.util.*;
 
+import backend.CourseManager.Degree;
+
 public class CourseSelectionScreen {
 	private Stage ownerStage; // The actual WelcomeScreen
 	private Student student; // The student created after signing-up
@@ -92,7 +94,8 @@ public class CourseSelectionScreen {
 		List<Course> allCourses = new ArrayList<>(OfferedCourseManager.loadCourses().values());
 		List<Course> coursesByDegree = new ArrayList<>(); // Filter only the courses belonging to the student’s degree program
 		for (Course c : allCourses) { // Loop through the course list
-			if (c.getType().equalsIgnoreCase(student.getDegree())) {
+			Degree d = Degree.valueOf(student.getDegree().toUpperCase()); // convert student degree to enum first
+			if (c.getType().contains(d)) {
 				coursesByDegree.add(c); // Add to the List
 			}
 		}

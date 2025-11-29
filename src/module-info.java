@@ -6,4 +6,5 @@ module CMSC22Proj {
     opens main to javafx.base, javafx.fxml, javafx.graphics;
     opens frontend to javafx.base, javafx.fxml, javafx.graphics;
 
+    exports main;
 }
