@@ -1,5 +1,7 @@
 package backend;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,6 +169,33 @@ public class CourseManager {
 	 * @param	the degree of the course
 	 * @return	returns the course of the given course code
 	 */
+	
+	public static void loadFromCSV() {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(OfferedCourseManager.class.getResourceAsStream("/dataset/course_offerings.csv")))) {
+
+			String line;
+			while ((line = br.readLine()) != null) {
+				if (line.isBlank() || line.toLowerCase().contains("code")) continue; // Skip the header of the CSV file
+
+				String[] parts = line.split(","); // Split the lines by commas
+				if (parts.length < 7) continue; // Must contain code, title, units, section, time, days, room, if one is missing, skip
+
+				String code = parts[0].trim(); // Trims the course code
+				String section = parts[3].trim(); // Trims the section (e.g., "U-1L")
+				String times = parts[4].trim(); // Trims the time range
+				String days = parts[5].trim(); // Trims the days
+				String room = parts[6].trim(); // Trims the room
+				
+				
+				Course course = new Course(code, parts[1].trim(), Integer.parseInt(parts[2].trim()), "");
+
+
+			}
+		} catch (Exception e) {}
+	}
+	
+	
 	
 	// Getters
 	public static Course getCourse(String courseCode, String degree) {

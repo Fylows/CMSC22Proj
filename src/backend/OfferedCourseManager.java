@@ -10,19 +10,12 @@ import java.util.Map;
 public class OfferedCourseManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<Course> allCourses; // All courses from the 4 degree files
-	private ArrayList<OfferedCourse> offeredCourses; // Courses offered for the first semester
+	private ArrayList<OfferedCourse> offeredCourses; // Courses offered
 	private static final Path STORAGE_PATH = Path.of("offered_courses.txt");
 
 	// Constructor
-	public OfferedCourseManager(ArrayList<Course> allCourses, ArrayList<OfferedCourse> offeredCourses) {
-		this.allCourses = allCourses;
+	public OfferedCourseManager(ArrayList<OfferedCourse> offeredCourses) {
 		this.offeredCourses = offeredCourses;
-	}
-
-	// Getters
-	public ArrayList<Course> getAllCourses() {
-		return allCourses;
 	}
 
 	public ArrayList<OfferedCourse> getOfferedCourses() {
@@ -51,8 +44,8 @@ public class OfferedCourseManager implements Serializable {
 	}
 
 	// Helper method that saves only the course list to the file "offered_courses.txt"
-	public static void saveData(ArrayList<Course> courses, ArrayList<OfferedCourse> offered) {
-		OfferedCourseManager handler = new OfferedCourseManager(courses, offered);
+	public static void saveData(ArrayList<OfferedCourse> offered) {
+		OfferedCourseManager handler = new OfferedCourseManager(offered);
 		handler.save(STORAGE_PATH); // Save to file named offered_courses.txt
 	}
 
@@ -60,7 +53,7 @@ public class OfferedCourseManager implements Serializable {
 	public static OfferedCourseManager loadData() {
 		OfferedCourseManager handler = load(STORAGE_PATH);
 		if (handler == null) {
-			return new OfferedCourseManager(new ArrayList<>(), new ArrayList<>()); // Return empty list if loading fails
+			return new OfferedCourseManager(new ArrayList<>()); // Return empty list if loading fails
 		}
 		return handler; // Return list of courses if successful
 	}
