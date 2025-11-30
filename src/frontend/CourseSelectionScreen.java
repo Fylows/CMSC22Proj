@@ -94,8 +94,7 @@ public class CourseSelectionScreen {
 		List<Course> allCourses = new ArrayList<>(OfferedCourseManager.loadCourses().values());
 		List<Course> coursesByDegree = new ArrayList<>(); // Filter only the courses belonging to the student’s degree program
 		for (Course c : allCourses) { // Loop through the course list
-			Degree d = Degree.valueOf(student.getDegree().toUpperCase()); // convert student degree to enum first
-			if (c.getType().contains(d)) {
+			if (c.getType().equalsIgnoreCase(student.getDegree())) {
 				coursesByDegree.add(c); // Add to the List
 			}
 		}

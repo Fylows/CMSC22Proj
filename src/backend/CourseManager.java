@@ -26,74 +26,74 @@ public class CourseManager {
 	 * 
 	 * An Immutable map that consists of all courses from ICT, mapped to their respective degrees
 	 */
-	public static Map<String, Set<Degree>> courseDegreeMap = Map.ofEntries(
+	public static Map<String, Degree> courseDegreeMap = Map.ofEntries(
 			// Bachelor of Science in Computer Science (BSCS)
-			Map.entry("CMSC 2", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 11", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 12", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 21", Set.of(Degree.BSCS, Degree.MSCS)),
-			Map.entry("CMSC 22", Set.of(Degree.BSCS, Degree.MSCS, Degree.MSIT)),
-			Map.entry("CMSC 23", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 56", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 57", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 100", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 123", Set.of(Degree.BSCS, Degree.MSCS)),
-			Map.entry("CMSC 124", Set.of(Degree.BSCS, Degree.MSCS)),
-			Map.entry("CMSC 125", Set.of(Degree.BSCS, Degree.MSCS)),
-			Map.entry("CMSC 127", Set.of(Degree.BSCS, Degree.MSIT)),
-			Map.entry("CMSC 128", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 129", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 130", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 131", Set.of(Degree.BSCS, Degree.MSCS)),
-			Map.entry("CMSC 132", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 137", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 141", Set.of(Degree.BSCS, Degree.MSCS)),
-			Map.entry("CMSC 142", Set.of(Degree.BSCS, Degree.MSCS)),
-			Map.entry("CMSC 150", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 161", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 165", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 170", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 172", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 173", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 180", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 190", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 191", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 198", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 199", Set.of(Degree.BSCS)),
-			Map.entry("CMSC 200", Set.of(Degree.BSCS)),
+			Map.entry("CMSC 2", Degree.BSCS),
+			Map.entry("CMSC 11", Degree.BSCS),
+			Map.entry("CMSC 12", Degree.BSCS),
+			Map.entry("CMSC 21", Degree.BSCS),
+			Map.entry("CMSC 22", Degree.BSCS),
+			Map.entry("CMSC 23", Degree.BSCS),
+			Map.entry("CMSC 56", Degree.BSCS),
+			Map.entry("CMSC 57", Degree.BSCS),
+			Map.entry("CMSC 100", Degree.BSCS),
+			Map.entry("CMSC 123", Degree.BSCS),
+			Map.entry("CMSC 124", Degree.BSCS),
+			Map.entry("CMSC 125", Degree.BSCS),
+			Map.entry("CMSC 127", Degree.BSCS),
+			Map.entry("CMSC 128", Degree.BSCS),
+			Map.entry("CMSC 129", Degree.BSCS),
+			Map.entry("CMSC 130", Degree.BSCS),
+			Map.entry("CMSC 131", Degree.BSCS),
+			Map.entry("CMSC 132", Degree.BSCS),
+			Map.entry("CMSC 137", Degree.BSCS),
+			Map.entry("CMSC 141", Degree.BSCS),
+			Map.entry("CMSC 142", Degree.BSCS),
+			Map.entry("CMSC 150", Degree.BSCS),
+			Map.entry("CMSC 161", Degree.BSCS),
+			Map.entry("CMSC 165", Degree.BSCS),
+			Map.entry("CMSC 170", Degree.BSCS),
+			Map.entry("CMSC 172", Degree.BSCS),
+			Map.entry("CMSC 173", Degree.BSCS),
+			Map.entry("CMSC 180", Degree.BSCS),
+			Map.entry("CMSC 190", Degree.BSCS),
+			Map.entry("CMSC 191", Degree.BSCS),
+			Map.entry("CMSC 198", Degree.BSCS),
+			Map.entry("CMSC 199", Degree.BSCS),
+			Map.entry("CMSC 200", Degree.BSCS),
 			
 			// Master of Science in Computer Science (MSCS)
-			Map.entry("CMSC 214", Set.of(Degree.MSCS, Degree.MSIT)),
-			Map.entry("CMSC 215", Set.of(Degree.MSCS, Degree.MSIT)),
-			Map.entry("CMSC 227", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 241", Set.of(Degree.MSCS, Degree.PHD)),
-			Map.entry("CMSC 244", Set.of(Degree.MSCS, Degree.PHD)),
-			Map.entry("CMSC 245", Set.of(Degree.MSCS, Degree.PHD)),
-			Map.entry("CMSC 250", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 265", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 271", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 272", Set.of(Degree.MSCS, Degree.MSIT)),
-			Map.entry("CMSC 280", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 290", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 291", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 299", Set.of(Degree.MSCS)),
-			Map.entry("CMSC 300", Set.of(Degree.MSCS)),
+			Map.entry("CMSC 214", Degree.MSCS),
+			Map.entry("CMSC 215", Degree.MSCS),
+			Map.entry("CMSC 227", Degree.MSCS),
+			Map.entry("CMSC 241", Degree.MSCS),
+			Map.entry("CMSC 244", Degree.MSCS),
+			Map.entry("CMSC 245", Degree.MSCS),
+			Map.entry("CMSC 250", Degree.MSCS),
+			Map.entry("CMSC 265", Degree.MSCS),
+			Map.entry("CMSC 271", Degree.MSCS),
+			Map.entry("CMSC 272", Degree.MSCS),
+			Map.entry("CMSC 280", Degree.MSCS),
+			Map.entry("CMSC 290", Degree.MSCS),
+			Map.entry("CMSC 291", Degree.MSCS),
+			Map.entry("CMSC 299", Degree.MSCS),
+			Map.entry("CMSC 300", Degree.MSCS),
 		
 			// Master of Information Technology (MIT)
-			Map.entry("IT 210", Set.of(Degree.MSIT)),
-			Map.entry("IT 226", Set.of(Degree.MSIT)),
-			Map.entry("IT 227", Set.of(Degree.MSIT)),
-			Map.entry("IT 238", Set.of(Degree.MSIT)),
-			Map.entry("IT 280", Set.of(Degree.MSIT)),
-			Map.entry("IT 295", Set.of(Degree.MSIT)),
-			Map.entry("IT 299", Set.of(Degree.MSIT)),
+			Map.entry("IT 210", Degree.MSIT),
+			Map.entry("IT 226", Degree.MSIT),
+			Map.entry("IT 227", Degree.MSIT),
+			Map.entry("IT 238", Degree.MSIT),
+			Map.entry("IT 280", Degree.MSIT),
+			Map.entry("IT 295", Degree.MSIT),
+			Map.entry("IT 299", Degree.MSIT),
 			
 			// PhD Computer Science (PhD)
-			Map.entry("CMSC 341", Set.of(Degree.PHD)),
-			Map.entry("CMSC 342", Set.of(Degree.PHD)),
-			Map.entry("CMSC 391", Set.of(Degree.PHD)),
-			Map.entry("CMSC 399", Set.of(Degree.PHD)),
-			Map.entry("CMSC 400", Set.of(Degree.PHD))
+			Map.entry("CMSC 341", Degree.PHD),
+			Map.entry("CMSC 342", Degree.PHD),
+			Map.entry("CMSC 391", Degree.PHD),
+			Map.entry("CMSC 399", Degree.PHD),
+			Map.entry("CMSC 400", Degree.PHD)
 						
 	);
 	/**
@@ -130,20 +130,20 @@ public class CourseManager {
 	
 			
 			// Master of Science in Computer Science (MSCS)
-			Map.entry("CMSC 214", List.of("CMSC 124", "CMSC 141")),
-			Map.entry("CMSC 215", List.of("CMSC 125", "CMSC 131")),
-			Map.entry("CMSC 244", List.of("CMSC 142")),
+//			Map.entry("CMSC 214", List.of("CMSC 124", "CMSC 141")),
+//			Map.entry("CMSC 215", List.of("CMSC 125", "CMSC 131")),
+//			Map.entry("CMSC 244", List.of("CMSC 142")),
 			Map.entry("CMSC 245", List.of("CMSC 244")),
 	
 	
 			// Master of Information Technology (MIT)
 			Map.entry("IT 227", List.of("IT 210", "IT 226")),
-			Map.entry("IT 280", List.of("IT 238")),
-			Map.entry("CMSC 272", List.of("CMSC 127")),
-
-			// PhD Computer Science (PhD)
-			Map.entry("CMSC 341", List.of("CMSC 241")),
-			Map.entry("CMSC 342", List.of("CMSC 245"))
+			Map.entry("IT 280", List.of("IT 238"))
+//			Map.entry("CMSC 272", List.of("CMSC 127")),
+//
+//			// PhD Computer Science (PhD)
+//			Map.entry("CMSC 341", List.of("CMSC 241")),
+//			Map.entry("CMSC 342", List.of("CMSC 245"))
 
 		);
 	
@@ -178,4 +178,6 @@ public class CourseManager {
 			default -> null; // If the degree does not match any known category, return null
 		};
 	}
+	
+	
 }
