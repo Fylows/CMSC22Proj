@@ -2,7 +2,9 @@ package backend;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -152,50 +154,76 @@ public class CourseManager {
 
 	
 	// Maps of the different degrees with their respective courses
-	private static Map<String, Course> BSCS = new HashMap<>();
-	private static Map<String, Course> MSCS = new HashMap<>();
-	private static Map<String, Course> PHD = new HashMap<>();
-	private static Map<String, Course> MSIT = new HashMap<>();
+	private static Map<String, Course> BSCS = new LinkedHashMap<>();
+	private static Map<String, Course> MSCS = new LinkedHashMap<>();
+	private static Map<String, Course> PHD = new LinkedHashMap<>();
+	private static Map<String, Course> MSIT = new LinkedHashMap<>();
 	// TODO add a observable list when doing UI
 
 	
 	
 	/**
-	 * getCourse
+	 * loadFromCSV
 	 * 
-	 * gets the course from the specific degree
+	 * Loads all degree courses into hashmaps
 	 * 
-	 * @param	course code to be used as the search key of the Course Object
-	 * @param	the degree of the course
-	 * @return	returns the course of the given course code
 	 */
-	
 	public static void loadFromCSV() {
-		try (BufferedReader br = new BufferedReader(
-				new InputStreamReader(OfferedCourseManager.class.getResourceAsStream("/dataset/course_offerings.csv")))) {
+		String[] files = {"/dataset/ics_cmsc_courses.csv", "/dataset/ics_mit_courses.csv", "/dataset/ics_mscs_courses.csv", "/dataset/ics_phd_courses.csv"};
 
-			String line;
-			while ((line = br.readLine()) != null) {
-				if (line.isBlank() || line.toLowerCase().contains("code")) continue; // Skip the header of the CSV file
+		for (String resourcePath : files) { // Loop through each CSV file
+			try (BufferedReader br = new BufferedReader(
+					new InputStreamReader(OfferedCourseManager.class.getResourceAsStream(resourcePath)))) {
 
-				String[] parts = line.split(","); // Split the lines by commas
-				if (parts.length < 7) continue; // Must contain code, title, units, section, time, days, room, if one is missing, skip
+				String line;
+				while ((line = br.readLine()) != null) {
+					if (line.isBlank() || line.toLowerCase().contains("code")) continue; // Skip the header of the CSV file
 
-				String code = parts[0].trim(); // Trims the course code
-				String section = parts[3].trim(); // Trims the section (e.g., "U-1L")
-				String times = parts[4].trim(); // Trims the time range
-				String days = parts[5].trim(); // Trims the days
-				String room = parts[6].trim(); // Trims the room
-				
-				
-				Course course = new Course(code, parts[1].trim(), Integer.parseInt(parts[2].trim()), "");
+					String[] parts = line.split(","); // Split the lines by commas
+					if (parts.length < 4) continue; // Must contain code, title, units, description, if one is missing, skip
+
+					String code = parts[0].trim(); // Trims the course code
+					String title = parts[1].trim(); // Trims the course name
+
+					// For trimming the units (some units have range)
+					String unitStr = parts[2].trim();
+					int units = 1; // Default units if parsing fails
+					try {
+						units = Integer.parseInt(unitStr); // Parsing the units normally
+					} catch (NumberFormatException e) { // Handle cases like "1–3" by taking the highest value
+						if (unitStr.contains("-")) {
+							String[] range = unitStr.split("-"); // Split the range into [1,3]
+							try {
+								units = Integer.parseInt(range[1].trim()); // Use the upper bound or max (3)
+							} catch (NumberFormatException ex) {
+								units = 1; // If parsing fails, use 1
+							}
+						} 
+					}
+
+					// For trimming the description (some description have commas)
+					StringBuilder descBuilder = new StringBuilder();
+					for (int i = 3; i < parts.length; i++) {
+						if (i > 3) descBuilder.append(","); // Restores the commas in the text
+						descBuilder.append(parts[i].trim()); 
+					}
+					String description = descBuilder.toString(); // Assigns the fixed description
 
 
+					Course c = new Course(code, title, units, description); // Creates the Course object from parsed values
+					String degree = c.getType();
+					switch(degree) {
+						case "BSCS" -> BSCS.put(code, c);
+						case "MSCS" -> MSCS.put(code, c);
+						case "PHD" -> PHD.put(code, c);
+						case "MSIT" -> MSIT.put(code, c);
+					}
+				}
+			} catch (Exception e) {
+				return;
 			}
-		} catch (Exception e) {}
+		}
 	}
-	
-	
 	
 	// Getters
 	public static Course getCourse(String courseCode, String degree) {
@@ -207,6 +235,16 @@ public class CourseManager {
 			default -> null; // If the degree does not match any known category, return null
 		};
 	}
-	
-	
+
+	public static List<Course> getCoursesByDegree(String degree) {
+	    return switch (degree) {
+	        case "BSCS" -> new ArrayList<>(BSCS.values());
+	        case "MSCS" -> new ArrayList<>(MSCS.values());
+	        case "PHD"  -> new ArrayList<>(PHD.values());
+	        case "MSIT" -> new ArrayList<>(MSIT.values());
+	        default     -> List.of(); // empty, safe list
+	    };
+	}
+
+
 }

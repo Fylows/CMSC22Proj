@@ -91,13 +91,8 @@ public class CourseSelectionScreen {
 		TextFlow subtitle2 = new TextFlow(subtitleText2);
 
 		// Load all courses from the CSV file
-		List<Course> allCourses = new ArrayList<>(OfferedCourseManager.loadCourses().values());
-		List<Course> coursesByDegree = new ArrayList<>(); // Filter only the courses belonging to the student’s degree program
-		for (Course c : allCourses) { // Loop through the course list
-			if (c.getType().equalsIgnoreCase(student.getDegree())) {
-				coursesByDegree.add(c); // Add to the List
-			}
-		}
+		// TODO load all courses from CourseMqa
+		List<Course> coursesByDegree = CourseManager.getCoursesByDegree(student.getDegree());
 
 		ObservableList<CheckBox> courseCheckboxes = FXCollections.observableArrayList(); // Store all the CheckBoxes (one per course)
 		Map<CheckBox, Course> cbToCourse = new HashMap<>(); // Map each CheckBox to the Course it represents
