@@ -30,6 +30,14 @@ public class Course implements Serializable {
 		System.out.printf("Course code: %s, title: %s, units: %d, description: %s\n", this.courseCode, this.courseTitle, this.units, this.description);
 	}
 	
+	public ArrayList<String> getPrerequisites() {
+	    if (prereq.isEmpty() && CourseManager.prereqMap.containsKey(courseCode)) {
+	        prereq.addAll(CourseManager.prereqMap.get(courseCode));
+	    }
+	    return prereq;
+	}
+
+	
 	// Getters
 	public String getType() { return this.type; }
 	public String getCourseCode() { return courseCode; }

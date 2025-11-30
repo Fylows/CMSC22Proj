@@ -8,7 +8,7 @@ public class RegSystem {
 
     public RegSystem() {
         this.studentManager = new StudentManager(StudentManager.loadStudents());
-        this.courseManager = new OfferedCourseManager(OfferedCourseManager.loadData());
+        this.courseManager = OfferedCourseManager.loadData();
     }
 
     public void addStudent(Student s) {
@@ -23,6 +23,7 @@ public class RegSystem {
                 oc.getEnrolledStudents().remove(s);
             }
             studentManager.getStudents().remove(s);
+
             StudentManager.saveStudents(studentManager.getStudents());
             OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
         }
@@ -46,6 +47,7 @@ public class RegSystem {
         if (c != null) {
             courseManager.getOfferedCourses().removeIf(oc -> oc.getCourse().equals(c));
             courseManager.getAllCourses().remove(c);
+
             OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
         }
     }
@@ -81,9 +83,28 @@ public class RegSystem {
 
         if (s == null || oc == null) return false;
 
+        // PREREQ CHECK
+        if (!hasPrerequisites(s, oc.getCourse())) {
+            System.out.println("Enrollment failed: prerequisites not met.");
+            return false;
+        }
+
+        if (hasTimeConflict(s, oc)) {
+            System.out.println("Enrollment failed: time schedule conflict.");
+            return false;
+        }
+
         if (!oc.getEnrolledStudents().contains(s)) {
             oc.getEnrolledStudents().add(s);
+
+            if (!s.getEnrolledCourses().contains(courseCode)) {
+                s.getEnrolledCourses().add(courseCode);
+            }
+
+            StudentManager.saveStudents(studentManager.getStudents());
             OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
+
+            System.out.println("Successfully enrolled in " + courseCode + " (" + term + ")");
             return true;
         }
         return false;
@@ -97,6 +118,10 @@ public class RegSystem {
 
         if (oc.getEnrolledStudents().contains(s)) {
             oc.getEnrolledStudents().remove(s);
+
+            s.getEnrolledCourses().remove(courseCode);
+
+            StudentManager.saveStudents(studentManager.getStudents());
             OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
             return true;
         }
@@ -107,5 +132,56 @@ public class RegSystem {
         OfferedCourse oc = getOfferedCourse(courseCode, term);
         if (oc != null) return oc.getEnrolledStudents();
         return new ArrayList<>();
+    }
+
+    private boolean hasPrerequisites(Student student, Course course) {
+        if (course.getPrerequisites() == null || course.getPrerequisites().isEmpty()) return true;
+
+        for (String req : course.getPrerequisites()) {
+            if (!student.getCompletedCourses().contains(req)) {
+                System.out.println("Missing prerequisite: " + req);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
+        for (String code : student.getEnrolledCourses()) {
+
+            OfferedCourse c = getOfferedCourse(code, courseToEnroll.getTerm());
+            if (c == null) continue;
+
+            if (c.getDay() != null && courseToEnroll.getDay() != null) {
+                String[] cDays = c.getDay().split(",");
+                String[] newDays = courseToEnroll.getDay().split(",");
+                boolean conflict = false;
+
+                for (String d1 : cDays) {
+                    for (String d2 : newDays) {
+                        if (d1.trim().equalsIgnoreCase(d2.trim())) {
+                            conflict = true;
+                            break;
+                        }
+                    }
+                    if (conflict) break;
+                }
+
+                if (conflict) {
+                    boolean overlap = !(courseToEnroll.getEndTime().isBefore(c.getStartTime()) ||
+                                        courseToEnroll.getStartTime().isAfter(c.getEndTime()));
+                    if (overlap) {
+                        System.out.println("Time conflict with " + c.getCourse().getCourseCode());
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private void saveStudentData() {
+        StudentManager.saveStudents(studentManager.getStudents());
+        System.out.println("Student data saved.");
     }
 }

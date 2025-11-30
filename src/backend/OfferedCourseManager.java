@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class OfferedCourseManager implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private ArrayList<Course> allCourses = new ArrayList<>();
 
 	private ArrayList<OfferedCourse> offeredCourses; // Courses offered
 	private static final Path STORAGE_PATH = Path.of("src/storage/offered_courses.txt");
@@ -17,6 +18,7 @@ public class OfferedCourseManager implements Serializable {
 		this.offeredCourses = offeredCourses;
 	}
 
+	
 	public ArrayList<OfferedCourse> getOfferedCourses() {
 		return offeredCourses;
 	}
@@ -46,6 +48,10 @@ public class OfferedCourseManager implements Serializable {
 	public static void saveData(ArrayList<OfferedCourse> offered) {
 		OfferedCourseManager handler = new OfferedCourseManager(offered);
 		handler.save(STORAGE_PATH); // Save to file named offered_courses.txt
+	}
+	
+	public static void saveData(ArrayList<Course> allCourses, ArrayList<OfferedCourse> offered) {
+	    saveData(offered); // We only persist offeredCourses; allCourses can be persisted separately if needed
 	}
 
 	// Helper method that loads saved courses from file
@@ -82,7 +88,7 @@ public class OfferedCourseManager implements Serializable {
 					System.out.printf("Couldn't find %s skipping...\n", code);
 					continue;
 				}
-				OfferedCourse oc = new OfferedCourse(baseCourse, section, times, days, room); // Build OfferedCourse using course info + schedule info
+				OfferedCourse oc = new OfferedCourse(baseCourse, section, times, days, room, "1st Semester"); // Build OfferedCourse using course info + schedule info
 				list.add(oc); // Add to offered list
 			}
 		} catch (Exception e) {
@@ -90,4 +96,10 @@ public class OfferedCourseManager implements Serializable {
 		}
 		return list; // Return all offered courses
 	}
+	
+	public ArrayList<Course> getAllCourses() {
+	    return allCourses;
+	}
+	
+	
 }
