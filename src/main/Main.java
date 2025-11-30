@@ -9,6 +9,8 @@
 
 package main;
 
+import java.nio.file.Path;
+
 import backend.CourseManager;
 import frontend.LoadingScreen;
 import javafx.application.Application;

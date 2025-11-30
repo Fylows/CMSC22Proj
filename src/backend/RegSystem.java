@@ -7,14 +7,8 @@ public class RegSystem {
     private OfferedCourseManager courseManager;
 
     public RegSystem() {
-        ArrayList<Student> students = StudentManager.loadStudents();
-        this.studentManager = new StudentManager(students);
-
-        // Removed Course, we are only concerned about students and offeredCourses
-        
-        ArrayList<OfferedCourse> offeredCourses = OfferedCourseManager.loadOfferedCoursesFromCSV();
-
-        this.courseManager = new OfferedCourseManager(offeredCourses);
+        this.studentManager = new StudentManager(StudentManager.loadStudents());
+        this.courseManager = new OfferedCourseManager(OfferedCourseManager.loadData());
     }
 
     public void addStudent(Student s) {

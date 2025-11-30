@@ -3,14 +3,12 @@ package backend;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * An Object to manage the different Courses
+ * An Object to store and manage the different Courses
  * 
  * @author Ljiel Saplan
  * @since 1.0
@@ -245,6 +243,5 @@ public class CourseManager {
 	        default     -> List.of(); // empty, safe list
 	    };
 	}
-
 
 }

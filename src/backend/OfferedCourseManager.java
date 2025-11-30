@@ -4,14 +4,13 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
 
 public class OfferedCourseManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private ArrayList<OfferedCourse> offeredCourses; // Courses offered
-	private static final Path STORAGE_PATH = Path.of("offered_courses.txt");
+	private static final Path STORAGE_PATH = Path.of("src/storage/offered_courses.txt");
 
 	// Constructor
 	public OfferedCourseManager(ArrayList<OfferedCourse> offeredCourses) {
@@ -33,7 +32,7 @@ public class OfferedCourseManager implements Serializable {
 	}
 
 	public static OfferedCourseManager load(Path path) {
-		if (!Files.exists(path)) return null; // File doesn't exist
+		if (!Files.exists(path)) return new OfferedCourseManager(OfferedCourseManager.loadOfferedCoursesFromCSV()); // File doesn't exist fall back to CSV loading
 
 		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) { // Put in the try block so it automatically closes at the end
 			OfferedCourseManager manager = (OfferedCourseManager) in.readObject(); // Read the serialized OfferedCourseManager object
@@ -80,7 +79,7 @@ public class OfferedCourseManager implements Serializable {
 
 				Course baseCourse = CourseManager.getCourse(code, CourseManager.courseDegreeMap.get(code).name());
 				if (baseCourse == null) {
-					System.out.printf("Couldn't find %s skipping...", code);
+					System.out.printf("Couldn't find %s skipping...\n", code);
 					continue;
 				}
 				OfferedCourse oc = new OfferedCourse(baseCourse, section, times, days, room); // Build OfferedCourse using course info + schedule info
