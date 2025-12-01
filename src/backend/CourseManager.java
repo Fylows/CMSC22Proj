@@ -98,6 +98,7 @@ public class CourseManager {
 			Map.entry("CMSC 400", Degree.PHD)
 						
 	);
+	
 	/**
 	 * prereqMap
 	 * 

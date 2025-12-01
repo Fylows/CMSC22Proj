@@ -9,7 +9,7 @@ public class StudentManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<Student> students; // List of registered students
-	private static final Path STORAGE_PATH = Path.of("students.txt");
+	private static final Path STORAGE_PATH = Path.of("src/storage/students.txt");
 
 	// Constructor
 	public StudentManager(ArrayList<Student> students) {
@@ -23,38 +23,40 @@ public class StudentManager implements Serializable {
 
     // Persistence Functions (saving/loading)
 	// Saves the entire StudentManager object to a file
-	public void save(Path path) {
-		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(path))) { // Put in the try block so it automatically closes at the end
-			out.writeObject(this); // Writes all the students
+	public static void save(StudentManager manager) {
+		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(STORAGE_PATH))) { // Put in the try block so it automatically closes at the end
+			out.writeObject(manager); // Writes all the students
 		} catch (IOException e) {
 			e.printStackTrace(); // Prints a detailed error report to the console
 		}
 	}
 
 	// Load a StudentManager from a file (returns null if something fails)
-	public static StudentManager load(Path path) {
-		if (!Files.exists(path)) return null; // If file does not exist, return null
+	public static StudentManager load() {
+		StudentManager fallback = new StudentManager(new ArrayList<Student>());
 		
-		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) { // Put in the try block so it automatically closes at the end
+		if (!Files.exists(STORAGE_PATH)) return fallback; // If file does not exist, return a default value
+		
+		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(STORAGE_PATH))) { // Put in the try block so it automatically closes at the end
 			StudentManager manager = (StudentManager) in.readObject(); // Read the serialized StudentManager object
 			return manager; // Return the loaded object
 		} catch (IOException | ClassNotFoundException e) {
-			return null; // Return nothing if file is unreadable or corrupted
+			return fallback; // Return nothing if file is unreadable or corrupted
 		}
 	}
 
-	// Helper method that saves only the students list to the file "students.txt"
-	public static void saveStudents(ArrayList<Student> students) {
-		StudentManager handler = new StudentManager(students);
-		handler.save(STORAGE_PATH); // Save to file named students.txt
-	}
-
-	// Helper method that loads saved students from file
-	public static ArrayList<Student> loadStudents() {
-		StudentManager handler = load(STORAGE_PATH);
-		if (handler == null) return new ArrayList<>(); // Return empty list if loading fails
-		return handler.getStudents(); // Return list of students if successful
-	}
+//	// Helper method that saves only the students list to the file "students.txt"
+//	public static void saveStudents(ArrayList<Student> students) {
+//		StudentManager handler = new StudentManager(students);
+//		handler.save(STORAGE_PATH); // Save to file named students.txt
+//	}
+//
+//	// Helper method that loads saved students from file
+//	public static ArrayList<Student> loadStudents() {
+//		StudentManager handler = load(STORAGE_PATH);
+//		if (handler == null) return new ArrayList<>(); // Return empty list if loading fails
+//		return handler.getStudents(); // Return list of students if successful
+//	}
 
 	// Update the information for the student (used after a successful sign-up, and student is asked for completed courses)
 	public void updateStudent(Student updatedStudent) {
@@ -64,7 +66,7 @@ public class StudentManager implements Serializable {
 				break;
 			}
 		}
-		saveStudents(students); // Persist all students
+		StudentManager.save(this); // Persist all students
 	}
 
 	// Logic for Sign-Up Screen
@@ -95,7 +97,7 @@ public class StudentManager implements Serializable {
 		// Creates the new student
 		Student newStudent = new Student(firstName, middleName, lastName, suffix, email, birthday, sex, password, degree);
 		students.add(newStudent);
-		saveStudents(students); // Saves the student after signing-up
+		StudentManager.save(this); // Saves the student after signing-up
 
 		return "SUCCESS";
 	}

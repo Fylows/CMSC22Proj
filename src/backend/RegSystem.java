@@ -7,13 +7,13 @@ public class RegSystem {
     private OfferedCourseManager courseManager;
 
     public RegSystem() {
-        this.studentManager = new StudentManager(StudentManager.loadStudents());
-        this.courseManager = OfferedCourseManager.loadData();
+        this.studentManager = StudentManager.load();
+        this.courseManager = OfferedCourseManager.load();
     }
 
     public void addStudent(Student s) {
         studentManager.getStudents().add(s);
-        StudentManager.saveStudents(studentManager.getStudents());
+        StudentManager.save(this.studentManager);
     }
 
     public void deleteStudent(String studentEmail) {
@@ -24,8 +24,8 @@ public class RegSystem {
             }
             studentManager.getStudents().remove(s);
 
-            StudentManager.saveStudents(studentManager.getStudents());
-            OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
+            StudentManager.save(this.studentManager);
+            // OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
         }
     }
 
@@ -37,31 +37,31 @@ public class RegSystem {
         return studentManager.getStudents();
     }
 
-    public void addCourse(Course c) {
-        courseManager.getAllCourses().add(c);
-        OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
-    }
+//    public void addCourse(Course c) {
+//        courseManager.getAllCourses().add(c);
+//        OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
+//    }
+//
+//    public void deleteCourse(String courseCode) {
+//        Course c = getCourse(courseCode);
+//        if (c != null) {
+//            courseManager.getOfferedCourses().removeIf(oc -> oc.getCourse().equals(c));
+//            courseManager.getAllCourses().remove(c);
+//
+//            OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
+//        }
+//    }
 
-    public void deleteCourse(String courseCode) {
-        Course c = getCourse(courseCode);
-        if (c != null) {
-            courseManager.getOfferedCourses().removeIf(oc -> oc.getCourse().equals(c));
-            courseManager.getAllCourses().remove(c);
-
-            OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
-        }
-    }
-
-    public Course getCourse(String courseCode) {
-        for (Course c : courseManager.getAllCourses()) {
-            if (c.getCourseCode().equalsIgnoreCase(courseCode)) return c;
-        }
-        return null;
-    }
-
-    public ArrayList<Course> getAllCourses() {
-        return courseManager.getAllCourses();
-    }
+//    public Course getCourse(String courseCode) {
+//        for (Course c : courseManager.getAllCourses()) {
+//            if (c.getCourseCode().equalsIgnoreCase(courseCode)) return c;
+//        }
+//        return null;
+//    }
+//
+//    public ArrayList<Course> getAllCourses() {
+//        return courseManager.getAllCourses();
+//    }
 
     public ArrayList<OfferedCourse> getAllOfferedCourses() {
         return courseManager.getOfferedCourses();
@@ -101,8 +101,8 @@ public class RegSystem {
                 s.getEnrolledCourses().add(courseCode);
             }
 
-            StudentManager.saveStudents(studentManager.getStudents());
-            OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
+            StudentManager.save(this.studentManager);
+            OfferedCourseManager.save(this.courseManager);
 
             System.out.println("Successfully enrolled in " + courseCode + " (" + term + ")");
             return true;
@@ -121,8 +121,8 @@ public class RegSystem {
 
             s.getEnrolledCourses().remove(courseCode);
 
-            StudentManager.saveStudents(studentManager.getStudents());
-            OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
+            StudentManager.save(this.studentManager);
+            OfferedCourseManager.save(this.courseManager);
             return true;
         }
         return false;
@@ -180,8 +180,4 @@ public class RegSystem {
         return false;
     }
 
-    private void saveStudentData() {
-        StudentManager.saveStudents(studentManager.getStudents());
-        System.out.println("Student data saved.");
-    }
 }

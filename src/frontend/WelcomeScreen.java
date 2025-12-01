@@ -71,8 +71,7 @@ public class WelcomeScreen {
 		styleButton(login);
 		
 		// Unedited
-		ArrayList<Student> students = StudentManager.loadStudents();
-		StudentManager manager = new StudentManager(students);
+		StudentManager manager = StudentManager.load();
 
 		// Sign Up button action
 		signup.setOnAction(e -> {

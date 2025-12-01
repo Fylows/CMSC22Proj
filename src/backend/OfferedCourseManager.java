@@ -5,10 +5,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-
+/**
+ * OffereCourseManager
+ * 
+ * A class for managing all offered courses
+ */
 public class OfferedCourseManager implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<Course> allCourses = new ArrayList<>();
 
 	private ArrayList<OfferedCourse> offeredCourses; // Courses offered
 	private static final Path STORAGE_PATH = Path.of("src/storage/offered_courses.txt");
@@ -23,46 +26,30 @@ public class OfferedCourseManager implements Serializable {
 		return offeredCourses;
 	}
 
-	// Persistence Functions (saving/loading)
-	// Saves the entire OfferedCourseManager object to a file
-	public void save(Path path) {
-		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(path))) { // Put in the try block so it automatically closes at the end
-			out.writeObject(this); // Writes all the courses
-		} catch (IOException e) {
-			e.printStackTrace(); // Prints a detailed error report to the console
-		}
-	}
 
-	public static OfferedCourseManager load(Path path) {
-		if (!Files.exists(path)) return new OfferedCourseManager(OfferedCourseManager.loadOfferedCoursesFromCSV()); // File doesn't exist fall back to CSV loading
+//	// Helper method that saves only the course list to the file "offered_courses.txt"
+//	public static void saveData(ArrayList<OfferedCourse> offered) {
+//		OfferedCourseManager handler = new OfferedCourseManager(offered);
+//		handler.save(STORAGE_PATH); // Save to file named offered_courses.txt
+//	}
+//	
+//	public static void saveData(ArrayList<Course> allCourses, ArrayList<OfferedCourse> offered) {
+//	    saveData(offered); // We only persist offeredCourses; allCourses can be persisted separately if needed
+//	}
+//
+//	// Helper method that loads saved courses from file
+//	public static OfferedCourseManager loadData() {
+//		OfferedCourseManager handler = load(STORAGE_PATH);
+//		if (handler == null) {
+//			return new OfferedCourseManager(new ArrayList<>()); // Return empty list if loading fails
+//		}
+//		return handler; // Return list of courses if successful
+//	}
 
-		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(path))) { // Put in the try block so it automatically closes at the end
-			OfferedCourseManager manager = (OfferedCourseManager) in.readObject(); // Read the serialized OfferedCourseManager object
-			return manager; // Return the loaded object
-		} catch (IOException | ClassNotFoundException e) {
-			return null; // Return nothing if file is unreadable or corrupted
-		}
-	}
-
-	// Helper method that saves only the course list to the file "offered_courses.txt"
-	public static void saveData(ArrayList<OfferedCourse> offered) {
-		OfferedCourseManager handler = new OfferedCourseManager(offered);
-		handler.save(STORAGE_PATH); // Save to file named offered_courses.txt
-	}
 	
-	public static void saveData(ArrayList<Course> allCourses, ArrayList<OfferedCourse> offered) {
-	    saveData(offered); // We only persist offeredCourses; allCourses can be persisted separately if needed
-	}
-
-	// Helper method that loads saved courses from file
-	public static OfferedCourseManager loadData() {
-		OfferedCourseManager handler = load(STORAGE_PATH);
-		if (handler == null) {
-			return new OfferedCourseManager(new ArrayList<>()); // Return empty list if loading fails
-		}
-		return handler; // Return list of courses if successful
-	}
-
+	// Savers and Loaders
+	
+	
 	// Loading the CSV file of the offered course for the first semester
 	public static ArrayList<OfferedCourse> loadOfferedCoursesFromCSV() {
 		ArrayList<OfferedCourse> list = new ArrayList<>();
@@ -97,9 +84,26 @@ public class OfferedCourseManager implements Serializable {
 		return list; // Return all offered courses
 	}
 	
-	public ArrayList<Course> getAllCourses() {
-	    return allCourses;
+	// Persistence Functions (saving/loading)
+	// Saves the entire OfferedCourseManager object to a file
+	public static void save(OfferedCourseManager manager) {
+		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(STORAGE_PATH))) { // Put in the try block so it automatically closes at the end
+			out.writeObject(manager); // Writes all the courses
+		} catch (IOException e) {
+			e.printStackTrace(); // Prints a detailed error report to the console
+		}
 	}
-	
-	
+
+	public static OfferedCourseManager load() {
+		OfferedCourseManager fallback = new OfferedCourseManager(OfferedCourseManager.loadOfferedCoursesFromCSV());
+		
+		if (!Files.exists(STORAGE_PATH)) return fallback; // File doesn't exist fallback to CSV loading
+
+		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(STORAGE_PATH))) { // Put in the try block so it automatically closes at the end
+			OfferedCourseManager manager = (OfferedCourseManager) in.readObject(); // Read the serialized OfferedCourseManager object
+			return manager; // Return the loaded object
+		} catch (IOException | ClassNotFoundException e) {
+			return fallback; // Return default course manager if failed to load
+		}
+	}
 }

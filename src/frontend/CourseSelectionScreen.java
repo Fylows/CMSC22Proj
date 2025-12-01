@@ -242,7 +242,7 @@ public class CourseSelectionScreen {
 			student.getCompletedCourses().addAll(selectedCourses);
 
 			// Save updated student info to students.txt
-			StudentManager studentManager = StudentManager.load(Path.of("students.txt")); // Load current manager
+			StudentManager studentManager = StudentManager.load(); // Load current manager
 			if (studentManager != null) {
 				studentManager.updateStudent(student); // Write updated student to file
 			}
