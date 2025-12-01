@@ -6,16 +6,22 @@ public class RegSystem {
     private StudentManager studentManager;
     private OfferedCourseManager courseManager;
 
+    //Constructor
     public RegSystem() {
         this.studentManager = StudentManager.load();
         this.courseManager = OfferedCourseManager.load();
     }
 
+    //Adds new students to system
+    //Saves the updated student list
     public void addStudent(Student s) {
         studentManager.getStudents().add(s);
         StudentManager.save(this.studentManager);
     }
 
+    //Deletes students from every course they enrolled in
+    //Deletes students from the entire system
+    //Saves the updated list
     public void deleteStudent(String studentEmail) {
         Student s = getStudent(studentEmail);
         if (s != null) {
@@ -29,10 +35,12 @@ public class RegSystem {
         }
     }
 
+    //Gets student by email address
     public Student getStudent(String studentEmail) {
         return studentManager.getStudentByEmail(studentEmail);
     }
 
+    //Gets a list of all students in the system
     public ArrayList<Student> getAllStudents() {
         return studentManager.getStudents();
     }
@@ -63,10 +71,12 @@ public class RegSystem {
 //        return courseManager.getAllCourses();
 //    }
 
+    //Get all currently offered courses in the system
     public ArrayList<OfferedCourse> getAllOfferedCourses() {
         return courseManager.getOfferedCourses();
     }
 
+    //Gets a specific course from the system using course codes
     public OfferedCourse getOfferedCourse(String courseCode, String term) {
         for (OfferedCourse oc : courseManager.getOfferedCourses()) {
             if (oc.getCourse().getCourseCode().equalsIgnoreCase(courseCode) &&
@@ -77,13 +87,15 @@ public class RegSystem {
         return null;
     }
 
+    //Enrolls students into offered courses
+    //Checks if students meet the prerequisites before enrolling in the course
+    //Saves the updated list
     public boolean enrollStudentInOfferedCourse(String studentEmail, String courseCode, String term) {
         Student s = getStudent(studentEmail);
         OfferedCourse oc = getOfferedCourse(courseCode, term);
 
         if (s == null || oc == null) return false;
 
-        // PREREQ CHECK
         if (!hasPrerequisites(s, oc.getCourse())) {
             System.out.println("Enrollment failed: prerequisites not met.");
             return false;
@@ -110,6 +122,8 @@ public class RegSystem {
         return false;
     }
 
+    //Removes student from enrolled courses
+    //Saves the updated list
     public boolean dropStudentFromOfferedCourse(String studentEmail, String courseCode, String term) {
         Student s = getStudent(studentEmail);
         OfferedCourse oc = getOfferedCourse(courseCode, term);
@@ -128,12 +142,14 @@ public class RegSystem {
         return false;
     }
 
+    //Gets list of all students currently enrolled in a specific course
     public ArrayList<Student> getStudentsInOfferedCourse(String courseCode, String term) {
         OfferedCourse oc = getOfferedCourse(courseCode, term);
         if (oc != null) return oc.getEnrolledStudents();
         return new ArrayList<>();
     }
 
+    //Checks if a specific course has prerequisites
     private boolean hasPrerequisites(Student student, Course course) {
         if (course.getPrerequisites() == null || course.getPrerequisites().isEmpty()) return true;
 
@@ -146,6 +162,7 @@ public class RegSystem {
         return true;
     }
 
+    //Compares two courses and checks if they have overlapping time frames
     private boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
         for (String code : student.getEnrolledCourses()) {
 
