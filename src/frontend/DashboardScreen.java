@@ -2,91 +2,104 @@ package frontend;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
-public class DashboardScreen {
+//import backend.Student;
 
-    private Stage stage;
+public class DashboardScreen extends VBox{
 
-    public DashboardScreen() {
-        stage = new Stage();
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Uploading Kurasu Icon for app 
-		stage.setTitle(" クラス | Kurasu"); // Sets the title to Kurasu
-        
+	Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
+	Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
+	Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
+	Font japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
+
+	//private Student student;
+	
+	public DashboardScreen() {
+		
+		setSpacing(20);
+		setPadding(new Insets(20));
+		setStyle("-fx-background-color: white;");
+
+
+        // ---------- WELCOME CARD ----------
+        VBox welcomeCard = createWelcomeCard();
+
+        // ---------- STATS ROW ----------
+        HBox statsRow = createStatsRow();
+
+        // Add all to layout
+        getChildren().addAll(welcomeCard, statsRow);
     }
+	
+	
+	/***** WELCOME CARD *****/
+	private VBox createWelcomeCard() {
+        VBox card = new VBox();
+        card.setPadding(new Insets(30));
+        card.setSpacing(10);
 
-    public void show() {
-
-        BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: #ffe5ec;");
-
-        // Sidebar
-        VBox sidebar = new VBox(10);
-        sidebar.setPadding(new Insets(20));
-        sidebar.setPrefWidth(230);
-        sidebar.setStyle("-fx-background-color: white; -fx-border-color: #ffc2d1;");
-
-        Label dash = new Label("Dashboard");
-        Label enlist = new Label("Enlistment");
-
-        // Course List with dropdown
-        VBox courseListBox = new VBox(5);
-        Label courseHeader = new Label("Course List ▼");
-
-        VBox courseDropdown = new VBox();
-        courseDropdown.setPadding(new Insets(0, 0, 0, 20));
-        courseDropdown.getChildren().addAll(
-                new Label("- BS Computer Science"),
-                new Label("- MS Computer Science"),
-                new Label("- MIT"),
-                new Label("- PHD")
+        card.setStyle(
+            "-fx-background-color: #f7c6d2;" +
+            "-fx-background-radius: 30;"
         );
-        courseDropdown.setVisible(false); // Hide 
+        
+        Label title = new Label("Welcome back, [NAME]!");
+        title.setStyle("-fx-font-size: 36; -fx-font-weight: bold;");
 
-        courseHeader.setOnMouseClicked(e -> {
-            courseDropdown.setVisible(!courseDropdown.isVisible());
-        });
+        Label subtitle = new Label(
+            "Welcome to クラス | Karasu! This is where your academic journey blooms, one class at a time "
+        );
+        subtitle.setStyle("-fx-font-size: 16;");
 
-        courseListBox.getChildren().addAll(courseHeader, courseDropdown);
+        Label tutorial = new Label("Tutorial on how to use Karasu System →");
+        tutorial.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
 
-        Label about = new Label("ℹ About");
-        Label credits = new Label("⭐ Credits");
+        card.getChildren().addAll(title, subtitle, tutorial);
+        return card;
+	}
+	
+	
+	/***** STATS ROW *****/
+    private HBox createStatsRow() {
+        HBox row = new HBox();
+        row.setSpacing(30);
+        row.setAlignment(Pos.CENTER);
 
-        sidebar.getChildren().addAll(dash, enlist, courseListBox, about, credits);
+        VBox completedCard = createStatCard("[PERCENT OF COMPLETED UNITS]", "of units completed");
+        VBox takenCard     = createStatCard("[TOTAL UNITS TAKEN]", "Units Taken (out of 130)");
+        VBox allowableCard = createStatCard("21",  "Allowable Units");
 
-        // Hamburer Icon
-        Button menuBtn = new Button("☰");
-        menuBtn.setStyle("-fx-font-size: 24px; -fx-background-color: transparent;");
-        menuBtn.setOnAction(e -> sidebar.setVisible(!sidebar.isVisible()));
-
-        // Top Bar
-        HBox topBar = new HBox(menuBtn);
-        topBar.setPadding(new Insets(10));
-        root.setTop(topBar);
-
-        // Content
-        VBox content = new VBox(20);
-        content.setAlignment(Pos.CENTER);
-
-        Button logoutBtn = new Button("Log Out");
-        logoutBtn.setStyle("-fx-background-color: #fb6f92; -fx-text-fill: white; -fx-font-size: 18px;");
-        logoutBtn.setOnAction(e -> {
-            stage.close();
-            System.exit(0);
-        });
-
-        content.getChildren().add(logoutBtn);
-
-        // Place regions
-        root.setLeft(sidebar);
-        root.setCenter(content);
-
-        Scene scene = new Scene(root, 1000, 700);
-        stage.setScene(scene);
-        stage.show();
+        row.getChildren().addAll(completedCard, takenCard, allowableCard);
+        return row;
     }
+
+    private VBox createStatCard(String value, String label) {
+        VBox card = new VBox();
+        card.setPadding(new Insets(20));
+        card.setSpacing(10);
+        card.setAlignment(Pos.CENTER);
+
+        card.setStyle(
+            "-fx-background-color: #f7c6d2;" +
+            "-fx-background-radius: 20;"
+        );
+
+        Label valueLabel = new Label(value);
+        valueLabel.setStyle("-fx-font-size: 32; -fx-font-weight: bold;");
+
+        Label textLabel = new Label(label);
+        textLabel.setStyle("-fx-font-size: 16;");
+
+        card.getChildren().addAll(valueLabel, textLabel);
+        return card;
+    }
+	
+
 }
+
+

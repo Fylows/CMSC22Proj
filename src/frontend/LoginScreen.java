@@ -147,7 +147,7 @@ public class LoginScreen {
 
 			popupStage.close(); // Close the current pop-up
 			ownerStage.close(); // Also close the WelcomeScreen
-			new DashboardScreen().show(); // Open the DashboardScreen
+			new ContentArea().show(); // Open the Content
 		});
 	}
 	
