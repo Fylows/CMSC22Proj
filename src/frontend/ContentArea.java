@@ -1,5 +1,7 @@
 package frontend;
 
+import backend.Student;
+import backend.StudentManager;
 import javafx.util.Duration;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Insets;
@@ -14,34 +16,58 @@ import javafx.stage.Stage;
 import javafx.scene.text.*;
 
 public class ContentArea {
-	Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
-	Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
-	Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-	Font japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
+	private Student student;
+	private StudentManager manager;
+	
+	//Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
+	Font poppinsBold;
+	Font inter;
+	Font interItalic;
+	Font japaneseFont;
+	
+//	Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
+//	Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
+//	Font japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
 	
     private Stage stage;
-	static Button externalHamburger = new Button();
+	static Button externalHamburger = new Button();    
 
     // -- Different screens
-	private HBox topBar = createTopbar();
-    private VBox dashboardScreen = new DashboardScreen();
-    
-	private EnlistmentScreen enlistmentScreen = new EnlistmentScreen();	
+    private HBox topBar;
+	private VBox dashboardScreen;
+	private EnlistmentScreen enlistmentScreen;	
 			
-//	private VBox courseList = new CourseListScreen();
-//	private VBox about = new AboutSceen();	
-//	private VBox credits = new CreditsSceen();	
+//	private VBox courseList;
+//	private VBox about;	
+//	private VBox credits;
 		
-	private StackPane screens = new StackPane(dashboardScreen, enlistmentScreen);
-    
-
-    public ContentArea() { //ITSURA NG WINDOW
-        stage = new Stage();
+	private StackPane screens;
+	
+    public ContentArea(Student student, StudentManager manager) { 
+        this.student = student;
+        this.manager = manager;
+    	
+        poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
+        inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
+        interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
+        japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
+        
+    	stage = new Stage();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Uploading Kurasu Icon for app 
 		stage.setTitle(" クラス | Kurasu"); // Sets the title to Kurasu
+		
+		topBar = createTopbar();
         
+	    dashboardScreen = new DashboardScreen(student, inter, poppinsBold, japaneseFont, interItalic);
+	    enlistmentScreen = new EnlistmentScreen();
+//		courseList = new CourseListScreen();
+//		about = new AboutSceen();	
+//		credits = new CreditsSceen();	
+	    
+	    screens = new StackPane(dashboardScreen, enlistmentScreen);
     }
     
+
     private void toggleSidebar(Pane sidebar, Pane content) {
         boolean opening = sidebar.getTranslateX() != 0;
 
@@ -106,10 +132,13 @@ public class ContentArea {
         HBox.setHgrow(space, Priority.ALWAYS);
 
         // Profile Section
-        VBox profileTexts = new VBox(
-        	new Label("Name"),
-            new Label("email@up.edu.ph")
-        );
+        Label nameLabel = new Label(student.getName());
+        nameLabel.setFont(Font.font(poppinsBold.getFamily(), 22));
+        
+        Label emailLabel = new Label(student.getEmail());
+        emailLabel.setFont(interItalic);
+
+        VBox profileTexts = new VBox(nameLabel, emailLabel);
         profileTexts.setAlignment(Pos.CENTER_RIGHT);
 	
         ImageView profilePic = new ImageView(

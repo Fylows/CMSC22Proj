@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.Student;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -11,26 +12,20 @@ import javafx.scene.text.Font;
 //import backend.Student;
 
 public class DashboardScreen extends VBox{
-
-	Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
-	Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
-	Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-	Font japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
-
-	//private Student student;
+	private Student student;
 	
-	public DashboardScreen() {
+	public DashboardScreen(Student student, Font inter, Font poppinsBold, Font japaneseFont, Font interItalic) {
+		this.student = student;
 		
 		setSpacing(20);
 		setPadding(new Insets(20));
 		setStyle("-fx-background-color: white;");
 
-
         // ---------- WELCOME CARD ----------
-        VBox welcomeCard = createWelcomeCard();
+        VBox welcomeCard = createWelcomeCard(student, inter, poppinsBold, japaneseFont, interItalic);
 
         // ---------- STATS ROW ----------
-        HBox statsRow = createStatsRow();
+        HBox statsRow = createStatsRow(inter, poppinsBold, japaneseFont, interItalic);
 
         // Add all to layout
         getChildren().addAll(welcomeCard, statsRow);
@@ -38,7 +33,7 @@ public class DashboardScreen extends VBox{
 	
 	
 	/***** WELCOME CARD *****/
-	private VBox createWelcomeCard() {
+	private VBox createWelcomeCard(Student student, Font inter, Font poppinsBold, Font japaneseFont, Font interItalic) {
         VBox card = new VBox();
         card.setPadding(new Insets(30));
         card.setSpacing(10);
@@ -48,16 +43,19 @@ public class DashboardScreen extends VBox{
             "-fx-background-radius: 30;"
         );
         
-        Label title = new Label("Welcome back, [NAME]!");
-        title.setStyle("-fx-font-size: 36; -fx-font-weight: bold;");
+        Label title = new Label("Welcome back, " + student.getFirstName() + "!");
+        title.setFont(Font.font(poppinsBold.getFamily(), 36));
+
 
         Label subtitle = new Label(
-            "Welcome to クラス | Karasu! This is where your academic journey blooms, one class at a time "
+            "Welcome to クラス | Karasu! This is where your academic journey blooms, one class at a time."
         );
-        subtitle.setStyle("-fx-font-size: 16;");
+        subtitle.setFont(Font.font(inter.getFamily(), 18));
+        subtitle.setPadding(new Insets(0, 10, 0, 30));
 
-        Label tutorial = new Label("Tutorial on how to use Karasu System →");
-        tutorial.setStyle("-fx-font-size: 16; -fx-font-weight: bold;");
+        Hyperlink tutorial = new Hyperlink("Tutorial on how to use Karasu System →");
+        tutorial.setFont(Font.font(interItalic.getFamily(), 16));
+        tutorial.setPadding(new Insets(0, 10, 0, 30));
 
         card.getChildren().addAll(title, subtitle, tutorial);
         return card;
@@ -65,7 +63,7 @@ public class DashboardScreen extends VBox{
 	
 	
 	/***** STATS ROW *****/
-    private HBox createStatsRow() {
+    private HBox createStatsRow(Font inter, Font poppinsBold, Font japaneseFont, Font interItalic) {
         HBox row = new HBox();
         row.setSpacing(30);
         row.setAlignment(Pos.CENTER);

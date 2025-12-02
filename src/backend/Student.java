@@ -44,6 +44,8 @@ public class Student implements Serializable {
 		return enrolledCourses; 
 	}
 	
+	public String getName() { return firstName + " " + lastName; }
+	public String getFirstName() { return firstName; }
 	public String getDegree() { return degree; }
 	public String getEmail() { return email; }
 	public String getPassword() { return password; }

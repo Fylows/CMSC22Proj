@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.Student;
 import backend.StudentManager;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
@@ -144,10 +145,13 @@ public class LoginScreen {
 				showTemporaryMessage(msgLabel, result, 3);
 				return;
 			}
-
+			
+			Student loggedIn = manager.getStudentByEmail(email.getText()); 
+			
 			popupStage.close(); // Close the current pop-up
 			ownerStage.close(); // Also close the WelcomeScreen
-			new ContentArea().show(); // Open the Content
+		    new ContentArea(loggedIn, manager).show(); // To pass student info to other screens
+		
 		});
 	}
 	
