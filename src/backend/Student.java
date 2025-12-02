@@ -46,6 +46,10 @@ public class Student implements Serializable {
 	
 	public String getName() { return firstName + " " + lastName; }
 	public String getFirstName() { return firstName; }
+	public String getMiddleName() { return middleName; }
+	public String getLastName() { return lastName; }
+	public String getSuffix() { return suffix; }
+	public String getSex() { return sex; }
 	public String getDegree() { return degree; }
 	public String getEmail() { return email; }
 	public String getPassword() { return password; }
