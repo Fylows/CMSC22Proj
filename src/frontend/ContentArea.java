@@ -2,6 +2,7 @@ package frontend;
 
 import javafx.util.Duration;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -53,24 +54,27 @@ public class ContentArea {
 
     public void show() {
     	 StackPane root = new StackPane();
-    	 
+         root.setStyle("-fx-background-color: white;");
+
     	 dashboardScreen.setVisible(true);
+
     	 enlistmentScreen.setVisible(false);
-    	 
-    	 
+
          // Create sidebar object
          Sidebar side = new Sidebar(inter, poppinsBold, japaneseFont, dashboardScreen, enlistmentScreen);
          VBox sidebar = side.getSidebar();
-
+         
          sidebar.setTranslateX(-320);
          StackPane.setAlignment(sidebar, Pos.CENTER_LEFT);
-        
          
          // Add topbar, sidebar, and the screens that will be changing
-         root.getChildren().addAll(screens, sidebar,topBar);
+         VBox content = new VBox(topBar, screens);
+         content.setPadding(new Insets(20));
          
-         StackPane.setAlignment(topBar, Pos.TOP_LEFT); // pin topBar to top
-         topBar.prefWidthProperty().bind(root.widthProperty()); // stretch across window
+         root.getChildren().addAll(content, sidebar);
+         sidebar.toFront();
+         topBar.setPickOnBounds(false);
+         
          
          // Toggle logic
          externalHamburger.setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
@@ -81,8 +85,6 @@ public class ContentArea {
          stage.show();
          
     }
-    
-    
     
     /***** TOP BAR: DASHBOARD PROFILE *****/
 	private HBox createTopbar() {
