@@ -1,15 +1,40 @@
 package backend;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import backend.CourseManager.Degree;
+import javafx.scene.Node;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 public class RegSystem {
     private StudentManager studentManager;
     private OfferedCourseManager courseManager;
 
+    private final Map<LocalTime, Integer> timeMap = new LinkedHashMap<>();
+   
+    private final Map<String, Integer> dayMap = Map.ofEntries(
+        	Map.entry("monday", 0), Map.entry("tuesday", 1),
+        	Map.entry("wednesday", 2), Map.entry("thursday", 3),
+        	Map.entry("friday", 4)
+	);
+    
     //Constructor
     public RegSystem() {
         this.studentManager = StudentManager.load();
         this.courseManager = OfferedCourseManager.load();
+        
+        // initialize timeMap
+        int row = 0;
+        for (int hour = 7; hour <= 18; hour++) {
+            timeMap.put(LocalTime.of(hour, 0), row++);
+            timeMap.put(LocalTime.of(hour, 30), row++);
+        }
+        
     }
 
     //Adds new students to system
@@ -196,5 +221,39 @@ public class RegSystem {
         }
         return false;
     }
+    
+    private void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
+    	int[] timeArray = new int[24];
+    	timeArray[timeMap.get(courseToEnroll.getStartTime())] = 1;
+    	timeArray[timeMap.get(courseToEnroll.getEndTime())] = 1;
+		boolean fill = false;
+		for (int row = 0; row < 24; row++) {
+		     if (timeArray[row] == 1) {fill = !fill; }
+		     if (fill) {
+		     	StackPane cell = (StackPane) getNodeFromGridPane(timeTable, 1, row);
+		         if (cell != null) {
+		             cell.setStyle("-fx-background-color: pink; -fx-border-color: black;");
+		         }
+		     }
+		     
+		 }
+    }
+    
+    // Helper to get a cell from a GridPane
+    private Node getNodeFromGridPane(GridPane grid, int col, int row) {
+        for (Node node : grid.getChildren()) {
+            Integer colIndex = GridPane.getColumnIndex(node);
+            Integer rowIndex = GridPane.getRowIndex(node);
+
+            if (colIndex == null) colIndex = 0;
+            if (rowIndex == null) rowIndex = 0;
+
+            if (colIndex == col && rowIndex == row) {
+                return node;
+            }
+        }
+        return null;
+    }
+    
 
 }
