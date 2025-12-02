@@ -2,6 +2,9 @@ package frontend;
 
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
+import backend.CourseManager;
+import backend.OfferedCourse;
+import backend.RegSystem;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,19 +21,21 @@ public class EnlistmentScreen extends VBox {
         		
         // ---------- CALENDAR ----------
 		
-        HBox Calendar = createCalendar();
+		GridPane calendar = createCalendar();
 
         // ---------- ACTIVE ENLISTMENTS ----------
         Button b = new Button("Active Enlistment");
+        OfferedCourse oc = RegSystem.getAllCourses().get(0);
+        b.setOnAction(e -> RegSystem.fillTime(calendar, oc));
         
         // ---------- COURSE SEARCH ----------
         Button c = new Button("Course Search");
 
         // Add all to layout
-        getChildren().addAll(Calendar,b,c);
+        getChildren().addAll(calendar,b,c);
 	}
 	
-	public HBox createCalendar() {
+	public GridPane createCalendar() {
 		GridPane calendar = new GridPane();
 		calendar.setPadding(new Insets(20));
 		 for (int row = 0; row < 24; row++) {
@@ -56,6 +61,6 @@ public class EnlistmentScreen extends VBox {
 		
 		HBox calendarAndWarnings = new HBox(calendar, warnings);
 		
-		return calendarAndWarnings;
+		return calendar;
 	}
 }

@@ -13,7 +13,7 @@ public class Student implements Serializable {
 	private String password; // Student's password
 	private String degree; // BSCS, MSCS, MIT, PHD
 	private ArrayList<Course> completedCourses = new ArrayList<>(); // List of the student's completed courses
-	private ArrayList<String> enrolledCourses = new ArrayList<>();
+		private ArrayList<String> enrolledCourses = new ArrayList<>();
 
     // Constructor
 	public Student(String firstName, String middleName, String lastName, String suffix,

@@ -12,6 +12,7 @@ package main;
 import java.nio.file.Path;
 
 import backend.CourseManager;
+import backend.RegSystem;
 import frontend.LoadingScreen;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -28,6 +29,7 @@ public class Main extends Application {
 
 		public static void main(String[] args) {
 			CourseManager.loadFromCSV();
+			RegSystem system = new RegSystem();
 			launch(args); // Starts the JavaFX application
 		}
 	}

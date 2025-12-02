@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class OfferedCourse implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -35,10 +36,40 @@ public class OfferedCourse implements Serializable {
     }
 
     
+    private LocalTime parseFlexibleTime(String t, boolean isEnd) {
+        t = t.trim();
+
+        // If AM/PM is already included → parse immediately
+        if (t.toLowerCase().contains("am") || t.toLowerCase().contains("pm")) {
+            return LocalTime.parse(t.toUpperCase(), DateTimeFormatter.ofPattern("h:mm a"));
+        }
+
+        // Otherwise infer AM/PM based on rules
+        String[] parts = t.split(":");
+        int hour = Integer.parseInt(parts[0]);
+
+        String suffix;
+
+        if (hour >= 7 && hour <= 11) {
+            suffix = " AM";
+        } else if (hour == 12) {
+            suffix = " PM";  // 12 is ALWAYS PM in your schedule
+        } else {
+            suffix = " PM";  // hours 1–6 must be PM
+        }
+
+        // Special case: 7 PM is ONLY allowed as end time
+        if (hour == 7 && isEnd) {
+            suffix = " PM";
+        }
+
+        return LocalTime.parse(t + suffix, DateTimeFormatter.ofPattern("h:mm a"));
+    }
+
     public LocalTime getStartTime() {
         try {
             String start = times.split("-")[0].trim();
-            return LocalTime.parse(start, DateTimeFormatter.ofPattern("HH:mm"));
+            return parseFlexibleTime(start, false);
         } catch (Exception e) {
             return null;
         }
@@ -47,11 +78,13 @@ public class OfferedCourse implements Serializable {
     public LocalTime getEndTime() {
         try {
             String end = times.split("-")[1].trim();
-            return LocalTime.parse(end, DateTimeFormatter.ofPattern("HH:mm"));
+            return parseFlexibleTime(end, true);
         } catch (Exception e) {
             return null;
         }
     }
+
+
 
     public String getDay() {
         return days;

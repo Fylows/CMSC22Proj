@@ -13,12 +13,12 @@ import java.util.ArrayList;
 public class OfferedCourseManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<OfferedCourse> offeredCourses; // Courses offered
+	private static ArrayList<OfferedCourse> offeredCourses; // Courses offered
 	private static final Path STORAGE_PATH = Path.of("src/storage/offered_courses.txt");
 
 	// Constructor
 	public OfferedCourseManager(ArrayList<OfferedCourse> offeredCourses) {
-		this.offeredCourses = offeredCourses;
+		OfferedCourseManager.offeredCourses = offeredCourses;
 	}
 
 	
@@ -58,12 +58,12 @@ public class OfferedCourseManager implements Serializable {
 				new InputStreamReader(OfferedCourseManager.class.getResourceAsStream("/dataset/course_offerings.csv")))) {
 
 			String line;
+
 			while ((line = br.readLine()) != null) {
 				if (line.isBlank() || line.toLowerCase().contains("code")) continue; // Skip the header of the CSV file
 
 				String[] parts = line.split(","); // Split the lines by commas
 				if (parts.length < 7) continue; // Must contain code, title, units, section, time, days, room, if one is missing, skip
-
 				String code = parts[0].trim(); // Trims the course code
 				String section = parts[3].trim(); // Trims the section (e.g., "U-1L")
 				String times = parts[4].trim(); // Trims the time range
@@ -106,4 +106,10 @@ public class OfferedCourseManager implements Serializable {
 			return fallback; // Return default course manager if failed to load
 		}
 	}
+
+
+	public static ArrayList<OfferedCourse> getAllCourses() {
+		return offeredCourses;
+	}
+	
 }
