@@ -1,15 +1,19 @@
 package backend;
 
+import javafx.scene.control.Label;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import backend.CourseManager.Degree;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class RegSystem {
     private StudentManager studentManager;
@@ -17,10 +21,11 @@ public class RegSystem {
 
     private final static Map<LocalTime, Integer> timeMap = new LinkedHashMap<>();
    
-    private final static Map<String, Integer> dayMap = Map.ofEntries(
-        	Map.entry("monday", 0), Map.entry("tuesday", 1),
-        	Map.entry("wednesday", 2), Map.entry("thursday", 3),
-        	Map.entry("friday", 4)
+    private final static Map<String, List<Integer>> dayMap = Map.ofEntries(
+        	Map.entry("m", List.of(0)), Map.entry("t", List.of(1)),
+        	Map.entry("w", List.of(2)), Map.entry("th", List.of(3)),
+        	Map.entry("f", List.of(4)), Map.entry("mw", List.of(0,2)),
+        	Map.entry("tth", List.of(1,3)), Map.entry("wf", List.of(2,4))
 	);
     
     //Constructor
@@ -220,24 +225,54 @@ public class RegSystem {
     }
     
     public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
-    	int[] timeArray = new int[24];
+        int startRow = timeMap.get(courseToEnroll.getStartTime());
+        int endRow = timeMap.get(courseToEnroll.getEndTime());
 
-    	timeArray[timeMap.get(courseToEnroll.getStartTime())] = 1;
-    	timeArray[timeMap.get(courseToEnroll.getEndTime())] = 1;
-    	int targetCol = dayMap.get(courseToEnroll.getDay().toLowerCase());
-    	
-		boolean fill = false;
-		for (int row = 0; row < 24; row++) {
-		     if (timeArray[row] == 1) {fill = !fill; }
-		     if (fill) {
-		     	StackPane cell = (StackPane) getNodeFromGridPane(timeTable, targetCol, row);
-		         if (cell != null) {
-		             cell.setStyle("-fx-background-color: pink; -fx-border-color: black;");
-		         }
-		     }
-		     
-		 }
+        List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
+        if (targetCols == null) return;
+
+        for (int col : targetCols) {
+            for (int row = startRow; row < endRow; row++) {
+                Node node = getNodeFromGridPane(timeTable, col, row);
+                if (node instanceof StackPane stack) {  // safe cast
+                	Rectangle rect = (Rectangle) stack.getChildren().get(0);
+                    rect.setFill(Color.PINK);
+                    rect.setStroke(Color.PINK);
+                    
+
+                    
+                    boolean hasLabel = stack.getChildren().stream().anyMatch(n -> n instanceof Label);
+                    if (!hasLabel) {
+                        Label code = new Label(courseToEnroll.getCourse().getCourseCode());
+                        code.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+                        stack.getChildren().add(code);
+                    }
+                }
+            }
+        }
     }
+
+    public static void resetTime(GridPane timeTable, OfferedCourse courseToEnroll) {
+        int startRow = timeMap.get(courseToEnroll.getStartTime());
+        int endRow = timeMap.get(courseToEnroll.getEndTime());
+        List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
+
+        for (int col : targetCols) {
+            for (int row = startRow; row < endRow; row++) {
+                Node node = getNodeFromGridPane(timeTable, col, row);
+                if (node instanceof StackPane stack) {
+                    Rectangle rect = (Rectangle) stack.getChildren().get(0);
+                    rect.setFill(Color.WHITE);
+                    rect.setStroke(Color.BLACK);
+
+                    // Remove any label inside
+                    stack.getChildren().removeIf(n -> n instanceof Label);
+                }
+            }
+        }
+    }
+
+
     
 
     // Helper to get a cell from a GridPane

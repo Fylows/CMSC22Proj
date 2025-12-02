@@ -83,7 +83,6 @@ public class ContentArea {
          root.setStyle("-fx-background-color: white;");
 
     	 dashboardScreen.setVisible(true);
-
     	 enlistmentScreen.setVisible(false);
 
          // Create sidebar object
@@ -94,9 +93,10 @@ public class ContentArea {
          StackPane.setAlignment(sidebar, Pos.CENTER_LEFT);
          
          // Add topbar, sidebar, and the screens that will be changing
-         VBox content = new VBox(topBar, screens);
+         VBox content = new VBox(5, topBar, screens);
          content.setPadding(new Insets(20));
-         
+         VBox.setVgrow(screens, Priority.ALWAYS);
+
          root.getChildren().addAll(content, sidebar);
          sidebar.toFront();
          topBar.setPickOnBounds(false);
@@ -106,7 +106,7 @@ public class ContentArea {
          externalHamburger.setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
          side.getInternalHamburger().setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
 
-         Scene scene = new Scene(root, 1200, 800);
+         Scene scene = new Scene(root, 1820, 980);
          stage.setScene(scene);
          stage.show();
          
