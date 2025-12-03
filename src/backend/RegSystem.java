@@ -22,9 +22,9 @@ public class RegSystem {
     private final static Map<LocalTime, Integer> timeMap = new LinkedHashMap<>();
    
     private final static Map<String, List<Integer>> dayMap = Map.ofEntries(
-        	Map.entry("m", List.of(0)), Map.entry("t", List.of(1)),
-        	Map.entry("w", List.of(2)), Map.entry("th", List.of(3)),
-        	Map.entry("f", List.of(4)), Map.entry("mw", List.of(0,2)),
+        	Map.entry("mon", List.of(0)), Map.entry("tues", List.of(1)),
+        	Map.entry("wed", List.of(2)), Map.entry("thurs", List.of(3)),
+        	Map.entry("fri", List.of(4)), Map.entry("mw", List.of(0,2)),
         	Map.entry("tth", List.of(1,3)), Map.entry("wf", List.of(2,4))
 	);
     
@@ -36,7 +36,7 @@ public class RegSystem {
 
         // initialize timeMap
         int row = 0;
-        for (int hour = 7; hour <= 18; hour++) {
+        for (int hour = 7; hour <= 19; hour++) {
             timeMap.put(LocalTime.of(hour, 0), row++);
             timeMap.put(LocalTime.of(hour, 30), row++);
         }
@@ -76,27 +76,6 @@ public class RegSystem {
         return studentManager.getStudents();
     }
 
-//    public void addCourse(Course c) {
-//        courseManager.getAllCourses().add(c);
-//        OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
-//    }
-//
-//    public void deleteCourse(String courseCode) {
-//        Course c = getCourse(courseCode);
-//        if (c != null) {
-//            courseManager.getOfferedCourses().removeIf(oc -> oc.getCourse().equals(c));
-//            courseManager.getAllCourses().remove(c);
-//
-//            OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
-//        }
-//    }
-
-//    public Course getCourse(String courseCode) {
-//        for (Course c : courseManager.getAllCourses()) {
-//            if (c.getCourseCode().equalsIgnoreCase(courseCode)) return c;
-//        }
-//        return null;
-//    }
     
     // Get all currently offered courses in the system
     public static ArrayList<OfferedCourse> getAllCourses() {
