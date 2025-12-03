@@ -25,6 +25,7 @@ public class OfferedCourse implements Serializable {
     }
 
     public Course getCourse() { return baseCourse; }
+    public String getCourseCode() {return baseCourse != null ? baseCourse.getCourseCode() : null; }
     public String getSection() { return section; }
     public String getTimes() { return times; }
     public String getDays() { return days; }
