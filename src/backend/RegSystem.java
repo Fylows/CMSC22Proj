@@ -100,26 +100,27 @@ public class RegSystem {
     
     // Get all currently offered courses in the system
     public static ArrayList<OfferedCourse> getAllCourses() {
-        return OfferedCourseManager.getAllCourses();
+        return OfferedCourseManager.getOfferedCourses();
     }
 
     // Gets a specific course from the system using course codes
-    public OfferedCourse getOfferedCourse(String courseCode, String term) {
-        for (OfferedCourse oc : courseManager.getOfferedCourses()) {
+    public OfferedCourse getOfferedCourse(String courseCode, String section, String term) {
+        ArrayList<OfferedCourse> courses = courseManager.getOfferedCourses();
+        for (OfferedCourse oc : courses) {
             if (oc.getCourse().getCourseCode().equalsIgnoreCase(courseCode) &&
+                oc.getSection().equalsIgnoreCase(section) &&
                 oc.getTerm().equalsIgnoreCase(term)) {
                 return oc;
             }
         }
         return null;
     }
-
     // Enrolls students into offered courses
     // Checks if students meet the prerequisites before enrolling in the course
     // Saves the updated list
-    public boolean enrollStudentInOfferedCourse(String studentEmail, String courseCode, String term) {
+    public boolean enrollStudentInOfferedCourse(String studentEmail, String courseCode, String section, String term) {
         Student s = getStudent(studentEmail);
-        OfferedCourse oc = getOfferedCourse(courseCode, term);
+        OfferedCourse oc = getOfferedCourse(courseCode, section, term);
 
         if (s == null || oc == null) return false;
 
@@ -135,15 +136,11 @@ public class RegSystem {
 
         if (!oc.getEnrolledStudents().contains(s)) {
             oc.getEnrolledStudents().add(s);
-
             if (!s.getEnrolledCourses().contains(courseCode)) {
                 s.getEnrolledCourses().add(courseCode);
             }
-
-            StudentManager.save(this.studentManager);
-            OfferedCourseManager.save(this.courseManager);
-
-            System.out.println("Successfully enrolled in " + courseCode + " (" + term + ")");
+            StudentManager.save(studentManager);
+            OfferedCourseManager.save(courseManager);
             return true;
         }
         return false;
@@ -151,29 +148,29 @@ public class RegSystem {
 
     // Removes student from enrolled courses
     // Saves the updated list
-    public boolean dropStudentFromOfferedCourse(String studentEmail, String courseCode, String term) {
+    public boolean dropStudentFromOfferedCourse(String studentEmail, String courseCode, String section, String term) {
         Student s = getStudent(studentEmail);
-        OfferedCourse oc = getOfferedCourse(courseCode, term);
+        OfferedCourse oc = getOfferedCourse(courseCode, section, term);
 
         if (s == null || oc == null) return false;
 
         if (oc.getEnrolledStudents().contains(s)) {
             oc.getEnrolledStudents().remove(s);
-
             s.getEnrolledCourses().remove(courseCode);
-
-            StudentManager.save(this.studentManager);
-            OfferedCourseManager.save(this.courseManager);
+            StudentManager.save(studentManager);
+            OfferedCourseManager.save(courseManager);
             return true;
         }
         return false;
     }
 
     // Gets list of all students currently enrolled in a specific course
-    public ArrayList<Student> getStudentsInOfferedCourse(String courseCode, String term) {
-        OfferedCourse oc = getOfferedCourse(courseCode, term);
-        if (oc != null) return oc.getEnrolledStudents();
-        return new ArrayList<>();
+    public ArrayList<Student> getStudentsInOfferedCourse(String courseCode, String section, String term) {
+        OfferedCourse oc = getOfferedCourse(courseCode, section, term);
+        if (oc != null) {
+            return oc.getEnrolledStudents();
+        }
+        return new ArrayList<Student>();
     }
 
     // Checks if a specific course has prerequisites
@@ -193,7 +190,7 @@ public class RegSystem {
     private boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
         for (String code : student.getEnrolledCourses()) {
 
-            OfferedCourse c = getOfferedCourse(code, courseToEnroll.getTerm());
+            OfferedCourse c = getOfferedCourse(code, courseToEnroll.getSection(), courseToEnroll.getTerm());
             if (c == null) continue;
 
             if (c.getDay() != null && courseToEnroll.getDay() != null) {

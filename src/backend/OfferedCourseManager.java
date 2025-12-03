@@ -22,14 +22,10 @@ public class OfferedCourseManager implements Serializable {
 	}
 
 	// Getters
-	public ArrayList<OfferedCourse> getOfferedCourses() {
+	public static ArrayList<OfferedCourse> getOfferedCourses() {
 		return offeredCourses;
 	}
-	
-	public static ArrayList<OfferedCourse> getAllCourses() {
-		return offeredCourses;
-	}
-	
+
 	// Savers and Loaders
 	// Loading the CSV file of the offered course for the first semester
 	public static ArrayList<OfferedCourse> loadOfferedCoursesFromCSV() {
