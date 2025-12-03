@@ -18,7 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class ContentArea implements ScreenChangeListener {
-	private final Student student;
+	private static Student student = null;
 	private final StudentManager manager;
 
 	// Stage and layout screens
@@ -37,7 +37,7 @@ public class ContentArea implements ScreenChangeListener {
 
 	// Constructor
 	public ContentArea(Student student, StudentManager manager) {
-		this.student = student;
+		ContentArea.student = student;
 		this.manager = manager;
 
 		// Stage setting
@@ -232,5 +232,9 @@ public class ContentArea implements ScreenChangeListener {
 	// Getters
 	public StudentManager getManager() {
 		return manager;
+	}
+	
+	public static Student getStudent() {
+		return student;
 	}
 }
