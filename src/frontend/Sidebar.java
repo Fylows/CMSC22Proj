@@ -44,13 +44,13 @@ public class Sidebar {
         internalHamburger = new Button("☰");
         internalHamburger.setStyle("-fx-font-size: 24px; -fx-background-color: transparent;");
 
-        Label h_karasu = new Label("クラス");
-        h_karasu.setFont(japaneseFont);
+        Label h_kurasu = new Label("クラス");
+        h_kurasu.setFont(japaneseFont);
 
-        Label karasu = new Label("| Karasu");
-        karasu.setFont(poppinsBold);
+        Label kurasu = new Label("| Karasu");
+        kurasu.setFont(poppinsBold);
 
-        header.getChildren().addAll(internalHamburger, h_karasu, karasu);
+        header.getChildren().addAll(internalHamburger, h_kurasu, kurasu);
         header.setPadding(new Insets(5));
 
         // --- Sidebar items ---
