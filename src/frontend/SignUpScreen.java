@@ -33,7 +33,7 @@ public class SignUpScreen {
 		popupStage.setResizable(false); // Not resizable
 		popupStage.setTitle("Sign-Up");
 
-		popupStage.getIcons().add(new Image(getClass().getResourceAsStream("/cssFiles/logo.png"))); // Setting the Kurasu Icon for pop-up
+		popupStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Setting the Kurasu Icon for pop-up
 	}
 
 	// Running the screen
@@ -165,7 +165,7 @@ public class SignUpScreen {
 		root.setCenter(form);
 
 		Scene scene = new Scene(root, 600, 620);
-        scene.getStylesheets().add(getClass().getResource("/resources/signup.css").toExternalForm()); // Add CSS Styling
+        scene.getStylesheets().add(getClass().getResource("/cssFiles/signup.css").toExternalForm()); // Add CSS Styling
 		
 		popupStage.setScene(scene); // Apply to stage
 		popupStage.show(); // Show the pop-up screen
