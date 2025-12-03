@@ -9,8 +9,6 @@
 
 package main;
 
-import java.nio.file.Path;
-
 import backend.CourseManager;
 import backend.RegSystem;
 import frontend.LoadingScreen;
@@ -19,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	@SuppressWarnings("exports")
 	@Override
     public void start(Stage stage) {
 			stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Uploading Kurasu Icon for app 
@@ -27,6 +26,7 @@ public class Main extends Application {
 			ld.show(); // Show loading screen
 	    }
 
+		@SuppressWarnings("unused")
 		public static void main(String[] args) {
 			CourseManager.loadFromCSV();
 			RegSystem system = new RegSystem();

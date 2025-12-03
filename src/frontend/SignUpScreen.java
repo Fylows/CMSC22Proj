@@ -9,20 +9,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.control.DatePicker;
+import javafx.util.StringConverter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class SignUpScreen {
 	private Stage popupStage; // The pop-up window that shows the sign-up UI
 	private Stage ownerStage; // The actual WelcomeScreen
 	private StudentManager studentManager; // Handles saving and validating sign-ups
-
-	// Fixed widths and height
-	private final double FULL_WIDTH = 300;
-	private final double HALF_WIDTH = 300;
-	private final double HEIGHT = 40;
 
 	// Constructor
 	public SignUpScreen(Stage ownerStage, StudentManager studentManager) {
@@ -43,138 +41,80 @@ public class SignUpScreen {
 		// Layout for background
 		BorderPane root = new BorderPane(); // Used a BorderPane since layout is much simpler
 		root.setPadding(new Insets(25));
-		root.setStyle("-fx-background-color: #ffc2d1;");
+		root.getStyleClass().add("signup-root");
 
 		// Semi-white box container
 		VBox form = new VBox(15);
-		form.setAlignment(Pos.TOP_LEFT);
-		form.setPadding(new Insets(25));
-		form.setStyle("-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 20;"); // RGB + opacity for transparent look
+		form.getStyleClass().add("signup-form");
 
 		// Font Styling for the texts
-		Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 32);
-		Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 14);
-		Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-
 		Label title = new Label("Sign-Up");
-		title.setFont(poppinsBold);
+		title.getStyleClass().add("signup-title");
 
 		Label subtitle = new Label("Fields marked with * are required.");
-		subtitle.setFont(interItalic);
-		subtitle.setStyle("-fx-text-fill: #444444;");
+		subtitle.getStyleClass().add("signup-subtitle");
 
 		// Input Fields of the student
-		TextField firstName = createField("First Name: *", inter, HALF_WIDTH, HEIGHT);
-		TextField middleName = createField("Middle Name:", inter, HALF_WIDTH, HEIGHT);
+		TextField firstName = createField("First Name: *");
+		TextField middleName = createField("Middle Name:");
 
-		TextField lastName = createField("Last Name: *", inter, HALF_WIDTH, HEIGHT);
-		TextField suffix = createField("Generational Suffix:", inter, HALF_WIDTH, HEIGHT);
+		TextField lastName = createField("Last Name: *");
+		TextField suffix = createField("Generational Suffix:");
 
-		TextField email = createField("Email: *", inter, FULL_WIDTH, HEIGHT);
+		TextField email = createField("Email: *");
 
 		DatePicker birthday = new DatePicker();
 		birthday.setPromptText("Birthdate: *");
-		birthday.setPrefWidth(HALF_WIDTH);
-		birthday.setPrefHeight(HEIGHT);
-		birthday.setStyle("-fx-font-family: 'Inter';" + "-fx-font-size: 14px;");
+		birthday.getStyleClass().add("date-picker");
+		
+		// Custom date format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		birthday.setConverter(new StringConverter<LocalDate>() {
+			@Override
+			public String toString(LocalDate date) {
+				return date != null ? formatter.format(date) : "";
+			}
+
+			@Override
+			public LocalDate fromString(String string) {
+				if (string == null || string.trim().isEmpty()) return null;
+				return LocalDate.parse(string, formatter);
+			}
+		});
 
 		ComboBox<String> sexBox = new ComboBox<>();
 		sexBox.getItems().addAll("Male", "Female", "Other");
 		sexBox.setPromptText("Sex Assigned at Birth: *");
-		sexBox.setPrefWidth(HALF_WIDTH);
-		sexBox.setPrefHeight(HEIGHT);
-		sexBox.setStyle("-fx-font-family: 'Inter';" + "-fx-font-size: 14px;");
+		sexBox.getStyleClass().add("combo-box");
 
 		ComboBox<String> degreeBox = new ComboBox<>();
 		degreeBox.getItems().addAll("BSCS", "MSCS", "MSIT", "PHD");
 		degreeBox.setPromptText("Degree Program: *");
-		degreeBox.setPrefWidth(FULL_WIDTH);
-		degreeBox.setPrefHeight(HEIGHT);
-		degreeBox.setStyle("-fx-font-family: 'Inter';" + "-fx-font-size: 14px;");
+		degreeBox.getStyleClass().add("combo-box");
 
 		PasswordField password = new PasswordField();
 		password.setPromptText("Password: *");
-		password.setFont(inter);
-		password.setPrefWidth(FULL_WIDTH);
-		password.setPrefHeight(HEIGHT);
+		password.getStyleClass().add("password-field");
 
 		PasswordField confirmPassword = new PasswordField();
 		confirmPassword.setPromptText("Confirm Password: *");
-		confirmPassword.setFont(inter);
-		confirmPassword.setPrefWidth(FULL_WIDTH);
-		confirmPassword.setPrefHeight(HEIGHT);
+		password.getStyleClass().add("password-field");
 
 		// Prompt message for any errors in bright red
 		Label msgLabel = new Label();
-		msgLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+		msgLabel.getStyleClass().add("error-label");
 
 		// Setting up the rows and layout
 		HBox nameRow = new HBox(10, firstName, middleName);
-		nameRow.setAlignment(Pos.TOP_LEFT);
-
 		HBox lastRow = new HBox(10, lastName, suffix);
-		lastRow.setAlignment(Pos.TOP_LEFT);
-
 		HBox birthRow = new HBox(10, birthday, sexBox);
-		birthRow.setAlignment(Pos.TOP_LEFT);
-
 		HBox msgRow = new HBox(msgLabel);
 		msgRow.setAlignment(Pos.CENTER);
 
 		// Sign-Up button and styling
 		Button signUpBtn = new Button("Sign-Up");
-		signUpBtn.setPrefWidth(FULL_WIDTH);
-
-		signUpBtn.setStyle(
-				"-fx-background-color: #fb6f92;" + // Main color of the button (darker pink)
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-        );
-
-		// Event Handlers (when hovered and exit hovering)
-		signUpBtn.setOnMouseEntered(e ->
-			signUpBtn.setStyle(
-				"-fx-background-color: #ff85ac;" + // Lighter color when hovered
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-			)
-		);
-
-		signUpBtn.setOnMouseExited(e ->
-			signUpBtn.setStyle(
-				"-fx-background-color: #fb6f92;" + // Revert back to original when not hovered anymore
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-			)
-		);
-
-		// Log-in Hyperlink
-		Hyperlink loginLink = new Hyperlink("Already have an account? Log-In");
-		loginLink.setFont(inter);
-		loginLink.setOnAction(e -> {
-			popupStage.close(); // Close the Sign-up pop-up
-			new LoginScreen(ownerStage, studentManager).show(); // Ensure that WelcomeScreen is the parent screen
-		});
-
-		// Centered layout box for the buttons and hyperlink
-		VBox centerBox = new VBox(10);
-		centerBox.setAlignment(Pos.CENTER);
-		centerBox.getChildren().addAll(signUpBtn, loginLink);
-
-		// Assembles everything into the form
-		form.getChildren().addAll(title, subtitle, nameRow, lastRow, email, birthRow, degreeBox, password, confirmPassword, msgRow, centerBox);
-		root.setCenter(form);
-
-		Scene scene = new Scene(root, 600, 620);
-		popupStage.setScene(scene); // Apply to stage
-		popupStage.show(); // Show the pop-up screen
-
+		signUpBtn.getStyleClass().add("signup-btn");
+		
 		// Events when sign-up button is clicked
 		signUpBtn.setOnAction(e -> {
 			// Checks if passwords match
@@ -207,15 +147,35 @@ public class SignUpScreen {
 			popupStage.close(); // Close the current pop-up
 			new CourseSelectionScreen(ownerStage, student).show(); // Show continuation of the pop-up for course selection
 		});
+
+		// Log-in Hyperlink
+		Hyperlink loginLink = new Hyperlink("Already have an account? Log-In");
+		loginLink.getStyleClass().add("login-link");
+		loginLink.setOnAction(e -> {
+			popupStage.close(); // Close the Sign-up pop-up
+			new LoginScreen(ownerStage, studentManager).show(); // Ensure that WelcomeScreen is the parent screen
+		});
+
+		// Centered layout box for the buttons and hyperlink
+		VBox centerBox = new VBox(10, signUpBtn, loginLink);
+		centerBox.setAlignment(Pos.CENTER);
+
+		// Assembles everything into the form
+		form.getChildren().addAll(title, subtitle, nameRow, lastRow, email, birthRow, degreeBox, password, confirmPassword, msgRow, centerBox);
+		root.setCenter(form);
+
+		Scene scene = new Scene(root, 600, 620);
+        scene.getStylesheets().add(getClass().getResource("/resources/signup.css").toExternalForm()); // Add CSS Styling
+		
+		popupStage.setScene(scene); // Apply to stage
+		popupStage.show(); // Show the pop-up screen
 	}
 
 	// Helper method to create styled TextFields
-	private TextField createField(String prompt, Font font, double width, double height) {
+	private TextField createField(String prompt) {
 		TextField tf = new TextField();
 		tf.setPromptText(prompt);
-		tf.setFont(font);
-		tf.setPrefWidth(width);
-		tf.setPrefHeight(height);   // <- unify height
+		tf.getStyleClass().add("input-field");
 		return tf;
 	}
 	

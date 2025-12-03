@@ -1,6 +1,5 @@
 package frontend;
 
-import backend.OfferedCourseManager;
 import backend.Course;
 import backend.CourseManager;
 import backend.Student;
@@ -21,17 +20,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.nio.file.Path;
 import java.util.*;
-
-import backend.CourseManager.Degree;
 
 public class CourseSelectionScreen {
 	private Stage ownerStage; // The actual WelcomeScreen
@@ -56,38 +51,28 @@ public class CourseSelectionScreen {
 		popup.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
 
 		// Prevent the user from closing the popup manually
-		popup.setOnCloseRequest(event -> {
-			event.consume(); // Makes close button unclosable
-		});
+		popup.setOnCloseRequest(event -> {event.consume();}); // Makes close button unclosable
 
 		// Layout for background
 		BorderPane root = new BorderPane(); // Used a BorderPane since layout is much simpler
 		root.setPadding(new Insets(25));
-		root.setStyle("-fx-background-color: #ffc2d1;");
+		root.getStyleClass().add("root-bg");
 
 		// Semi-white box container
 		VBox form = new VBox(20);
-		form.setAlignment(Pos.TOP_LEFT);
-		form.setPadding(new Insets(30));
-		form.setStyle("-fx-background-color: rgba(255,255,255,0.95); -fx-background-radius: 20;"); // RGB + opacity for transparent look
+		form.getStyleClass().add("form-box"); // RGB + opacity for transparent look
 
 		// Font Styling for the texts
-		Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 32);
-		Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 14);
-		Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-
 		Label title = new Label("Sign-Up");
-		title.setFont(poppinsBold);
+		title.getStyleClass().add("title-label");
 
 		// Subtitles using Text/TextFlow so custom styling stays intact
 		Text subtitleText1 = new Text("Check the courses you have completed as a " + student.getDegree() + " student.");
-		subtitleText1.setFont(interItalic);
-		subtitleText1.setStyle("-fx-text-fill: #444444;");
+		subtitleText1.getStyleClass().add("subtitle");
 		TextFlow subtitle1 = new TextFlow(subtitleText1);
 
 		Text subtitleText2 = new Text("If you haven't completed any courses yet, you may continue without selecting anything.");
-		subtitleText2.setFont(interItalic);
-		subtitleText2.setStyle("-fx-text-fill: #6a6a6a;");
+		subtitleText1.getStyleClass().add("subtitle");
 		TextFlow subtitle2 = new TextFlow(subtitleText2);
 
 		// Load all courses from the CSV file
@@ -100,8 +85,8 @@ public class CourseSelectionScreen {
 		// Create a CheckBox per degree-specific course
 		for (Course c : coursesByDegree) { // Loop through the course per degree
 			CheckBox cb = new CheckBox(c.getCourseCode());
-			cb.setFont(inter);
-			cb.setStyle("-fx-padding: 5 0 5 0;");
+			cb.getStyleClass().add("course-checkbox");
+			cb.setMaxWidth(Double.MAX_VALUE);
 			
 			// When a course is selected, re-check the prerequisites for all courses
 			cb.selectedProperty().addListener((obs, w, s) -> handlePrerequisites(courseCheckboxes));
@@ -115,13 +100,7 @@ public class CourseSelectionScreen {
 		// Search Bar that filters in real time
 		TextField searchField = new TextField();
 		searchField.setPromptText("Search courses...");
-		searchField.setPrefWidth(380);
-		searchField.setFont(inter);
-		searchField.setStyle(
-			"-fx-background-radius: 8;" +
-			"-fx-padding: 6 10 6 10;" +
-			"-fx-border-radius: 8;"
-		);
+		searchField.getStyleClass().add("search-bar");
 
 		// FilteredList wraps the master observable list
 		FilteredList<CheckBox> filteredList = new FilteredList<>(courseCheckboxes, p -> true);
@@ -147,12 +126,7 @@ public class CourseSelectionScreen {
 
 		// ListView to visually show filtered courses
 		ListView<CheckBox> listView = new ListView<>(filteredList);
-		listView.setPrefHeight(350);
-		listView.setStyle(
-			"-fx-border-radius: 8; " +
-			"-fx-background-radius: 8; " +
-			"-fx-padding: 6;"
-		);
+		listView.getStyleClass().add("course-list");
 
 		// Custom ListCell to display each course with a checkbox, the course title, and units
 		listView.setCellFactory(lv -> new ListCell<CheckBox>() {
@@ -170,10 +144,12 @@ public class CourseSelectionScreen {
 
 				// Container for checkbox and course details
 				VBox container = new VBox(2);
-				container.setPadding(new Insets(6, 4, 6, 4));
+				container.getStyleClass().add("course-cell");
+				
+				cb.setOnMouseClicked(e -> {getListView().getSelectionModel().select(getIndex());}); // Follows highlighting when checking boxes
 
 				// Style the checkbox
-				cb.setFont(inter);
+				cb.getStyleClass().add("course-checkbox");
                 cb.setMaxWidth(Double.MAX_VALUE);
                 container.getChildren().add(cb);
 
@@ -183,8 +159,7 @@ public class CourseSelectionScreen {
 
                 	// Style the details
                 	Label details = new Label(title + " (" + units + " units)");
-                	details.setStyle("-fx-font-size: 12px; -fx-text-fill: #555;");
-                	details.setFont(inter);
+                	details.getStyleClass().add("course-details");
                 	details.setWrapText(true); // Wrap long titles
 
                 	container.getChildren().add(details);
@@ -195,37 +170,7 @@ public class CourseSelectionScreen {
 
 		// Continue button and styling
 		Button continueBtn = new Button("Continue");
-		continueBtn.setPrefWidth(300);
-		continueBtn.setStyle("-fx-font-size: 20px;");
-		
-		continueBtn.setStyle(
-				"-fx-background-color: #fb6f92;" + // Main color of the button (darker pink)
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-        );
-
-		// Event Handlers (when hovered and exit hovering)
-		continueBtn.setOnMouseEntered(e ->
-			continueBtn.setStyle(
-				"-fx-background-color: #ff85ac;" + // Lighter color when hovered
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-			)
-		);
-
-		continueBtn.setOnMouseExited(e ->
-			continueBtn.setStyle(
-				"-fx-background-color: #fb6f92;" + // Revert back to original when not hovered anymore
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-			)
-		);
+		continueBtn.getStyleClass().add("continue-btn");
 
 		// Events when sign-up button is clicked
 		continueBtn.setOnAction(e -> {
@@ -260,13 +205,13 @@ public class CourseSelectionScreen {
 		root.setCenter(form);
 
 		Scene scene = new Scene(root, 600, 620);
+		scene.getStylesheets().add(getClass().getResource("/resources/courseselection.css").toExternalForm()); // Add CSS Styling
+		
 		popup.setScene(scene); // Apply to stage
 		popup.show(); // Show the pop-up screen
 	}
 
-
-
-	// Enables/disables CheckBoxes depending on whether their prer`equisites are checked
+	// Enables/disables CheckBoxes depending on whether their prerequisites are checked
 	private void handlePrerequisites(ObservableList<CheckBox> checkboxes) {
 		for (CheckBox cb : checkboxes) { // Loop through every course checkbox
 			String code = cb.getText(); // Get the course code shown on the checkbox
@@ -294,21 +239,15 @@ public class CourseSelectionScreen {
 		toast.initStyle(StageStyle.TRANSPARENT);
 
 		Label msg = new Label(message);
-		msg.setStyle(
-			"-fx-background-color: #fb6f92; " +
-			"-fx-text-fill: #ffe5ec; " +
-			"-fx-padding: 12px 20px; " +
-			"-fx-background-radius: 20; " +
-			"-fx-font-size: 14px; " +
-			"-fx-font-family: 'Inter';"
-		);
+		msg.getStyleClass().add("toast");
 
 		StackPane root = new StackPane(msg);
-		root.setStyle("-fx-background-color: transparent;");
-		root.setPadding(new Insets(10));
+		root.getStyleClass().add("toast-root");
 
 		Scene scene = new Scene(root);
 		scene.setFill(Color.TRANSPARENT);
+		
+		scene.getStylesheets().add(getClass().getResource("/resources/courseselection.css").toExternalForm()); // Add CSS Styling
 
 		// Center bottom of WelcomeScreen
 		toast.setScene(scene);

@@ -1,0 +1,98 @@
+/* Fonts */
+@font-face {
+	font-family: "Poppins";
+	src: url("PoppinsBold.ttf");
+}
+
+@font-face {
+	font-family: "Inter";
+	src: url("Inter.ttf");
+}
+
+@font-face {
+	font-family: "Inter Italic";
+	src: url("InterItalic.ttf");
+}
+
+/* Root Background */
+.signup-root {
+	-fx-background-color: #ffc2d1;
+}
+
+/* Form Container */
+.signup-form {
+	-fx-background-color: rgba(255,255,255,0.9);
+	-fx-background-radius: 20;
+	-fx-padding: 25;
+}
+
+/* Titles */
+.signup-title {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 32px;
+}
+
+.signup-subtitle {
+	-fx-font-family: "Inter Italic";
+	-fx-font-size: 14px;
+	-fx-text-fill: #444444;
+}
+
+/* Input Fields */
+.input-field {
+	-fx-font-family: "Inter";
+	-fx-font-size: 14px;
+	-fx-pref-height: 40px;
+	-fx-pref-width: 300px;
+}
+
+.combo-box {
+	-fx-font-family: "Inter";
+	-fx-font-size: 14px;
+	-fx-pref-height: 40px;
+	-fx-pref-width: 300px;
+}
+
+.date-picker {
+	-fx-font-family: "Inter";
+	-fx-font-size: 14px;
+	-fx-pref-height: 40px;
+	-fx-pref-width: 300px;
+}
+
+.password-field {
+	-fx-font-family: "Inter";
+	-fx-font-size: 14px;
+	-fx-pref-height: 40px;
+	-fx-pref-width: 300px;
+}
+
+/* Buttons */
+.signup-btn {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 20px;
+	-fx-font-weight: bold;
+    
+	-fx-background-radius: 8;
+	-fx-text-fill: #ffe5ec;
+	-fx-background-color: #fb6f92;
+
+	-fx-pref-width: 300px;
+	-fx-pref-height: 40px;
+}
+
+.signup-btn:hover {
+	-fx-background-color: #ff85ac;
+}
+
+/* Error Message */
+.error-label {
+	-fx-text-fill: red;
+	-fx-font-weight: bold;
+}
+
+/* Hyperlink */
+.login-link {
+	-fx-font-family: "Inter";
+	-fx-font-size: 14px;
+}
