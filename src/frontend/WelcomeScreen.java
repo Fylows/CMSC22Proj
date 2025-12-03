@@ -87,7 +87,7 @@ public class WelcomeScreen {
 		root.getChildren().addAll(bgPane, petalPane, ui); // Add layers in order: background -> petals -> UI panel
 
 		Scene scene = new Scene(root, 1200, 800);
-        scene.getStylesheets().add(getClass().getResource("/resources/welcome.css").toExternalForm()); // Add CSS Styling
+        scene.getStylesheets().add(getClass().getResource("/cssFiles/welcome.css").toExternalForm()); // Add CSS Styling
 	
 		stage.setScene(scene); // Apply to stage
 		stage.show(); // Show Welcome Screen

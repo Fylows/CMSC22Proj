@@ -46,10 +46,10 @@ public class ContentArea {
         this.student = student;
         this.manager = manager;
     	
-        poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
-        inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
-        interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-        japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
+        poppinsBold = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Poppins Bold.ttf"), 28);
+        inter = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Inter.ttf"), 25);
+        interItalic = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Inter Italic.ttf"), 14);
+        japaneseFont = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Seibi Ohkido.otf"), 25);
         
     	stage = new Stage();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Uploading Kurasu Icon for app 

@@ -48,7 +48,7 @@ public class CourseSelectionScreen {
 		popup.setResizable(false); // Not resizable
 		popup.setTitle("Sign-Up");
 
-		popup.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+		popup.getIcons().add(new Image(getClass().getResourceAsStream("/cssFiles/logo.png")));
 
 		// Prevent the user from closing the popup manually
 		popup.setOnCloseRequest(event -> {event.consume();}); // Makes close button unclosable
