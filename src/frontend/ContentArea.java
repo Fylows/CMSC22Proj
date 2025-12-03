@@ -46,10 +46,10 @@ public class ContentArea {
         this.student = student;
         this.manager = manager;
     	
-        poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
-        inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
-        interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-        japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
+        poppinsBold = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Poppins Bold.ttf"), 28);
+        inter = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Inter.ttf"), 25);
+        interItalic = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Inter Italic.ttf"), 14);
+        japaneseFont = Font.loadFont(getClass().getResourceAsStream("/cssFiles/Seibi Ohkido.otf"), 25);
         
     	stage = new Stage();
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Uploading Kurasu Icon for app 
@@ -114,24 +114,33 @@ public class ContentArea {
 
          
          // Toggle logic
-         externalHamburger.setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
+         externalHamburger.setOnAction(e -> {
+        	 toggleSidebar(sidebar, this.dashboardScreen);
+        	 hidden = false;
+         });
          side.getInternalHamburger().setOnAction(e -> {
         	 toggleSidebar(sidebar, this.dashboardScreen); 
-        	 hidden = !hidden;
+        	 hidden = true;
          });
-         if (!hidden) {
-        	 root.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-         	    Bounds bounds = sidebar.localToScene(sidebar.getBoundsInLocal());
-         	    double x = event.getSceneX();
-         	    double y = event.getSceneY();
 
-         	    if (!bounds.contains(x, y)) {
-         	        System.out.println("Clicked outside the sidebar!");
-         	        // Optionally, hide sidebar here
-         	        toggleSidebar(sidebar, dashboardScreen);
-         	    }
-         	});
-         }
+    	 root.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+    		if (!hidden) {
+    			Bounds bounds = sidebar.localToScene(sidebar.getBoundsInLocal());
+          	    double x = event.getSceneX();
+          	    double y = event.getSceneY();
+
+          	    if (!bounds.contains(x, y)) {
+          	        System.out.println("Clicked outside the sidebar!");
+          	        // Optionally, hide sidebar here
+          	        toggleSidebar(sidebar, dashboardScreen);
+          	        hidden = true;
+          	    }
+    		}
+      	    
+      	});
+
+    	 
+
         
          
          Scene scene = new Scene(root, 1200, 800);

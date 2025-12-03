@@ -106,7 +106,7 @@ public class LoginScreen {
 		root.setCenter(form);
 
 		Scene scene = new Scene(root, 500, 400);
-		scene.getStylesheets().add(getClass().getResource("/resources/login.css").toExternalForm()); // Add CSS Styling
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/login.css").toExternalForm()); // Add CSS Styling
 		
 		popupStage.setScene(scene); // Apply to stage
 		popupStage.show(); // Show the pop-up screen

@@ -33,7 +33,7 @@ public class SignUpScreen {
 		popupStage.setResizable(false); // Not resizable
 		popupStage.setTitle("Sign-Up");
 
-		popupStage.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png"))); // Setting the Kurasu Icon for pop-up
+		popupStage.getIcons().add(new Image(getClass().getResourceAsStream("/cssFiles/logo.png"))); // Setting the Kurasu Icon for pop-up
 	}
 
 	// Running the screen
