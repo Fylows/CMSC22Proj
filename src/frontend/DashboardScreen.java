@@ -4,16 +4,12 @@ import backend.Student;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-
-//import backend.Student;
-
 public class DashboardScreen extends VBox{
 	private Student student;
 	
+	// Constructor
 	public DashboardScreen(Student student, Font inter, Font poppinsBold, Font japaneseFont, Font interItalic) {
 		this.student = student;
 		
@@ -96,7 +92,11 @@ public class DashboardScreen extends VBox{
         card.getChildren().addAll(valueLabel, textLabel);
         return card;
     }
-	
+    
+    // Getters
+    public Student getStudent() {
+		return student;
+	}
 
 }
 
