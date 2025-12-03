@@ -48,7 +48,7 @@ public class CourseSelectionScreen {
 		popup.setResizable(false); // Not resizable
 		popup.setTitle("Sign-Up");
 
-		popup.getIcons().add(new Image(getClass().getResourceAsStream("/cssFiles/logo.png")));
+		popup.getIcons().add(new Image(getClass().getResourceAsStream("/resources/logo.png")));
 
 		// Prevent the user from closing the popup manually
 		popup.setOnCloseRequest(event -> {event.consume();}); // Makes close button unclosable
@@ -205,7 +205,7 @@ public class CourseSelectionScreen {
 		root.setCenter(form);
 
 		Scene scene = new Scene(root, 600, 620);
-		scene.getStylesheets().add(getClass().getResource("/resources/courseselection.css").toExternalForm()); // Add CSS Styling
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/courseselection.css").toExternalForm()); // Add CSS Styling
 		
 		popup.setScene(scene); // Apply to stage
 		popup.show(); // Show the pop-up screen
@@ -247,7 +247,7 @@ public class CourseSelectionScreen {
 		Scene scene = new Scene(root);
 		scene.setFill(Color.TRANSPARENT);
 		
-		scene.getStylesheets().add(getClass().getResource("/resources/courseselection.css").toExternalForm()); // Add CSS Styling
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/courseselection.css").toExternalForm()); // Add CSS Styling
 
 		// Center bottom of WelcomeScreen
 		toast.setScene(scene);
