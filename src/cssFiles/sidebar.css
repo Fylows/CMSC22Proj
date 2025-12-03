@@ -1,0 +1,116 @@
+/* Fonts */
+@font-face {
+	font-family: "SeibiOhkidoUltraBold-Rg";
+	src: url("SeibiOhkido.otf");
+}
+
+@font-face {
+	font-family: "Poppins";
+	src: url("PoppinsBold.ttf");
+}
+
+@font-face {
+	font-family: "Inter";
+	src: url("Inter.ttf");
+}
+
+@font-face {
+	font-family: "Inter Italic";
+	src: url("InterItalic.ttf");
+}
+
+/* Side Bar Container */
+.sidebar-root {
+	-fx-pref-width: 320px;
+	-fx-max-width: 320px;
+
+	-fx-padding: 7;
+	-fx-spacing: 10;
+
+	-fx-background-color: #fff0f4;
+	-fx-border-color: #fff0f4;
+	-fx-background-radius: 0 20 20 0;
+	-fx-border-radius: 0 20 20 0;
+}
+
+/* Header */
+.sidebar-header {
+    -fx-padding: 5;
+    -fx-spacing: 10;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.sidebar-hamburger {
+    -fx-background-color: transparent;
+    -fx-font-size: 24px;
+}
+
+.sidebar-japanese-title {
+	-fx-font-family: "SeibiOhkidoUltraBold-Rg";
+	-fx-font-size: 30px;
+	-fx-fill: black;
+}
+
+.sidebar-english-title {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 24px;
+	-fx-fill: black;
+}
+
+/* Side Bar Items */
+.sidebar-item {
+    -fx-padding: 7 7 7 20;
+    -fx-spacing: 15;
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: transparent;
+}
+
+.sidebar-item:hover {
+    -fx-background-color: #ffe0eb;
+    -fx-background-radius: 8;
+}
+
+.sidebar-label {
+    -fx-font-family: "Poppins";
+    -fx-font-size: 20px;
+}
+
+/* Course Dropdown */
+.sidebar-course-dropdown {
+    -fx-padding: 7 7 7 20;
+}
+
+.sidebar-course-item {
+    -fx-padding: 7 7 7 40; /* indent under Course List */
+    -fx-font-family: "Inter";
+    -fx-font-size: 18px;
+    -fx-background-color: transparent;
+}
+
+.sidebar-course-item:hover {
+    -fx-background-color: #ffe0eb;
+    -fx-background-radius: 8;
+}
+
+/* Logout Button */
+.sidebar-logout {
+    -fx-font-family: "Poppins";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+
+    -fx-text-fill: #ffe5ec;
+    -fx-background-color: #fb6f92;
+    -fx-background-radius: 8;
+
+    -fx-pref-width: 200px;
+    -fx-pref-height: 40px;
+}
+
+.sidebar-logout:hover {
+    -fx-background-color: #ff85ac;
+}
+
+.sidebar-logout-wrapper {
+    -fx-padding: 20;
+    -fx-alignment: CENTER;
+}
