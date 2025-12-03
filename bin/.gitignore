@@ -1,8 +1,7 @@
-/.DS_Store
+<<<<<<< HEAD
+/module-info.class
+=======
 /backend/
-/cssFiles/
-/dataset/
 /frontend/
 /main/
-/resources/
-/storage/
+>>>>>>> 97caca8d7406f0dfd14997acf9469ace91348c6b
