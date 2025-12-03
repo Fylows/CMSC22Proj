@@ -54,11 +54,6 @@ public class Sidebar {
         header.setPadding(new Insets(5));
 
         // --- Sidebar items ---
-//        HBox dashboardBox = createItem("Dashboard", "/resources/dashboardIcon.png", inter);
-//        dashboardBox.setOnMouseClicked(event -> {
-//        	this.dashboard.setVisible(true);
-//            this.enlistment.setVisible(false);
-//        });
 
         HBox dashboardBox = createItem("Dashboard", "/resources/dashboardIcon.png", inter);
         dashboardBox.setOnMouseClicked(event -> {
@@ -94,12 +89,6 @@ public class Sidebar {
         dropdownIcon.setFitWidth(30);
         dropdownIcon.setPreserveRatio(true);
 
-//        dropdownIcon.setOnMouseClicked(e -> {
-//            boolean open = !courseDropdown.isVisible();
-//            courseDropdown.setVisible(open);
-//            courseDropdown.setManaged(open);
-//            dropdownIcon.setRotate(open ? 180 : 0);
-//        });
 
         courseBox.getChildren().add(dropdownIcon);
         courseBox.setOnMouseClicked(event -> {

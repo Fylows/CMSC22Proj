@@ -21,35 +21,16 @@ public class OfferedCourseManager implements Serializable {
 		OfferedCourseManager.offeredCourses = offeredCourses;
 	}
 
-	
+	// Getters
 	public ArrayList<OfferedCourse> getOfferedCourses() {
 		return offeredCourses;
 	}
-
-
-//	// Helper method that saves only the course list to the file "offered_courses.txt"
-//	public static void saveData(ArrayList<OfferedCourse> offered) {
-//		OfferedCourseManager handler = new OfferedCourseManager(offered);
-//		handler.save(STORAGE_PATH); // Save to file named offered_courses.txt
-//	}
-//	
-//	public static void saveData(ArrayList<Course> allCourses, ArrayList<OfferedCourse> offered) {
-//	    saveData(offered); // We only persist offeredCourses; allCourses can be persisted separately if needed
-//	}
-//
-//	// Helper method that loads saved courses from file
-//	public static OfferedCourseManager loadData() {
-//		OfferedCourseManager handler = load(STORAGE_PATH);
-//		if (handler == null) {
-//			return new OfferedCourseManager(new ArrayList<>()); // Return empty list if loading fails
-//		}
-//		return handler; // Return list of courses if successful
-//	}
-
+	
+	public static ArrayList<OfferedCourse> getAllCourses() {
+		return offeredCourses;
+	}
 	
 	// Savers and Loaders
-	
-	
 	// Loading the CSV file of the offered course for the first semester
 	public static ArrayList<OfferedCourse> loadOfferedCoursesFromCSV() {
 		ArrayList<OfferedCourse> list = new ArrayList<>();
@@ -94,6 +75,7 @@ public class OfferedCourseManager implements Serializable {
 		}
 	}
 
+	// Loads the courses from the CSV
 	public static OfferedCourseManager load() {
 		OfferedCourseManager fallback = new OfferedCourseManager(OfferedCourseManager.loadOfferedCoursesFromCSV());
 		
@@ -105,11 +87,6 @@ public class OfferedCourseManager implements Serializable {
 		} catch (IOException | ClassNotFoundException e) {
 			return fallback; // Return default course manager if failed to load
 		}
-	}
-
-
-	public static ArrayList<OfferedCourse> getAllCourses() {
-		return offeredCourses;
 	}
 	
 }

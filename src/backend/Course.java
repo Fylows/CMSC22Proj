@@ -2,9 +2,6 @@ package backend;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Set;
-
-import backend.CourseManager.Degree;
 
 public class Course implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -25,20 +22,20 @@ public class Course implements Serializable {
 	}
 	
 	public void addPrereq(String course) { prereq.add(course); }
+	
 	// View State
 	public void viewState() {
 		System.out.printf("Course code: %s, title: %s, units: %d, description: %s\n", this.courseCode, this.courseTitle, this.units, this.description);
 	}
 	
-	public ArrayList<String> getPrerequisites() {
-	    if (prereq.isEmpty() && CourseManager.prereqMap.containsKey(courseCode)) {
-	        prereq.addAll(CourseManager.prereqMap.get(courseCode));
-	    }
-	    return prereq;
-	}
-
-	
 	// Getters
+	public ArrayList<String> getPrerequisites() {
+		if (prereq.isEmpty() && CourseManager.prereqMap.containsKey(courseCode)) {
+			prereq.addAll(CourseManager.prereqMap.get(courseCode));
+		}
+		return prereq;
+	}
+	
 	public String getType() { return this.type; }
 	public String getCourseCode() { return courseCode; }
 	public String getCourseTitle() { return courseTitle; }

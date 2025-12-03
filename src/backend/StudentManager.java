@@ -45,19 +45,6 @@ public class StudentManager implements Serializable {
 		}
 	}
 
-//	// Helper method that saves only the students list to the file "students.txt"
-//	public static void saveStudents(ArrayList<Student> students) {
-//		StudentManager handler = new StudentManager(students);
-//		handler.save(STORAGE_PATH); // Save to file named students.txt
-//	}
-//
-//	// Helper method that loads saved students from file
-//	public static ArrayList<Student> loadStudents() {
-//		StudentManager handler = load(STORAGE_PATH);
-//		if (handler == null) return new ArrayList<>(); // Return empty list if loading fails
-//		return handler.getStudents(); // Return list of students if successful
-//	}
-
 	// Update the information for the student (used after a successful sign-up, and student is asked for completed courses)
 	public void updateStudent(Student updatedStudent) {
 		for (int i = 0; i < students.size(); i++) { // Loop through the students to look for the email

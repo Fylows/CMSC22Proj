@@ -84,8 +84,6 @@ public class OfferedCourse implements Serializable {
         }
     }
 
-
-
     public String getDay() {
         return days;
     }
