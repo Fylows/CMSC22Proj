@@ -29,6 +29,7 @@ public class ContentArea {
 	
     private Stage stage;
 	static Button externalHamburger = new Button();    
+    private boolean hidden = true;
 
     // -- Different screens
     private HBox topBar;
@@ -114,18 +115,24 @@ public class ContentArea {
          
          // Toggle logic
          externalHamburger.setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
-         side.getInternalHamburger().setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
-         root.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-        	    Bounds bounds = sidebar.localToScene(sidebar.getBoundsInLocal());
-        	    double x = event.getSceneX();
-        	    double y = event.getSceneY();
+         side.getInternalHamburger().setOnAction(e -> {
+        	 toggleSidebar(sidebar, this.dashboardScreen); 
+        	 hidden = !hidden;
+         });
+         if (!hidden) {
+        	 root.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+         	    Bounds bounds = sidebar.localToScene(sidebar.getBoundsInLocal());
+         	    double x = event.getSceneX();
+         	    double y = event.getSceneY();
 
-        	    if (!bounds.contains(x, y)) {
-        	        System.out.println("Clicked outside the sidebar!");
-        	        // Optionally, hide sidebar here
-        	        toggleSidebar(sidebar, dashboardScreen);
-        	    }
-        	});
+         	    if (!bounds.contains(x, y)) {
+         	        System.out.println("Clicked outside the sidebar!");
+         	        // Optionally, hide sidebar here
+         	        toggleSidebar(sidebar, dashboardScreen);
+         	    }
+         	});
+         }
+        
          
          Scene scene = new Scene(root, 1200, 800);
          stage.setScene(scene);
