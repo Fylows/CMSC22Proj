@@ -25,6 +25,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class EnlistmentScreen extends VBox {
+	private final int ITEMS_PER_PAGE = 10;
+	private int currentPage = 0;
+	private ObservableList<OfferedCourse> allCourses;
+	private TableView<OfferedCourse> table;
+	private ArrayList<OfferedCourse> offered = RegSystem.getAllCourses();
+	private OfferedCourse oc = offered.get(0);
+	private int cou = 0;
 	
 	public EnlistmentScreen() {
 		setSpacing(20);
@@ -57,48 +64,101 @@ public class EnlistmentScreen extends VBox {
 		
 		HBox calendarAndWarnings = new HBox(calendar, warnings);
 		 
+
         // ---------- ACTIVE ENLISTMENTS ----------
         Button b = new Button("Active Enlistment");
-        OfferedCourse oc = RegSystem.getAllCourses().get(0);
-        b.setOnAction(e -> RegSystem.fillTime(calendar, oc));
         
+        b.setOnAction(e -> { RegSystem.fillTime(calendar, oc);});
+        
+        Button d = new Button("Increment course");
+        d.setOnAction(e -> {
+        	oc = offered.get(++cou);
+        });
         // ---------- COURSE SEARCH ----------
         Button c = new Button("Course Search");
-        HBox courseSearch = createCourseSearch(RegSystem.getAllCourses());
+        VBox courseSearch = createCourseSearch(RegSystem.getAllCourses());
         c.setOnAction(e -> RegSystem.resetTime(calendar, oc));
         // Add all to layout
-        getChildren().addAll(calendarAndWarnings,b,c, courseSearch);
+        getChildren().addAll(calendarAndWarnings,courseSearch, b,c,d);
 	}
 	
 	
-	private HBox createCourseSearch(ArrayList<OfferedCourse> allOfferedCourses) {
-		System.out.println(allOfferedCourses.size());
-		// CREATE A TABLE
-    	TableView<OfferedCourse> table = new TableView<>();
-    	table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+	private VBox createCourseSearch(ArrayList<OfferedCourse> allOfferedCourses) {
+//		System.out.println(allOfferedCourses.size());
 
-        TableColumn<OfferedCourse, String> codeCol   = new TableColumn<>("Code");
-        TableColumn<OfferedCourse, String> classDetailsCol      = new TableColumn<>("Class Details");
-        
-        codeCol.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
-        classDetailsCol.setCellValueFactory(new PropertyValueFactory<>("section"));
-        
-        // MAKE COLUMNS NOT REORDERABLE
-        table.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            for (TableColumn<OfferedCourse, ?> col : table.getColumns()) {
-                col.setReorderable(false);
-            }
-        });
-        
-        // MAKE USERS ARRAY INTO SOMETHING THE TABLE CAN READ
-	    ObservableList<OfferedCourse> data = FXCollections.observableArrayList(allOfferedCourses);
-        table.setItems(data);
-        table.getColumns().addAll(
-        		codeCol, classDetailsCol);
-        HBox box = new HBox(table);
-        HBox.setHgrow(table, Priority.ALWAYS);
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-        
-        return box;
+		// CREATE A TABLE
+		 // Store full list
+	    allCourses = FXCollections.observableArrayList(allOfferedCourses);
+
+	    // --- Table Setup ---
+	    table = new TableView<>();
+	    table.setPrefHeight(400);
+	    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+	    TableColumn<OfferedCourse, String> codeCol = new TableColumn<>("Code");
+	    codeCol.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
+
+	    TableColumn<OfferedCourse, String> sectionCol = new TableColumn<>("Section");
+	    sectionCol.setCellValueFactory(new PropertyValueFactory<>("section"));
+
+	    table.getColumns().addAll(codeCol, sectionCol);
+
+	    for (TableColumn<OfferedCourse, ?> col : table.getColumns()) {
+	        col.setReorderable(false);
+	    }
+
+	    // --- Pagination Controls ---
+	    Button prevBtn = new Button("Previous");
+	    Button nextBtn = new Button("Next");
+	    Label pageLabel = new Label();
+
+	    HBox pagination = new HBox(10, prevBtn, pageLabel, nextBtn);
+	    pagination.setPadding(new Insets(10));
+
+	    prevBtn.setOnAction(e -> {
+	        if (currentPage > 0) {
+	            currentPage--;
+	            showPage(currentPage);
+	            updatePageLabel(pageLabel);
+	        }
+	    });
+
+	    nextBtn.setOnAction(e -> {
+	        if ((currentPage + 1) * ITEMS_PER_PAGE < allCourses.size()) {
+	            currentPage++;
+	            showPage(currentPage);
+	            updatePageLabel(pageLabel);
+	        }
+	    });
+
+	    // --- Initial Page ---
+	    currentPage = 0;
+	    showPage(currentPage);
+	    updatePageLabel(pageLabel);
+
+	    // --- Layout ---
+	    VBox box = new VBox(10, table, pagination);
+	    VBox.setVgrow(table, Priority.ALWAYS);
+	    box.setPadding(new Insets(10));
+
+	    return box;
+	}
+	
+	// --- Helper: show a page in the table ---
+	private void showPage(int page) {
+	    int fromIndex = page * ITEMS_PER_PAGE;
+	    int toIndex = Math.min(fromIndex + ITEMS_PER_PAGE, allCourses.size());
+
+	    if (fromIndex >= allCourses.size() || fromIndex < 0) return;
+
+	    ObservableList<OfferedCourse> pageData =
+	            FXCollections.observableArrayList(allCourses.subList(fromIndex, toIndex));
+	    table.setItems(pageData);
+	}
+	
+	// --- Helper: update page number label ---
+	private void updatePageLabel(Label pageLabel) {
+	    int totalPages = (int) Math.ceil((double) allCourses.size() / ITEMS_PER_PAGE);
+	    pageLabel.setText("Page " + (currentPage + 1) + " of " + totalPages);
 	}
 }
