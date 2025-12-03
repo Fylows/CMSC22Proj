@@ -35,6 +35,10 @@ public class OfferedCourse implements Serializable {
     public ArrayList<Student> getEnrolledStudents() {
         return enrolledStudents;
     }
+    
+    public boolean isStudentEnrolled(Student student) { 
+    	return enrolledStudents.contains(student);
+    }
 
     
     private LocalTime parseFlexibleTime(String t, boolean isEnd) {
@@ -89,6 +93,25 @@ public class OfferedCourse implements Serializable {
         return days;
     }
 
+    public boolean conflictsWith(OfferedCourse other) {
+    	if (other == null) return false;
+    	
+    	if (!this.term.equalsIgnoreCase(other.term))
+    		return false;
+
+    	if (!this.days.equalsIgnoreCase(other.days))
+    		return false;
+    	
+    	LocalTime s1 = this.getStartTime();
+    	LocalTime e1 = this.getEndTime();
+    	LocalTime s2 = other.getStartTime();
+    	LocalTime e2 = other.getEndTime();
+    	
+    	if (s1 == null || e1 == null || s2 == null || e2 == null) return false;
+    	return s1.isBefore(e2) && s2.isBefore(e1);
+    }
+
+    
     // View State
     public void viewState() {
         System.out.printf("%s | Section: %s | Days: %s | Time: %s | Room: %s%n",

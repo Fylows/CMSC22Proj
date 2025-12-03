@@ -1,6 +1,8 @@
+/.DS_Store
 /backend/
+/cssFiles/
+/dataset/
 /frontend/
 /main/
 /resources/
-/cssFiles/
 /storage/
