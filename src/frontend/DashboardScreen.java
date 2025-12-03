@@ -44,12 +44,12 @@ public class DashboardScreen extends VBox{
 
 
         Label subtitle = new Label(
-            "Welcome to クラス | Karasu! This is where your academic journey blooms, one class at a time."
+            "Welcome to クラス | Kurasu! This is where your academic journey blooms, one class at a time."
         );
         subtitle.setFont(Font.font(inter.getFamily(), 18));
         subtitle.setPadding(new Insets(0, 10, 0, 30));
 
-        Hyperlink tutorial = new Hyperlink("Tutorial on how to use Karasu System →");
+        Hyperlink tutorial = new Hyperlink("Tutorial on how to use Kurasu System →");
         tutorial.setFont(Font.font(interItalic.getFamily(), 16));
         tutorial.setPadding(new Insets(0, 10, 0, 30));
 

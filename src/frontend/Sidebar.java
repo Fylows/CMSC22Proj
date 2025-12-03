@@ -47,7 +47,7 @@ public class Sidebar {
         Label h_kurasu = new Label("クラス");
         h_kurasu.setFont(japaneseFont);
 
-        Label kurasu = new Label("| Karasu");
+        Label kurasu = new Label("| Kurasu");
         kurasu.setFont(poppinsBold);
 
         header.getChildren().addAll(internalHamburger, h_kurasu, kurasu);

@@ -64,7 +64,7 @@ public class SignUpScreen {
 		TextField email = createField("Email: *");
 
 		DatePicker birthday = new DatePicker();
-		birthday.setPromptText("Birthdate: *");
+		birthday.setPromptText("Birthdate: (MM/DD/YYYY)*");
 		birthday.getStyleClass().add("date-picker");
 		
 		// Custom date format
@@ -78,7 +78,11 @@ public class SignUpScreen {
 			@Override
 			public LocalDate fromString(String string) {
 				if (string == null || string.trim().isEmpty()) return null;
-				return LocalDate.parse(string, formatter);
+				try {
+					return LocalDate.parse(string, formatter); // Try parsing
+				} catch (Exception e) {
+					return null; // Return null if invalid
+				}
 			}
 		});
 
