@@ -4,6 +4,7 @@ import backend.Student;
 import backend.StudentManager;
 import javafx.util.Duration;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -107,12 +109,24 @@ public class ContentArea {
          root.getChildren().addAll(content, sidebar);
          sidebar.toFront();
          topBar.setPickOnBounds(false);
-         
+         sidebar.setPickOnBounds(false);
+
          
          // Toggle logic
          externalHamburger.setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
          side.getInternalHamburger().setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
+         root.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+        	    Bounds bounds = sidebar.localToScene(sidebar.getBoundsInLocal());
+        	    double x = event.getSceneX();
+        	    double y = event.getSceneY();
 
+        	    if (!bounds.contains(x, y)) {
+        	        System.out.println("Clicked outside the sidebar!");
+        	        // Optionally, hide sidebar here
+        	        toggleSidebar(sidebar, dashboardScreen);
+        	    }
+        	});
+         
          Scene scene = new Scene(root, 1200, 800);
          stage.setScene(scene);
          stage.show();
