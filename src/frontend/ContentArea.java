@@ -71,9 +71,7 @@ public class ContentArea {
 	    enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
 	    enlistmentScroll.prefHeightProperty().bind(screens.heightProperty());
 	    
-	    // Initial visibility of screens
-//	    dashboardScreen.setVisible(true);
-//	    enlistmentScroll.setVisible(false);      
+ 
     }
     
 
