@@ -1,6 +1,7 @@
 package frontend;
 
 import javafx.geometry.Insets;
+import frontend.ScreenChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
@@ -9,15 +10,18 @@ import javafx.scene.text.Font;
 
 public class Sidebar {
 	
-	private VBox sidebar;          // The whole sidebar UI
+	private VBox sidebar; // The whole sidebar UI
 //	private VBox enlistment;
 	private VBox dashboard;
 	private ScrollPane enlistmentScroll;
 
-    private Button internalHamburger; // The hamburger button inside the sidebar
+	private Button internalHamburger; // The hamburger button inside the sidebar
+	private ScreenChangeListener listener;
 
-    public Sidebar(Font inter, Font poppinsBold, Font japaneseFont, VBox dashboard, ScrollPane enlistmentScroll) {
-        sidebar = new VBox(10);
+	public Sidebar(Font inter, Font poppinsBold, Font japaneseFont, ScreenChangeListener listener) {
+		this.listener = listener;
+		
+		sidebar = new VBox(10);
         sidebar.setPrefWidth(320);
         sidebar.setMaxWidth(320);
         
@@ -31,12 +35,7 @@ public class Sidebar {
         );
 
         sidebar.setTranslateX(-320);   // Hidden by default
-        sidebar.setTranslateX(0);
         sidebar.setAlignment(Pos.TOP_LEFT);
-        
-    	this.dashboard = dashboard;
-//    	this.enlistment = enlistment;
-    	this.enlistmentScroll = enlistmentScroll;
     	
     	// --- HEADER WITH HAMBURGER ---
         HBox header = new HBox(10);
@@ -53,19 +52,13 @@ public class Sidebar {
         header.getChildren().addAll(internalHamburger, h_kurasu, kurasu);
         header.setPadding(new Insets(5));
 
-        // --- Sidebar items ---
+        // Sidebar
 
         HBox dashboardBox = createItem("Dashboard", "/resources/dashboardIcon.png", inter);
-        dashboardBox.setOnMouseClicked(event -> {
-        	this.dashboard.setVisible(true);
-            this.enlistmentScroll.setVisible(false);
-        });
+        dashboardBox.setOnMouseClicked(event -> listener.onScreenChange("Dashboard"));
         
         HBox enlistmentBox = createItem("Enlistment", "/resources/enlistIcon.png", inter);
-        enlistmentBox.setOnMouseClicked(event -> {
-        	this.dashboard.setVisible(false);
-            this.enlistmentScroll.setVisible(true);
-        });
+        enlistmentBox.setOnMouseClicked(event -> listener.onScreenChange("Enlistment"));
         
         HBox aboutBox = createItem("About", "/resources/aboutIcon.png", inter);
         HBox creditsBox = createItem("Credits", "/resources/creditsIcon.png", inter);
@@ -142,10 +135,7 @@ public class Sidebar {
     		)
         );
     
-        logoutBtn.setOnAction(e -> {
-        	//stage.close();
-        	System.exit(0);
-        });
+        logoutBtn.setOnAction(e -> {System.exit(0);}); // Closes the stage
 
         HBox logoutWrapper = new HBox(logoutBtn);
         logoutWrapper.setAlignment(Pos.CENTER);
