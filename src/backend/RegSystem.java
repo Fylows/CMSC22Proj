@@ -98,7 +98,7 @@ public class RegSystem {
     // Enrolls students into offered courses
     // Checks if students meet the prerequisites before enrolling in the course
     // Saves the updated list
-    public boolean enrollStudentInOfferedCourse(Student student, OfferedCourse course) { 
+    public static boolean enrollStudentInOfferedCourse(Student student, OfferedCourse course) { 
     	if (student == null || course == null) return false; 
     	for (OfferedCourse oc : courseManager.getOfferedCourses()) { 
     		if (oc.getCourseCode().equalsIgnoreCase(course.getCourseCode()) && 
@@ -156,7 +156,7 @@ public class RegSystem {
     	}
 
     // Checks if a specific course has prerequisites
-    private boolean hasPrerequisites(Student student, OfferedCourse course) { 
+    private static boolean hasPrerequisites(Student student, OfferedCourse course) { 
         if (course.getCourse() == null || course.getCourse().getPrerequisites() == null || course.getCourse().getPrerequisites().isEmpty())
             return true; 
 
@@ -172,7 +172,7 @@ public class RegSystem {
     
 
     // Compares two courses and checks if they have overlapping time frames
-    private boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
+    private static boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
         for (OfferedCourse enrolledCourse : student.getEnrolledCourses()) {
             if (!enrolledCourse.getTerm().equalsIgnoreCase(courseToEnroll.getTerm())) continue;
 
