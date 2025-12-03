@@ -1,7 +1,5 @@
 package frontend;
 
-import java.util.ArrayList;
-
 import backend.*;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
@@ -47,28 +45,24 @@ public class WelcomeScreen {
 		StackPane.setAlignment(ui, Pos.CENTER_LEFT); // Position the VBox on the left side
 
 		// Font Styling for the texts
-		Font japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 80); // Seibi Ohkido (Japanese)
-		Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 42); // Poppins (for sub headers)
-		Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 22); // Inter (for content)
-		Font interFont = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 10); // Mini Inter
-
 		Text line1 = new Text("クラス");
-		line1.setFont(japaneseFont);
+		line1.getStyleClass().add("jp-title");
 
 		Text line2 = new Text("Welcome to Kurasu!");
-		line2.setFont(poppinsBold);
+		line2.getStyleClass().add("sub-title");
 
 		Text line3 = new Text("Your academic journey blooms, one class at a time");
-		line3.setFont(interItalic);
+		line3.getStyleClass().add("tagline");
 
 		Text line4 = new Text("Version 3.12.2");
-		line4.setFont(interFont);
+		line4.getStyleClass().add("version");
 		
 		// Buttons and styling
 		Button signup = new Button("Sign-Up"); // Sign-up button
+		signup.getStyleClass().add("pink-button");
+		
 		Button login = new Button("Log-In"); // Log-in button
-		styleButton(signup);
-		styleButton(login);
+        login.getStyleClass().add("pink-button");
 		
 		// Unedited
 		StudentManager manager = StudentManager.load();
@@ -84,7 +78,6 @@ public class WelcomeScreen {
 		    LoginScreen loginScreen = new LoginScreen(stage, manager); // pass stage and manager
 		    loginScreen.show(); // show modal
 		});
-		// End
 
 		// Add a spacer to create visual separation before buttons
 		Region spacer = new Region();
@@ -94,45 +87,9 @@ public class WelcomeScreen {
 		root.getChildren().addAll(bgPane, petalPane, ui); // Add layers in order: background -> petals -> UI panel
 
 		Scene scene = new Scene(root, 1200, 800);
+        scene.getStylesheets().add(getClass().getResource("/resources/welcome.css").toExternalForm()); // Add CSS Styling
+	
 		stage.setScene(scene); // Apply to stage
 		stage.show(); // Show Welcome Screen
     }
-
-	// For the button styling to avoid repetitiveness
-	private void styleButton(Button b) {
-		Font poppins = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins-Bold.ttf"), 26); // Poppins Font
-
-		// Base appearance
-		b.setFont(poppins);
-		b.setPrefWidth(200);
-		b.setPrefHeight(45);
-		
-		// Default style
-		b.setStyle(
-			"-fx-background-color: #fb6f92;" + // Main color of the button (darker pink)
-			"-fx-background-radius: 8;" +
-			"-fx-text-fill: #ffe5ec;" +
-			"-fx-font-size: 26px;" + // Font size 26
-			"-fx-font-weight: bold;"
-		);
-
-		// Event Handlers
-		// Hover effect
-		b.setOnMouseEntered(e -> b.setStyle(
-			"-fx-background-color: #ff85ac;" + // Lighter color when hovered
-			"-fx-background-radius: 8;" +
-			"-fx-text-fill: #ffe5ec;" +
-			"-fx-font-size: 26px;" + // Font size 26
-			"-fx-font-weight: bold;"
-		));
-
-		// Revert hover when mouse exits
-		b.setOnMouseExited(e -> b.setStyle(
-			"-fx-background-color: #fb6f92;" + // Revert back to original when not hovered anymore
-			"-fx-background-radius: 8;" +
-			"-fx-text-fill: #ffe5ec;" +
-			"-fx-font-size: 26px;" + // Font size 26
-			"-fx-font-weight: bold;"
-		));
-	}
 }

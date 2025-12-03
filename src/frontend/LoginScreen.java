@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -18,10 +17,6 @@ public class LoginScreen {
 	private Stage popupStage; // The pop-up window that shows the sign-up UI
 	private Stage ownerStage; // The actual WelcomeScreen
 	private StudentManager manager; // Handles validating log-in
-
-	// Fixed widths and height
-	private final double FULL_WIDTH = 300;
-	private final double HEIGHT = 40;
 
 	// Constructor
 	public LoginScreen(Stage ownerStage, StudentManager manager) {
@@ -42,99 +37,38 @@ public class LoginScreen {
 		// Layout for background
 		BorderPane root = new BorderPane(); // Used a BorderPane since layout is much simpler
 		root.setPadding(new Insets(25));
-		root.setStyle("-fx-background-color: #ffc2d1;");
+		root.getStyleClass().add("login-root");
 
 		// Semi-white box container
 		VBox form = new VBox(15);
-		form.setAlignment(Pos.TOP_LEFT);
-		form.setPadding(new Insets(25));
-		form.setStyle("-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 20;"); // RGB + opacity for transparent look
+		form.getStyleClass().add("login-form"); // RGB + opacity for transparent look
 
 		// Font Styling for the texts
-		Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 32);
-		Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 14);
-		Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-
 		Label title = new Label("Log-In");
-		title.setFont(poppinsBold);
+		title.getStyleClass().add("login-title");
 
 		Label subtitle = new Label("Please enter your credentials.");
-		subtitle.setFont(interItalic);
-		subtitle.setStyle("-fx-text-fill: #444444;");
+		subtitle.getStyleClass().add("login-subtitle");
 
 		// Input Fields of the student
 		TextField email = new TextField();
 		email.setPromptText("Email");
-		email.setFont(inter);
-		email.setPrefWidth(FULL_WIDTH);
-		email.setPrefHeight(HEIGHT);
+		email.getStyleClass().add("login-field");
 
 		PasswordField password = new PasswordField();
 		password.setPromptText("Password");
-		password.setFont(inter);
-		password.setPrefWidth(FULL_WIDTH);
-		password.setPrefHeight(HEIGHT);
-
+		password.getStyleClass().add("login-field");
+		
 		// Prompt message for any errors in bright red
 		Label msgLabel = new Label();
-		msgLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+		msgLabel.getStyleClass().add("error-label");
 
 		HBox msgRow = new HBox(msgLabel);
 		msgRow.setAlignment(Pos.CENTER);
 
 		// Log-in button and styling
 		Button loginBtn = new Button("Log-In");
-		loginBtn.setPrefWidth(FULL_WIDTH);
-
-		loginBtn.setStyle(
-				"-fx-background-color: #fb6f92;" + // Main color of the button (darker pink)
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-        );
-
-		// Event Handlers (when hovered and exit hovering)
-		loginBtn.setOnMouseEntered(e ->
-			loginBtn.setStyle(
-				"-fx-background-color: #ff85ac;" + // Lighter color when hovered
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-			)
-		);
-
-		loginBtn.setOnMouseExited(e ->
-			loginBtn.setStyle(
-				"-fx-background-color: #fb6f92;" + // Revert back to original when not hovered anymore
-				"-fx-background-radius: 8;" +
-				"-fx-text-fill: #ffe5ec;" +
-				"-fx-font-size: 20px;" + // Font size 20
-				"-fx-font-weight: bold;"
-			)
-		);
-
-		// Sign-Up Hyperlink
-		Hyperlink signUpLink = new Hyperlink("Don't have an account? Sign-Up");
-		signUpLink.setFont(inter);
-		signUpLink.setOnAction(e -> {
-			popupStage.close(); // Close the Log-in pop-up
-			new SignUpScreen(ownerStage, manager).show(); // Ensure that WelcomeScreen is the parent screen
-		});
-
-		// Centered layout box for the buttons and hyperlink
-		VBox centerBox = new VBox(10);
-		centerBox.setAlignment(Pos.CENTER);
-		centerBox.getChildren().addAll(loginBtn, signUpLink);
-
-		// Assembles everything into the form
-		form.getChildren().addAll(title, subtitle, email, password, msgRow, centerBox);
-		root.setCenter(form);
-
-		Scene scene = new Scene(root, 500, 400);
-		popupStage.setScene(scene); // Apply to stage
-		popupStage.show(); // Show the pop-up screen
+		loginBtn.getStyleClass().add("login-btn");
 
 		// Events when log-in button is clicked
 		loginBtn.setOnAction(e -> {
@@ -153,6 +87,29 @@ public class LoginScreen {
 		    new ContentArea(loggedIn, manager).show(); // To pass student info to other screens
 		
 		});
+		
+		// Sign-Up Hyperlink
+		Hyperlink signUpLink = new Hyperlink("Don't have an account? Sign-Up");
+		signUpLink.getStyleClass().add("signup-link");
+		signUpLink.setOnAction(e -> {
+			popupStage.close(); // Close the Log-in pop-up
+			new SignUpScreen(ownerStage, manager).show(); // Ensure that WelcomeScreen is the parent screen
+		});
+
+		// Centered layout box for the buttons and hyperlink
+		VBox centerBox = new VBox(10);
+		centerBox.setAlignment(Pos.CENTER);
+		centerBox.getChildren().addAll(loginBtn, signUpLink);
+
+		// Assembles everything into the form
+		form.getChildren().addAll(title, subtitle, email, password, msgRow, centerBox);
+		root.setCenter(form);
+
+		Scene scene = new Scene(root, 500, 400);
+		scene.getStylesheets().add(getClass().getResource("/resources/login.css").toExternalForm()); // Add CSS Styling
+		
+		popupStage.setScene(scene); // Apply to stage
+		popupStage.show(); // Show the pop-up screen
 	}
 	
 	// Helper method that allows to show error message for the given seconds
