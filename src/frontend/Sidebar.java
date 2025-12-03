@@ -10,12 +10,13 @@ import javafx.scene.text.Font;
 public class Sidebar {
 	
 	private VBox sidebar;          // The whole sidebar UI
-	private VBox enlistment;
+//	private VBox enlistment;
 	private VBox dashboard;
+	private ScrollPane enlistmentScroll;
 
     private Button internalHamburger; // The hamburger button inside the sidebar
 
-    public Sidebar(Font inter, Font poppinsBold, Font japaneseFont, VBox dashboard, VBox enlistment) {
+    public Sidebar(Font inter, Font poppinsBold, Font japaneseFont, VBox dashboard, ScrollPane enlistmentScroll) {
         sidebar = new VBox(10);
         sidebar.setPrefWidth(320);
         sidebar.setMaxWidth(320);
@@ -33,9 +34,11 @@ public class Sidebar {
         sidebar.setTranslateX(0);
         sidebar.setAlignment(Pos.TOP_LEFT);
         
-    	this.enlistment = enlistment;
     	this.dashboard = dashboard;
-        // --- HEADER WITH HAMBURGER ---
+//    	this.enlistment = enlistment;
+    	this.enlistmentScroll = enlistmentScroll;
+    	
+    	// --- HEADER WITH HAMBURGER ---
         HBox header = new HBox(10);
 
         internalHamburger = new Button("☰");
@@ -51,17 +54,24 @@ public class Sidebar {
         header.setPadding(new Insets(5));
 
         // --- Sidebar items ---
+//        HBox dashboardBox = createItem("Dashboard", "/resources/dashboardIcon.png", inter);
+//        dashboardBox.setOnMouseClicked(event -> {
+//        	this.dashboard.setVisible(true);
+//            this.enlistment.setVisible(false);
+//        });
+
         HBox dashboardBox = createItem("Dashboard", "/resources/dashboardIcon.png", inter);
         dashboardBox.setOnMouseClicked(event -> {
         	this.dashboard.setVisible(true);
-            this.enlistment.setVisible(false);
+            this.enlistmentScroll.setVisible(false);
         });
         
         HBox enlistmentBox = createItem("Enlistment", "/resources/enlistIcon.png", inter);
         enlistmentBox.setOnMouseClicked(event -> {
         	this.dashboard.setVisible(false);
-            this.enlistment.setVisible(true);
+            this.enlistmentScroll.setVisible(true);
         });
+        
         HBox aboutBox = createItem("About", "/resources/aboutIcon.png", inter);
         HBox creditsBox = createItem("Credits", "/resources/creditsIcon.png", inter);
 
@@ -84,15 +94,21 @@ public class Sidebar {
         dropdownIcon.setFitWidth(30);
         dropdownIcon.setPreserveRatio(true);
 
-        dropdownIcon.setOnMouseClicked(e -> {
+//        dropdownIcon.setOnMouseClicked(e -> {
+//            boolean open = !courseDropdown.isVisible();
+//            courseDropdown.setVisible(open);
+//            courseDropdown.setManaged(open);
+//            dropdownIcon.setRotate(open ? 180 : 0);
+//        });
+
+        courseBox.getChildren().add(dropdownIcon);
+        courseBox.setOnMouseClicked(event -> {
             boolean open = !courseDropdown.isVisible();
             courseDropdown.setVisible(open);
             courseDropdown.setManaged(open);
             dropdownIcon.setRotate(open ? 180 : 0);
         });
-
-        courseBox.getChildren().add(dropdownIcon);
-
+        
         VBox courseListBox = new VBox(courseBox, courseDropdown);
 
         // Spacer

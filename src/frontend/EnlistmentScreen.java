@@ -19,6 +19,7 @@ public class EnlistmentScreen extends VBox {
 		setSpacing(20);
 		setPadding(new Insets(20));
 		setStyle("-fx-background-color: white;");
+
         		
         // ---------- CALENDAR ----------
 		

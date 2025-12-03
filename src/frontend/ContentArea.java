@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
@@ -19,15 +20,10 @@ public class ContentArea {
 	private Student student;
 	private StudentManager manager;
 	
-	//Font poppinsBold = Font.loadFont(getClass().getResourceAsStream("/resources/Poppins Bold.ttf"), 28);
 	Font poppinsBold;
 	Font inter;
 	Font interItalic;
 	Font japaneseFont;
-	
-//	Font inter = Font.loadFont(getClass().getResourceAsStream("/resources/Inter.ttf"), 25);
-//	Font interItalic = Font.loadFont(getClass().getResourceAsStream("/resources/Inter Italic.ttf"), 14);
-//	Font japaneseFont = Font.loadFont(getClass().getResourceAsStream("/resources/Seibi Ohkido.otf"), 25);
 	
     private Stage stage;
 	static Button externalHamburger = new Button();    
@@ -36,12 +32,12 @@ public class ContentArea {
     private HBox topBar;
 	private VBox dashboardScreen;
 	private EnlistmentScreen enlistmentScreen;	
-			
 //	private VBox courseList;
 //	private VBox about;	
 //	private VBox credits;
 		
 	private StackPane screens;
+	private ScrollPane enlistmentScroll;
 	
     public ContentArea(Student student, StudentManager manager) { 
         this.student = student;
@@ -60,11 +56,24 @@ public class ContentArea {
         
 	    dashboardScreen = new DashboardScreen(student, inter, poppinsBold, japaneseFont, interItalic);
 	    enlistmentScreen = new EnlistmentScreen();
+		    enlistmentScroll = new ScrollPane(enlistmentScreen);
+		    enlistmentScroll.setFitToWidth(true);
+		    enlistmentScroll.setFitToHeight(true);
+		    enlistmentScroll.setStyle("-fx-background-color: transparent;");
 //		courseList = new CourseListScreen();
 //		about = new AboutSceen();	
-//		credits = new CreditsSceen();	
+//		credits = new CreditsSceen();
 	    
-	    screens = new StackPane(dashboardScreen, enlistmentScreen);
+	    // STACK PANE LAYERS
+	    screens = new StackPane(enlistmentScroll, dashboardScreen);
+	    
+	    // Binds enlistment scroll size to stack pane
+	    enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
+	    enlistmentScroll.prefHeightProperty().bind(screens.heightProperty());
+	    
+	    // Initial visibility of screens
+//	    dashboardScreen.setVisible(true);
+//	    enlistmentScroll.setVisible(false);      
     }
     
 
@@ -83,10 +92,10 @@ public class ContentArea {
          root.setStyle("-fx-background-color: white;");
 
     	 dashboardScreen.setVisible(true);
-    	 enlistmentScreen.setVisible(false);
-
+    	 enlistmentScroll.setVisible(false);
+    	 
          // Create sidebar object
-         Sidebar side = new Sidebar(inter, poppinsBold, japaneseFont, dashboardScreen, enlistmentScreen);
+         Sidebar side = new Sidebar(inter, poppinsBold, japaneseFont, dashboardScreen, enlistmentScroll);
          VBox sidebar = side.getSidebar();
          
          sidebar.setTranslateX(-320);
@@ -106,7 +115,7 @@ public class ContentArea {
          externalHamburger.setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
          side.getInternalHamburger().setOnAction(e -> toggleSidebar(sidebar, this.dashboardScreen));
 
-         Scene scene = new Scene(root, 1820, 980);
+         Scene scene = new Scene(root, 1200, 800);
          stage.setScene(scene);
          stage.show();
          
