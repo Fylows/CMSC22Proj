@@ -25,6 +25,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -125,23 +126,32 @@ public class EnlistmentScreen extends VBox {
             units.setText("Total Units: " + total);
         });
 		
-		Color[] colors = {Color.PINK, Color.LIGHTBLUE, Color.LIGHTSEAGREEN };
-		String[] states = {"Bookmarked", "Enlisted", "Finalized" };
-		
+		Color[] colors = {Color.PINK, Color.LIGHTBLUE, Color.LIGHTSEAGREEN};
+		String[] states = {"Bookmarked", "Enlisted", "Finalized"};
+		String[] tooltips = {
+		    "Courses you have bookmarked but not yet enlisted",
+		    "Courses you are currently enlisted in",
+		    "Courses that are finalized in your schedule"
+		};
+
 		HBox enlistmentDetails = new HBox(20);
 		for (int i = 0; i < 3; i++) {
-			Rectangle rect = new Rectangle(100, 60, colors[i]);
+		    Rectangle rect = new Rectangle(100, 60, colors[i]);
 
-	        // Create label
-	        Label label = new Label(states[i]);
+		    // Create label
+		    Label label = new Label(states[i]);
 
-	        // StackPane to put label on top of rectangle
-	        StackPane stack = new StackPane();
-	        stack.getChildren().addAll(rect, label);
-	        stack.setAlignment(Pos.CENTER);
+		    // StackPane to put label on top of rectangle
+		    StackPane stack = new StackPane();
+		    stack.getChildren().addAll(rect, label);
+		    stack.setAlignment(Pos.CENTER);
 
-	        // Add to HBox
-	        enlistmentDetails.getChildren().add(stack);
+		    // Add tooltip
+		    Tooltip tooltip = new Tooltip(tooltips[i]);
+		    Tooltip.install(stack, tooltip);  // attach tooltip to the StackPane
+
+		    // Add to HBox
+		    enlistmentDetails.getChildren().add(stack);
 		}
 		
 		enlistments.getChildren().addAll(enlistmentDetails,units,activeEnlistments);
