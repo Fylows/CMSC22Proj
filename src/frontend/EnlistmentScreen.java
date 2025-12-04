@@ -30,10 +30,13 @@ public class EnlistmentScreen extends VBox {
 	private GridPane calendar = new GridPane();
 	private ArrayList<OfferedCourse> offered = RegSystem.getAllCourses();
 	private Student student = ContentArea.getStudent();
-
 	private ObservableList<OfferedCourse> studentCourses = FXCollections.observableList(student.getEnrolledCourses());
 	 
 	public EnlistmentScreen() {
+		System.out.println(student.getEnrolledCourses());
+		for (OfferedCourse oc : student.getEnrolledCourses()) {
+			System.out.println(oc);
+		}
 		setSpacing(20);
 		setPadding(new Insets(60, 20, 20, 20)); 
 		setStyle("-fx-background-color: white;");
@@ -154,7 +157,7 @@ public class EnlistmentScreen extends VBox {
 	            // Add button
 	            Button addBtn = new Button("Add");
 	            addBtn.setOnAction(e -> {
-	                if (RegSystem.enrollStudentInOfferedCourse(student, course, studentCourses)) {
+	                if (RegSystem.enrollStudentInOfferedCourse(student, course, studentCourses) == 0) {
 	                    RegSystem.fillTime(calendar, course);
 	                    if (course.getLec() != null) {
 	                        RegSystem.fillTime(calendar, course.getLec());
