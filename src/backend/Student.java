@@ -50,6 +50,15 @@ public class Student implements Serializable {
 	public ObservableList<OfferedCourse> getEnrolledObLi() {
 	    return FXCollections.observableList(enrolledCourses); 
 	}
+	
+	// Computes for the student's total units from completed courses
+	public int getTotalCompletedUnits() {
+	    int sum = 0;
+	    for (Course c : completedCourses) {
+	        sum += c.getUnits();
+	    }
+	    return sum;
+	}
 
 	public String getName() { return firstName + " " + lastName; }
 	public String getFirstName() { return firstName; }

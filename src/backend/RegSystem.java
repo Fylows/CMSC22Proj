@@ -4,10 +4,12 @@ import javafx.scene.control.Label;
 import java.time.LocalTime;
 //import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.collections.ObservableList;
 //import backend.CourseManager.Degree;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
@@ -97,7 +99,7 @@ public class RegSystem {
     // Enrolls students into offered courses
     // Checks if students meet the prerequisites before enrolling in the course
     // Saves the updated list
-    public static boolean enrollStudentInOfferedCourse(Student student, OfferedCourse course) { 
+    public static boolean enrollStudentInOfferedCourse(Student student, OfferedCourse course, ObservableList<OfferedCourse> off) { 
     	if (student == null || course == null) return false; 
     	for (OfferedCourse oc : courseManager.getOfferedCourses()) { 
     		if (oc.getCourseCode().equalsIgnoreCase(course.getCourseCode()) && 
@@ -111,6 +113,11 @@ public class RegSystem {
     	boolean alreadyEnrolled = student.getEnrolledCourses().stream()
     	        .anyMatch(c -> c.getCourseCode().equals(course.getCourseCode())
     	                   && !c.getSection().equals(course.getSection()));
+    	
+    	if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
+    		System.out.println("Enrollment failed: not your degree"); 
+    		return false; 
+    	}
     	
     	if (!hasPrerequisites(student, course)) { 
     		System.out.println("Enrollment failed: prerequisites not met."); 
@@ -127,11 +134,12 @@ public class RegSystem {
     		course.getEnrolledStudents().add(student); 
     		
 			if (!alreadyEnrolled) {
-				student.getEnrolledCourses().add(course);
+				// student.getEnrolledCourses().add(course);
+				off.add(course);
 			    // auto-enroll lecture for labs
 				if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
-			        student.getEnrolledCourses().add(course.getLec());
-		    		return true; 
+			        //student.getEnrolledCourses().add(course.getLec());
+			        off.add(course.getLec());
 				}
 			    
 	    		return true;
@@ -145,12 +153,17 @@ public class RegSystem {
     }
     // Removes student from enrolled courses
     // Saves the updated list
-    public boolean dropStudentFromOfferedCourse(Student student, OfferedCourse course) { 
+    public static boolean dropStudentFromOfferedCourse(Student student, OfferedCourse course) { 
     	if (student == null || course == null) return false;
     	
     	if (course.getEnrolledStudents().contains(student)) { 
     		course.getEnrolledStudents().remove(student); 
-    		student.getEnrolledCourses().remove(course.getCourseCode()); 
+    		student.getEnrolledCourses().remove(course); 
+    		if (course.getLec() != null) {
+        		course.getLec().getEnrolledStudents().remove(student); 
+        		student.getEnrolledCourses().remove(course.getLec()); 
+        	}
+    		
     		StudentManager.save(studentManager); 
     		OfferedCourseManager.save(courseManager); 
     		return true; 
