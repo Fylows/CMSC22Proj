@@ -35,7 +35,7 @@ public class RegSystem {
     	RegSystem.studentManager = StudentManager.load();
     	RegSystem.courseManager = OfferedCourseManager.load();
         OfferedCourseManager.save(courseManager);
-
+        
         // initialize timeMap
         int row = 0;
         for (int hour = 7; hour <= 19; hour++) {
@@ -96,56 +96,67 @@ public class RegSystem {
         }
         return null;
     }
-    // Enrolls students into offered courses
-    // Checks if students meet the prerequisites before enrolling in the course
-    // Saves the updated list
-    public static boolean enrollStudentInOfferedCourse(Student student, OfferedCourse course, ObservableList<OfferedCourse> off) { 
-    	if (student == null || course == null) return false; 
-    	for (OfferedCourse oc : courseManager.getOfferedCourses()) { 
-    		if (oc.getCourseCode().equalsIgnoreCase(course.getCourseCode()) && 
-    				oc.getTerm().equalsIgnoreCase(course.getTerm()) && 
-    				oc.getEnrolledStudents().contains(student)) { 
-    			System.out.println("Enrollment failed: already enrolled in another section of " + course.getCourseCode()); 
-    			return false; 
-    			} 
-    		} 
+    /** enrollStudentInOfferedCourse
+     * 
+     * enrolls a student in their chosen course by going through multiple checks, namely:
+     * is student enrolled, is the course in their degree, do they have the prerequisites, is there a time conflict
+     * 
+     * @param student, the student to enroll in the course
+     * @param course, the course to be enrolled in
+     * @param off, observable list of student's courses
+     * @return integers corresponding to the type of error
+     * -1 = null error
+     * 0 = successful 
+     * 1 = already have the course
+     * 2 = not their degree
+     * 3 = prerequisites not met
+     * 4 = has a time conflict
+     */
+    public static int enrollStudentInOfferedCourse(Student student, OfferedCourse course, ObservableList<OfferedCourse> off) { 
+    	if (student == null || course == null) return -1; 
+//    	for (OfferedCourse oc : courseManager.getOfferedCourses()) { 
+//    		if (oc.getCourseCode().equalsIgnoreCase(course.getCourseCode()) && 
+//    				oc.getTerm().equalsIgnoreCase(course.getTerm()) && 
+//    				oc.getEnrolledStudents().contains(student)) { 
+//    			System.out.println("Enrollment failed: already enrolled in another section of " + course.getCourseCode()); 
+//    			return false; 
+//    			} 
+//    		} 
 
     	boolean alreadyEnrolled = student.getEnrolledCourses().stream()
     	        .anyMatch(c -> c.getCourseCode().equals(course.getCourseCode())
     	                   && !c.getSection().equals(course.getSection()));
     	
+    	if (alreadyEnrolled) {
+    		System.out.println("Enrollment failed: already enrolled in another section of " + course.getCourseCode());
+    		return 1;
+    	}
+    	
     	if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
     		System.out.println("Enrollment failed: not your degree"); 
-    		return false; 
+    		return 2; 
     	}
     	
     	if (!hasPrerequisites(student, course)) { 
     		System.out.println("Enrollment failed: prerequisites not met."); 
-    		return false; 
-    		} 
+    		return 3; 
+    	} 
 
     	if (hasTimeConflict(student, course)) { 
     		System.out.println("Enrollment failed: schedule conflict."); 
-    		return false; 
-    		} 
+    		return 4; 
+    	} 
     	
-    	
-    	if (!course.getEnrolledStudents().contains(student)) { 
-    		course.getEnrolledStudents().add(student); 
-    		
-			if (!alreadyEnrolled) {
-				// student.getEnrolledCourses().add(course);
-				off.add(course);
-			    // auto-enroll lecture for labs
-				if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
-			        //student.getEnrolledCourses().add(course.getLec());
-			        off.add(course.getLec());
-				}
-			    
-	    		return true;
-			}
-		} 
-    	return false; 
+    	off.add(course);
+	    // auto-enroll lecture for labs
+		if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
+	        //student.getEnrolledCourses().add(course.getLec());
+	        off.add(course.getLec());
+		}
+		studentManager.updateStudent(student);
+		StudentManager.save(studentManager); 
+		OfferedCourseManager.save(courseManager); 
+		return 0;
     }
     
     private static boolean isLecture(OfferedCourse course) {
