@@ -299,5 +299,16 @@ public class CourseManager {
 	        default     -> List.of(); // empty, safe list
 	    };
 	}
+	
+	// Total number of units required per degree
+		public static int getTotalRequiredUnits(String degree) {
+			return switch (degree) {
+				case "BSCS" -> 130;
+				case "MSCS" -> 34;
+				case "PHD" -> 36;
+				case "MSIT" -> 37;
+				default -> 0; // If the degree does not match any known category, return null
+			};
+		}	
 
 }
