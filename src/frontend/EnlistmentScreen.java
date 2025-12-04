@@ -17,8 +17,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
@@ -206,9 +204,6 @@ public class EnlistmentScreen extends VBox {
 
 	    return container;
 	}
-
-
-
 
 	private VBox createActiveEnlistments() {
 	    VBox vbox = new VBox(10);

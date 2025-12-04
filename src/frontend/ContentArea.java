@@ -1,6 +1,5 @@
 package frontend;
 
-import backend.OfferedCourse;
 import backend.Student;
 import backend.StudentManager;
 import javafx.util.Duration;
@@ -43,6 +42,8 @@ public class ContentArea implements ScreenChangeListener {
 	private final ScrollPane phdScroll;
 	
 	private final AboutScreen aboutScreen;
+	private final ScrollPane aboutScroll;
+	
 	private final CreditsScreen creditsScreen;
 	private final ScrollPane creditsScroll;
 	
@@ -110,6 +111,11 @@ public class ContentArea implements ScreenChangeListener {
 		phdScroll.getStyleClass().add("transparent-scroll");
 		
 		aboutScreen = new AboutScreen();
+		aboutScroll = new ScrollPane(aboutScreen);
+		aboutScroll.setFitToWidth(true);
+		aboutScroll.setFitToHeight(true);
+		aboutScroll.getStyleClass().add("transparent-scroll");
+		
 		creditsScreen = new CreditsScreen();
 		creditsScroll = new ScrollPane(creditsScreen);
 		creditsScroll.setFitToWidth(true);
@@ -126,7 +132,7 @@ public class ContentArea implements ScreenChangeListener {
 			msScroll, 
 			mitScroll, 
 			phdScroll, 
-			aboutScreen, 
+			aboutScroll, 
 			creditsScroll, 
 			profileScreen
 		);
@@ -137,7 +143,7 @@ public class ContentArea implements ScreenChangeListener {
 		StackPane.setAlignment(msScroll, Pos.CENTER);
 		StackPane.setAlignment(mitScroll, Pos.CENTER);
 		StackPane.setAlignment(phdScroll, Pos.CENTER);
-		StackPane.setAlignment(aboutScreen, Pos.CENTER);
+		StackPane.setAlignment(aboutScroll, Pos.CENTER);
 		StackPane.setAlignment(creditsScroll, Pos.CENTER);
 		StackPane.setAlignment(profileScreen, Pos.CENTER);
 
@@ -249,7 +255,7 @@ public class ContentArea implements ScreenChangeListener {
 		msScroll.setVisible(false);
 		mitScroll.setVisible(false);
 		phdScroll.setVisible(false);
-		aboutScreen.setVisible(false);
+		aboutScroll.setVisible(false);
 		creditsScroll.setVisible(false);
 		profileScreen.setVisible(false);
 	}
@@ -294,7 +300,7 @@ public class ContentArea implements ScreenChangeListener {
 				break;
 			
 			case "About":
-				aboutScreen.setVisible(true);
+				aboutScroll.setVisible(true);
 				topBarTitle.setText("About");
 				break;
 
@@ -329,6 +335,7 @@ public class ContentArea implements ScreenChangeListener {
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/dashboard.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/programCourses.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/credits.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/about.css").toExternalForm());
 
 		// Close sidebar when clicking outside
 		scene.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {

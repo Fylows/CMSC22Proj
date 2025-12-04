@@ -10,6 +10,7 @@ public class CreditsScreen extends BorderPane {
 	// Constructor
 	public CreditsScreen() {
 		this.getStyleClass().addAll("credits-root", "credits-padding");
+		
 		this.setCenter(createDeveloperSection()); // Center content
 		this.setBottom(createReferencesSection()); // Bottom content
 	}
@@ -46,7 +47,7 @@ public class CreditsScreen extends BorderPane {
 				"Institute of Computer Science\n UP Los Baños",
 				"carlos.png",
 				"cealquinto@up.edu.ph",
-				"2024-XXXXX",
+				"2024-16008",
 				"dokudokunomu"
 		), 1, 0); // Top right
 
