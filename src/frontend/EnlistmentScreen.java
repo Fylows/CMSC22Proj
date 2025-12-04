@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
-import javafx.collections.ListChangeListener;
 import backend.OfferedCourse;
 import backend.RegSystem;
 import backend.Student;

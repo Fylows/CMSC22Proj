@@ -1,7 +1,6 @@
 package frontend;
 
 import backend.Student;
-import backend.StudentManager;
 import javafx.geometry.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -139,5 +138,10 @@ public class ProfilePageScreen extends HBox{
         box.setPadding(new Insets(7));
         return box;
     }
+
+    // Getters
+	public Student getStudent() {
+		return student;
+	}
 	
 }

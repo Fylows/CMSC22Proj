@@ -202,6 +202,10 @@ public class CourseManager {
 			Map.entry("CMSC 172", List.of("CMSC 123")),
 			Map.entry("CMSC 191", List.of("CMSC 123")),
 			
+			// To prevent checking of CMSC 2 and 11
+			Map.entry("CMSC 2", List.of("None")),
+			Map.entry("CMSC 11", List.of("None")),
+			
 			// Master of Science in Computer Science (MSCS)
 			// Assumes that non-degree courses are already taken and finished
 			Map.entry("CMSC 245", List.of("CMSC 244")),

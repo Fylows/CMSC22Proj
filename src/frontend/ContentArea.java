@@ -307,7 +307,7 @@ public class ContentArea implements ScreenChangeListener {
 
 	// Running the screen
 	public void show() {
-		for (OfferedCourse oc : this.student.getEnrolledCourses()) {
+		for (OfferedCourse oc : ContentArea.getStudent().getEnrolledCourses()) {
 			System.out.println(oc);
 		}
 		StackPane root = new StackPane();
