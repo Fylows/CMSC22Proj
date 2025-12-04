@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class StudentManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private ArrayList<Student> students; // List of registered students
+	private static ArrayList<Student> students; // List of registered students
 	private static final Path STORAGE_PATH = Path.of("src/storage/students.txt");
 
 	// Constructor
@@ -23,9 +23,9 @@ public class StudentManager implements Serializable {
 
     // Persistence Functions (saving/loading)
 	// Saves the entire StudentManager object to a file
-	public static void save(StudentManager manager) {
+	public static void save() {
 		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(STORAGE_PATH))) { // Put in the try block so it automatically closes at the end
-			out.writeObject(manager); // Writes all the students
+			out.writeObject(StudentManager.students); // Writes all the students
 		} catch (IOException e) {
 			e.printStackTrace(); // Prints a detailed error report to the console
 		}
@@ -35,10 +35,14 @@ public class StudentManager implements Serializable {
 	public static StudentManager load() {
 		StudentManager fallback = new StudentManager(new ArrayList<Student>());
 		
-		if (!Files.exists(STORAGE_PATH)) return fallback; // If file does not exist, return a default value
+		if (!Files.exists(STORAGE_PATH)) {
+			System.out.println("Student manager did not load");
+			return fallback; // If file does not exist, return a default value
+		}
 		
 		try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(STORAGE_PATH))) { // Put in the try block so it automatically closes at the end
-			StudentManager manager = (StudentManager) in.readObject(); // Read the serialized StudentManager object
+			ArrayList<Student> students = (ArrayList<Student>) in.readObject();
+			StudentManager manager = new StudentManager(students); // Read the serialized StudentManager object
 			return manager; // Return the loaded object
 		} catch (IOException | ClassNotFoundException e) {
 			return fallback; // Return nothing if file is unreadable or corrupted
@@ -53,11 +57,11 @@ public class StudentManager implements Serializable {
 				break;
 			}
 		}
-		StudentManager.save(this); // Persist all students
+		StudentManager.save(); // Persist all students
 	}
 
 	// Logic for Sign-Up Screen
-	public String signUp(String firstName, String middleName, String lastName, String suffix,
+	public String signUp (String firstName, String middleName, String lastName, String suffix,
 						String email, String birthday, String sex, String password, String degree) {
 
 		// Checks if the required fields (those with *) are not empty
@@ -84,7 +88,7 @@ public class StudentManager implements Serializable {
 		// Creates the new student
 		Student newStudent = new Student(firstName, middleName, lastName, suffix, email, birthday, sex, password, degree);
 		students.add(newStudent);
-		StudentManager.save(this); // Saves the student after signing-up
+		StudentManager.save(); // Saves the student after signing-up
 
 		return "SUCCESS";
 	}

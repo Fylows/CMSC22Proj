@@ -2,6 +2,7 @@ package frontend;
 
 import backend.Course;
 import backend.CourseManager;
+import backend.RegSystem;
 import backend.Student;
 import backend.StudentManager;
 import javafx.util.Duration;
@@ -188,7 +189,7 @@ public class CourseSelectionScreen {
 			student.getCompletedCourses().addAll(selectedCourses);
 
 			// Save updated student info to students.txt
-			StudentManager studentManager = StudentManager.load(); // Load current manager
+			StudentManager studentManager = RegSystem.getStudentManager();
 			if (studentManager != null) {
 				studentManager.updateStudent(student); // Write updated student to file
 			}

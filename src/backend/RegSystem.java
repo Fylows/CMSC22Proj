@@ -49,7 +49,7 @@ public class RegSystem {
     //Saves the updated student list
     public void addStudent(Student s) {
         studentManager.getStudents().add(s);
-        StudentManager.save(this.studentManager);
+        StudentManager.save();
     }
 
     // Deletes students from every course they enrolled in
@@ -63,7 +63,7 @@ public class RegSystem {
             }
             studentManager.getStudents().remove(s);
 
-            StudentManager.save(this.studentManager);
+            StudentManager.save();
             // OfferedCourseManager.saveData(courseManager.getAllCourses(), courseManager.getOfferedCourses());
         }
     }
@@ -154,7 +154,7 @@ public class RegSystem {
 	        off.add(course.getLec());
 		}
 		studentManager.updateStudent(student);
-		StudentManager.save(studentManager); 
+		StudentManager.save(); 
 		OfferedCourseManager.save(courseManager); 
 		return 0;
     }
@@ -175,7 +175,7 @@ public class RegSystem {
         		student.getEnrolledCourses().remove(course.getLec()); 
         	}
     		studentManager.updateStudent(student);
-    		StudentManager.save(studentManager); 
+    		StudentManager.save(); 
     		OfferedCourseManager.save(courseManager); 
     		return true; 
     		} 
@@ -309,5 +309,7 @@ public class RegSystem {
         return null;
     }
     
+    public static StudentManager getStudentManager() { return studentManager; }
+    public static OfferedCourseManager getCourseManager() { return courseManager; }
 
 }

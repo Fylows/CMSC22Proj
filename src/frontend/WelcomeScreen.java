@@ -15,8 +15,10 @@ public class WelcomeScreen {
 
 	// Constructor
 	@SuppressWarnings("exports")
+	private StudentManager manager;
 	public WelcomeScreen(Stage stage) {
 		this.stage = stage;
+		this.manager = RegSystem.getStudentManager();
 	}
 
 	// Running the screen
@@ -65,8 +67,6 @@ public class WelcomeScreen {
 		Button login = new Button("Log-In"); // Log-in button
         login.getStyleClass().add("pink-button");
 		
-		// Unedited
-		StudentManager manager = StudentManager.load();
 
 		// Sign Up button action
 		signup.setOnAction(e -> {

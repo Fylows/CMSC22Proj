@@ -33,10 +33,6 @@ public class EnlistmentScreen extends VBox {
 	private ObservableList<OfferedCourse> studentCourses = FXCollections.observableList(student.getEnrolledCourses());
 	 
 	public EnlistmentScreen() {
-		System.out.println(student.getEnrolledCourses());
-		for (OfferedCourse oc : student.getEnrolledCourses()) {
-			System.out.println(oc);
-		}
 		setSpacing(20);
 		setPadding(new Insets(60, 20, 20, 20)); 
 		setStyle("-fx-background-color: white;");
@@ -268,16 +264,17 @@ public class EnlistmentScreen extends VBox {
 	            deleteBtn.setOnAction(e -> {
 	                RegSystem.resetTime(calendar, course);
                     studentCourses.remove(course);
-	                RegSystem.dropStudentFromOfferedCourse(student, course);
+                    course.getEnrolledStudents().remove(student);
+	                //RegSystem.dropStudentFromOfferedCourse(student, course);
 
 	                if (course.getLec() != null) {
 	                    studentCourses.remove(course.getLec());
+	                    course.getLec().getEnrolledStudents().remove(student);
 	                    RegSystem.resetTime(calendar, course.getLec());
-	                    RegSystem.dropStudentFromOfferedCourse(student, course.getLec());
+	                    //RegSystem.dropStudentFromOfferedCourse(student, course.getLec());
 	                }
-	                for (OfferedCourse oc : studentCourses) {
-	                	System.out.println(oc);
-	                }
+	                RegSystem.getStudentManager().updateStudent(student);
+
 	                
 	                refreshGrid[0].run();
 	            });
