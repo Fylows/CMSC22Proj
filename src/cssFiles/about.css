@@ -1,0 +1,62 @@
+/* Fonts */
+@font-face {
+	font-family: "Poppins";
+	src: url("PoppinsBold.ttf");
+}
+
+@font-face {
+	font-family: "Inter";
+	src: url("Inter.ttf");
+}
+
+@font-face {
+	font-family: "Inter Italic";
+	src: url("InterItalic.ttf");
+}
+
+/* Root background */
+.about-root {
+	-fx-background-color: linear-gradient(to bottom, #ffeef3, #ffdce7);
+}
+
+.about-header-container {
+	-fx-padding: 40 20 20 20;
+	-fx-alignment: center;
+}
+
+.about-content {
+	-fx-alignment: top-center;
+	-fx-spacing: 15;
+	-fx-padding: 20 0 30 0;
+}
+
+.about-section {
+	-fx-padding: 0 40 0 40;
+}
+
+/* Title */
+.about-title {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 36px;
+	-fx-font-weight: 700;
+	-fx-text-fill: #d14d79;
+	-fx-padding: 40 0 20 0;
+}
+
+/* Section Texts */
+.section-header {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 30px;
+	-fx-font-weight: bold;
+	-fx-text-fill: #b83e63;
+	-fx-alignment: center;
+	-fx-padding: 0 0 10 0;
+}
+
+.section-text {
+	-fx-font-family: "Inter";
+	-fx-font-size: 16px;
+	-fx-fill: #444;
+	-fx-wrap-text: true;
+	-fx-max-width: 1100px;
+}
