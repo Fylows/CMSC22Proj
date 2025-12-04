@@ -128,4 +128,9 @@ public class ProgramCoursesScreen extends BorderPane {
         box.getChildren().addAll(code, title, units, desc, prereqLabel);
         return box;
     }
+
+    // Getters
+	public String getDegree() {
+		return degree;
+	}
 }

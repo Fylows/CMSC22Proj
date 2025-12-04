@@ -15,19 +15,12 @@ import java.util.Map;
  */
 
 public class CourseManager {
-	/**
-	 * Degree
-	 * an Enum to get the different degrees
-	 */
+	// Enum to get the different degrees
 	public enum Degree {
-		BSCS, MSCS,	PHD, MSIT
+		BSCS, MSCS,	MSIT, PHD
 	}
 	
-	/**
-	 * courseDegreeMap
-	 * 
-	 * An Immutable map that consists of all courses from ICT, mapped to their respective degrees
-	 */
+	// An Immutable map that consists of all courses from ICT, mapped to their respective degrees
 	public static Map<String, Degree> courseDegreeMap = Map.ofEntries(
 			// Bachelor of Science in Computer Science (BSCS)
 			Map.entry("CMSC 2", Degree.BSCS),
@@ -99,12 +92,7 @@ public class CourseManager {
 						
 	);
 	
-	/**
-	 * prereqMap
-	 * 
-	 * An Immutable map that consists of the prerequisites of all the courses
-	 * 
-	 */
+	// An Immutable map that consists of the prerequisites of all the courses (for viewing)
 	public static Map<String, List<String>> prereqMap = Map.ofEntries(
 			// Bachelor of Science in Computer Science (BSCS)
 			Map.entry("CMSC 21", List.of("CMSC 12")),
@@ -113,16 +101,77 @@ public class CourseManager {
 			Map.entry("CMSC 22", List.of("CMSC 12")),
 			Map.entry("CMSC 123", List.of("CMSC 21","CMSC 57")),
 			Map.entry("CMSC 130", List.of("CMSC 57")),
-			Map.entry("CMSC 150", List.of("CMSC 21")),
+			Map.entry("CMSC 150", List.of("CMSC 21", "MATH 27 or MATH 36")),
 			
+			Map.entry("CMSC 23", List.of("CMSC 22")),
+			Map.entry("CMSC 100", List.of("CMSC 22")),
+			Map.entry("CMSC 127", List.of("CMSC 22")),
+			Map.entry("CMSC 131", List.of("CMSC 21")),
+			
+			Map.entry("CMSC 124", List.of("CMSC 123")),
+			Map.entry("CMSC 125", List.of("CMSC 123")),
+			Map.entry("CMSC 141", List.of("CMSC 123")),
+			Map.entry("CMSC 170", List.of("CMSC 123")),
+			Map.entry("CMSC 132", List.of("CMSC 131")),
+			
+			Map.entry("CMSC 137", List.of("CMSC 125")),
+			Map.entry("CMSC 128", List.of("CMSC 123")),
+			Map.entry("CMSC 142", List.of("CMSC 123")),
+			Map.entry("CMSC 173", List.of("CMSC 123", "STAT 101")),
+			Map.entry("CMSC 180", List.of("CMSC 132")),
+
+			Map.entry("CMSC 129", List.of("CMSC 124")),
+			Map.entry("CMSC 161", List.of("CMSC 123")),
+			Map.entry("CMSC 165", List.of("CMSC 123")),
+			Map.entry("CMSC 172", List.of("CMSC 123")),
+			Map.entry("CMSC 191", List.of("CMSC 123")),
+			
+			Map.entry("CMSC 11", List.of("MATH 11 or MATH 17")),
+			
+			// Master of Science in Computer Science (MSCS)
+			Map.entry("CMSC 245", List.of("CMSC 244")),
+	
+			Map.entry("CMSC 214", List.of("CMSC 124", "CMSC 141")),
+			Map.entry("CMSC 215", List.of("CMSC 125", "CMSC 131")),
+			Map.entry("CMSC 227", List.of("CMSC 127")),
+			Map.entry("CMSC 241", List.of("CMSC 141")),
+			Map.entry("CMSC 244", List.of("CMSC 142")),
+			Map.entry("CMSC 250", List.of("MATH 28 or MATH 38")),
+			Map.entry("CMSC 265", List.of("CMSC 165")),
+			Map.entry("CMSC 271", List.of("CMSC 127")),
+			Map.entry("CMSC 272", List.of("CMSC 127")),
+			Map.entry("CMSC 280", List.of("CMSC 132")),
+	
+			// Master of Information Technology (MIT)
+			Map.entry("IT 227", List.of("IT 210", "IT 226")),
+			Map.entry("IT 280", List.of("IT 238")),
+			
+			Map.entry("IT 210", List.of("CMSC 100")),
+			Map.entry("IT 238", List.of("CMSC 137")),
+			
+			// PhD in Computer Science (PhD)
+			Map.entry("CMSC 341", List.of("CMSC 241")),
+			Map.entry("CMSC 342", List.of("CMSC 245"))
+		);
+	
+	// An Immutable map that consists of the prerequisites of all the courses (for sign-up)
+	public static Map<String, List<String>> prereqEnforcedMap = Map.ofEntries(
+			// Bachelor of Science in Computer Science (BSCS)
+			Map.entry("CMSC 21", List.of("CMSC 12")),
+			Map.entry("CMSC 57", List.of("CMSC 56")),
+			
+			Map.entry("CMSC 22", List.of("CMSC 12")),
+			Map.entry("CMSC 123", List.of("CMSC 21","CMSC 57")),
+			Map.entry("CMSC 130", List.of("CMSC 57")),
+			Map.entry("CMSC 150", List.of("CMSC 21")),
 
 			Map.entry("CMSC 23", List.of("CMSC 22")),
 			Map.entry("CMSC 100", List.of("CMSC 22")),
 			Map.entry("CMSC 127", List.of("CMSC 22")),
 			Map.entry("CMSC 131", List.of("CMSC 21")),
 			
-			Map.entry("CMSC 125", List.of("CMSC 123")),
 			Map.entry("CMSC 124", List.of("CMSC 123")),
+			Map.entry("CMSC 125", List.of("CMSC 123")),
 			Map.entry("CMSC 141", List.of("CMSC 123")),
 			Map.entry("CMSC 170", List.of("CMSC 123")),
 			Map.entry("CMSC 132", List.of("CMSC 131")),
@@ -141,46 +190,20 @@ public class CourseManager {
 			Map.entry("CMSC 191", List.of("CMSC 123")),
 			
 			// Master of Science in Computer Science (MSCS)
-//			Map.entry("CMSC 214", List.of("CMSC 124", "CMSC 141")),
 			Map.entry("CMSC 245", List.of("CMSC 244")),
-	
 	
 			// Master of Information Technology (MIT)
 			Map.entry("IT 227", List.of("IT 210", "IT 226")),
 			Map.entry("IT 280", List.of("IT 238"))
 		);
 	
-//	public static boolean isBSCSCourse(String code) {
-//	    // Example: all BSCS courses start with CMSC and number < 200
-//	    if (code.startsWith("CMSC")) {
-//	        try {
-//	            int num = Integer.parseInt(code.split(" ")[1]);
-//	            return num < 200; // BSCS courses are below 200
-//	        } catch (Exception e) {
-//	            return true; // default to true if parsing fails
-//	        }
-//	    }
-//	    return false;
-//	}
-
-	
-
-	
 	// Maps of the different degrees with their respective courses
 	private static Map<String, Course> BSCS = new LinkedHashMap<>();
 	private static Map<String, Course> MSCS = new LinkedHashMap<>();
 	private static Map<String, Course> PHD = new LinkedHashMap<>();
 	private static Map<String, Course> MSIT = new LinkedHashMap<>();
-	// TODO add a observable list when doing UI
-
 	
-	
-	/**
-	 * loadFromCSV
-	 * 
-	 * Loads all degree courses into hashmaps
-	 * 
-	 */
+	// Loads all degree courses into hashmaps from the CSV files
 	public static void loadFromCSV() {
 		String[] files = {"/dataset/ics_cmsc_courses.csv", "/dataset/ics_mit_courses.csv", "/dataset/ics_mscs_courses.csv", "/dataset/ics_phd_courses.csv"};
 

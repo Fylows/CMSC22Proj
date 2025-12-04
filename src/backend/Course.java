@@ -37,25 +37,9 @@ public class Course implements Serializable {
 		return prereq;
 	}
 	
-//	// New method: prerequisites depending on the degree
-//	public List<String> getPrerequisitesForDegree(String degreeCode) {
-//	    List<String> prereqs = CourseManager.prereqMap.getOrDefault(courseCode, new ArrayList<>());
-//
-//	    // For MSCS or MSIT, assume all BSCS courses are completed
-//	    if (degreeCode.equals("MSCS") || degreeCode.equals("MSIT")) {
-//	        List<String> filtered = new ArrayList<>();
-//	        for (String p : prereqs) {
-//	            // Keep only non-BSCS courses
-//	            if (!CourseManager.isBSCSCourse(p)) { // <- helper method
-//	                filtered.add(p);
-//	            }
-//	        }
-//	        return filtered;
-//	    }
-//
-//	    // Otherwise, return normal prerequisites
-//	    return prereqs;
-//	}
+	public List<String> getEnforcedPrerequisites() {
+		return CourseManager.prereqEnforcedMap.getOrDefault(courseCode, List.of());
+	}
 	
 	public String getType() { return this.type; }
 	public String getCourseCode() { return courseCode; }

@@ -33,6 +33,7 @@ public class CourseSelectionScreen {
 	private Student student; // The student created after signing-up
 	
 	// Constructor
+	@SuppressWarnings("exports")
 	public CourseSelectionScreen(Stage ownerStage, Student student) {
 		this.ownerStage = ownerStage;
 		this.student = student;
@@ -215,7 +216,7 @@ public class CourseSelectionScreen {
 	private void handlePrerequisites(ObservableList<CheckBox> checkboxes) {
 		for (CheckBox cb : checkboxes) { // Loop through every course checkbox
 			String code = cb.getText(); // Get the course code shown on the checkbox
-			List<String> prereqs = CourseManager.prereqMap.get(code); // Look up its prerequisites
+			List<String> prereqs = CourseManager.prereqEnforcedMap.get(code); // Look up its prerequisites
 
 			if (prereqs == null || prereqs.isEmpty()) { // If there are no prerequisite
 				cb.setDisable(false); // Always enabled
