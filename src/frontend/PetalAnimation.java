@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 public class PetalAnimation {
+	@SuppressWarnings("exports")
 	public static void start(Pane layer, int maxPetals, double interval) {
 		Timeline spawn = new Timeline( // Timeline that repeatedly spawns new petals
 				new KeyFrame(Duration.seconds(interval), e -> { // Spawn petals every given "interval"

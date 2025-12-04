@@ -15,6 +15,7 @@ public class LoadingScreen {
 	private Stage stage; // Reference to main window (Stage)
 
 	// Constructor
+	@SuppressWarnings("exports")
 	public LoadingScreen(Stage stage) {
 		this.stage = stage;
 	}

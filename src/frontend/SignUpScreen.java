@@ -23,6 +23,7 @@ public class SignUpScreen {
 	private StudentManager studentManager; // Handles saving and validating sign-ups
 
 	// Constructor
+	@SuppressWarnings("exports")
 	public SignUpScreen(Stage ownerStage, StudentManager studentManager) {
 		this.ownerStage = ownerStage; // Keep reference to the WelcomeScreen
 		this.studentManager = studentManager;

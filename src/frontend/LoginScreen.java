@@ -19,6 +19,7 @@ public class LoginScreen {
 	private StudentManager manager; // Handles validating log-in
 
 	// Constructor
+	@SuppressWarnings("exports")
 	public LoginScreen(Stage ownerStage, StudentManager manager) {
 		this.ownerStage = ownerStage; // Keep reference to the WelcomeScreen
 		this.manager = manager;
