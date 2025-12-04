@@ -81,7 +81,6 @@ public class EnlistmentScreen extends VBox {
 	private VBox createCourseSearchGrid(ArrayList<OfferedCourse> allOfferedCourses) {
 	    ObservableList<OfferedCourse> allCourses = FXCollections.observableArrayList(allOfferedCourses);
 
-	    // Current page and items per page
 	    final int[] currentPage = {0};
 	    final int[] itemsPerPage = {10};
 
@@ -139,16 +138,17 @@ public class EnlistmentScreen extends VBox {
 
 	            // Lecture details
 	            OfferedCourse lecture = course.getLec() != null ? course.getLec() : course;
-	            VBox classDetails = new VBox(3);
-	            classDetails.getChildren().add(new Label("Lecture: " + lecture.getCourseCode() + " - " + lecture.getSection()));
-	            classDetails.getChildren().add(new Label("Schedule: " + lecture.getTimes()));
+	            VBox lectureBox = new VBox(3);
+	            lectureBox.getChildren().add(new Label("Lecture: " + lecture.getCourseCode() + " - " + lecture.getSection()));
+	            lectureBox.getChildren().add(new Label("Schedule: " + lecture.getTimes()));
 
 	            // Lab details if exists
+	            VBox labBox = new VBox(3);
 	            if (course.getLec() != null) {
-	                classDetails.getChildren().add(new Label("Lab: " + course.getCourseCode() + " - " + course.getSection()));
-	                classDetails.getChildren().add(new Label("Schedule: " + course.getTimes()));
+	                labBox.getChildren().add(new Label("Lab: " + course.getCourseCode() + " - " + course.getSection()));
+	                labBox.getChildren().add(new Label("Schedule: " + course.getTimes()));
 	            } else {
-	                classDetails.getChildren().add(new Label("No associated lab"));
+	                labBox.getChildren().add(new Label("No associated lab"));
 	            }
 
 	            // Add button
@@ -162,7 +162,8 @@ public class EnlistmentScreen extends VBox {
 	                }
 	            });
 
-	            HBox row = new HBox(20, codeLabel, classDetails, addBtn);
+	            // Row HBox with separate columns
+	            HBox row = new HBox(20, codeLabel, lectureBox, labBox, addBtn);
 	            row.setAlignment(Pos.CENTER_LEFT);
 	            gridContainer.getChildren().add(row);
 	        }
@@ -206,6 +207,7 @@ public class EnlistmentScreen extends VBox {
 
 	    return container;
 	}
+
 
 
 
