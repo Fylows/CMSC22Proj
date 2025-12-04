@@ -54,12 +54,12 @@ public class ProfilePageScreen extends HBox{
         contactInfo.setOnMouseEntered(e ->
         	contactInfo.setStyle("-fx-background-color: #f9a8c4; -fx-background-radius: 8;"));
         contactInfo.setOnMouseExited(e ->
-    		contactInfo.setStyle("-fx-background-color: invisible; -fx-background-radius: 8;"));
+    		contactInfo.setStyle("-fx-background-color: #ffe5ec; -fx-background-radius: 8;"));
         grades.setStyle("-fx-background-radius: 8;");
         grades.setOnMouseEntered(e ->
         	grades.setStyle("-fx-background-color: #f9a8c4; -fx-background-radius: 8;"));
         grades.setOnMouseExited(e ->
-    		grades.setStyle("-fx-background-color: invisible; -fx-background-radius: 8;"));
+    		grades.setStyle("-fx-background-color: #ffe5ec; -fx-background-radius: 8;"));
 
         
         profile.getChildren().addAll(pfpPlaceholder, degree, infoBox, contactInfo, grades);
