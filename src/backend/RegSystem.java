@@ -195,13 +195,12 @@ public class RegSystem {
         if (course.getCourse() == null || course.getCourse().getPrerequisites() == null || course.getCourse().getPrerequisites().isEmpty())
             return true; 
 
-        for (String req : course.getCourse().getPrerequisites()) { 
-            if (!student.getCompletedCourses().contains(req)) { 
-                System.out.println("Missing prerequisite: " + req); 
-                return false; 
-            } 
-        } 
-        return true; 
+        boolean meetsPrereqs = course.getCourse().getPrerequisites().stream()
+        	    .allMatch(req ->
+        	        student.getCompletedCourses().stream()
+        	                 .anyMatch(c -> c.getCourseCode().toLowerCase().contains(req.toLowerCase()))
+        	    );
+        return meetsPrereqs; 
     }
     
     

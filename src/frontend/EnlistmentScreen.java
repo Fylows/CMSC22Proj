@@ -266,14 +266,19 @@ public class EnlistmentScreen extends VBox {
 	            // Action buttons
 	            Button deleteBtn = new Button("Delete");
 	            deleteBtn.setOnAction(e -> {
-	                RegSystem.dropStudentFromOfferedCourse(student, course);
 	                RegSystem.resetTime(calendar, course);
+                    studentCourses.remove(course);
+	                RegSystem.dropStudentFromOfferedCourse(student, course);
 
 	                if (course.getLec() != null) {
-	                    RegSystem.dropStudentFromOfferedCourse(student, course.getLec());
+	                    studentCourses.remove(course.getLec());
 	                    RegSystem.resetTime(calendar, course.getLec());
+	                    RegSystem.dropStudentFromOfferedCourse(student, course.getLec());
 	                }
-
+	                for (OfferedCourse oc : studentCourses) {
+	                	System.out.println(oc);
+	                }
+	                
 	                refreshGrid[0].run();
 	            });
 
