@@ -1,6 +1,5 @@
 package frontend;
 
-import backend.OfferedCourse;
 import backend.Student;
 import backend.StudentManager;
 import javafx.util.Duration;
