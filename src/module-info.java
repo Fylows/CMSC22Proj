@@ -2,6 +2,7 @@ module CMSC22Proj {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
+	requires javafx.base;
 
     opens main to javafx.base, javafx.fxml, javafx.graphics;
     opens frontend to javafx.base, javafx.fxml, javafx.graphics;

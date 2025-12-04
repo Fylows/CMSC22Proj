@@ -5,15 +5,17 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-
+import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
 import backend.OfferedCourse;
 import backend.RegSystem;
 import backend.Student;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -45,6 +47,10 @@ public class EnlistmentScreen extends VBox {
 		        calendar.add(cellPane, col, row);
 	        }
 		}
+		// TODO initiate calendar fill with subjs
+		for (OfferedCourse oc: student.getEnrolledCourses()) {
+			RegSystem.fillTime(calendar, oc);
+		}
 		
 		HBox warnings = new HBox();
 		warnings.setPadding(new Insets(20));
@@ -55,13 +61,17 @@ public class EnlistmentScreen extends VBox {
 		 
 
         // ---------- ACTIVE ENLISTMENTS ----------
-
+		VBox activeEnlistments = createActiveEnlistments(student.getEnrolledCourses());
+		
         // ---------- COURSE SEARCH ----------
         VBox courseSearch = createCourseSearchGrid(offered);
+		
+        
 
-        getChildren().addAll(calendarAndWarnings,courseSearch);
+        getChildren().addAll(calendarAndWarnings,activeEnlistments, courseSearch);
 	}
 	
+
 	private VBox createCourseSearchGrid(ArrayList<OfferedCourse> allOfferedCourses) {
 	    // Observable list for easier pagination
 	    ObservableList<OfferedCourse> allCourses = FXCollections.observableArrayList(allOfferedCourses);
@@ -86,22 +96,26 @@ public class EnlistmentScreen extends VBox {
 	    // Method to update the grid for a given page
 	    Runnable showPage = () -> {
 	        grid.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
-
+	    	
 	        int start = currentPage[0] * ITEMS_PER_PAGE;
 	        int end = Math.min(start + ITEMS_PER_PAGE, allCourses.size());
 
 	        for (int i = start; i < end; i++) {
 	            OfferedCourse course = allCourses.get(i);
-
+	            
 	            Label courseLabel = new Label(course.getCourseCode());
 	            Label labLabel = new Label(course.getSection()); // Assuming section is the lab info
 	            Button enlistBtn = new Button("Add");
-
+	            
 	            // Example action for the button
 	            enlistBtn.setOnAction(e -> {
-	            	if(RegSystem.enrollStudentInOfferedCourse(student, course)) RegSystem.fillTime(calendar, course);
+	            	// add student to course
+	            	if(RegSystem.enrollStudentInOfferedCourse(student, course)) {
+	            		RegSystem.fillTime(calendar, course);
+	            		RegSystem.fillTime(calendar, course.getLec());
+	            	}
+	            	
 	            });
-
 	            grid.addRow(i - start + 1, courseLabel, labLabel, enlistBtn);
 	        }
 	    };
@@ -137,4 +151,68 @@ public class EnlistmentScreen extends VBox {
 	    VBox container = new VBox(10, grid, pagination);
 	    return container;
 	}
+	
+	private VBox createActiveEnlistments(ArrayList<OfferedCourse> studentEnrolledCourses) {
+	    // Make the student's courses observable
+	    ObservableList<OfferedCourse> studentCourses = FXCollections.observableArrayList(studentEnrolledCourses);
+
+	    // Create a ListView to show the courses
+	    ListView<OfferedCourse> listView = new ListView<>(studentCourses);
+
+	    // Custom cell factory for each course
+	    listView.setCellFactory(lv -> new ListCell<>() {
+	        private final HBox hbox = new HBox(10);
+	        private final Label classLabel = new Label();
+	        private final Button deleteBtn = new Button("Delete");
+
+	        {
+	            hbox.getChildren().addAll(classLabel, deleteBtn);
+
+	            deleteBtn.setOnAction(e -> {
+	                OfferedCourse course = getItem();
+	                if (course != null) {
+	                    // Remove course from student and course's student list
+	   
+		                RegSystem.resetTime(calendar, course);
+
+	                    student.getEnrolledCourses().remove(course);
+	                    course.getEnrolledStudents().remove(student);
+
+	                    // Also remove linked lecture if exists
+	                    if (course.getLec() != null) {
+	                        student.getEnrolledCourses().remove(course.getLec());
+	                        course.getLec().getEnrolledStudents().remove(student);
+	                        studentCourses.remove(course.getLec());
+		            		RegSystem.resetTime(calendar, course.getLec());
+
+	                    }
+
+	                    // Remove from observable list so ListView refreshes automatically
+	                    studentCourses.remove(course);
+	                }
+	            });
+	        }
+
+	        @Override
+	        protected void updateItem(OfferedCourse course, boolean empty) {
+	            super.updateItem(course, empty);
+	            if (empty || course == null) {
+	                setGraphic(null);
+	            } else {
+	                classLabel.setText(course.getCourseCode() + " - " + course.getSection());
+	                setGraphic(hbox);
+	            }
+	        }
+	    });
+
+	    // Optional: add a header label
+	    Label header = new Label("Active Enrollments");
+	    VBox vbox = new VBox(10, header, listView);
+	    vbox.setPadding(new Insets(10));
+
+	    return vbox;
+	}
+
+
+
 }

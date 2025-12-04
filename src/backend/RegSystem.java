@@ -109,6 +109,10 @@ public class RegSystem {
     			} 
     		} 
 
+    	boolean alreadyEnrolled = student.getEnrolledCourses().stream()
+    	        .anyMatch(c -> c.getCourseCode().equals(course.getCourseCode())
+    	                   && !c.getSection().equals(course.getSection()));
+    	
     	if (!hasPrerequisites(student, course)) { 
     		System.out.println("Enrollment failed: prerequisites not met."); 
     		return false; 
@@ -118,20 +122,28 @@ public class RegSystem {
     		System.out.println("Enrollment failed: schedule conflict."); 
     		return false; 
     		} 
-
+    	
+    	
     	if (!course.getEnrolledStudents().contains(student)) { 
     		course.getEnrolledStudents().add(student); 
-    		if (!student.getEnrolledCourses().contains(course.getCourseCode())) { 
-    			student.getEnrolledCourses().add(course);
-    			} 
-    		StudentManager.save(studentManager); 
-    		OfferedCourseManager.save(courseManager); 
-    		return true; 
-    		} 
+    		
+			if (!alreadyEnrolled) {
+				student.getEnrolledCourses().add(course);
+			    // auto-enroll lecture for labs
+				if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
+			        student.getEnrolledCourses().add(course.getLec());
+		    		return true; 
+				}
+			    
+	    		return true;
+			}
+		} 
     	return false; 
     }
     
-    
+    private static boolean isLecture(OfferedCourse course) {
+        return course.getLec() == null;
+    }
     // Removes student from enrolled courses
     // Saves the updated list
     public boolean dropStudentFromOfferedCourse(Student student, OfferedCourse course) { 

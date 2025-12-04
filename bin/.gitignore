@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 /.DS_Store
 /backend/
 /cssFiles/
@@ -7,3 +8,7 @@
 /resources/
 /storage/
 /module-info.class
+=======
+/frontend/
+/backend/
+>>>>>>> Stashed changes

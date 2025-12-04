@@ -13,6 +13,8 @@ public class OfferedCourse implements Serializable {
     private String section, times, days, room;
     private String term;
     private ArrayList<Student> enrolledStudents = new ArrayList<>();
+    private OfferedCourse parentLecture = null; // instance field
+    private static OfferedCourse lastLec = null; // static for global access
 
     public OfferedCourse(Course baseCourse, String section, String times, String days, String room, String term) {
         this.baseCourse = baseCourse;
@@ -31,10 +33,34 @@ public class OfferedCourse implements Serializable {
     public String getDays() { return days; }
     public String getRoom() { return room; }
     public String getTerm() { return term; }
-    
-    public ArrayList<Student> getEnrolledStudents() {
-        return enrolledStudents;
+    public String getDay() { return days; }
+    public OfferedCourse getLec() { return parentLecture; }
+    public static OfferedCourse getLastLec() { return lastLec; }
+    public ArrayList<Student> getEnrolledStudents() { return enrolledStudents; }
+
+
+	
+    public LocalTime getStartTime() {
+        try {
+            String start = times.split("-")[0].trim();
+            return parseFlexibleTime(start, false);
+        } catch (Exception e) {
+            return null;
+        }
     }
+
+    public LocalTime getEndTime() {
+        try {
+            String end = times.split("-")[1].trim();
+            return parseFlexibleTime(end, true);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+	public void setLastLec() { lastLec = this;	}
+    public void setLec(OfferedCourse lec) { this.parentLecture = lec; }
+
     
     public boolean isStudentEnrolled(Student student) { 
     	return enrolledStudents.contains(student);
@@ -71,28 +97,7 @@ public class OfferedCourse implements Serializable {
         return LocalTime.parse(t + suffix, DateTimeFormatter.ofPattern("h:mm a"));
     }
 
-    public LocalTime getStartTime() {
-        try {
-            String start = times.split("-")[0].trim();
-            return parseFlexibleTime(start, false);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public LocalTime getEndTime() {
-        try {
-            String end = times.split("-")[1].trim();
-            return parseFlexibleTime(end, true);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public String getDay() {
-        return days;
-    }
-
+    
     public boolean conflictsWith(OfferedCourse other) {
     	if (other == null) return false;
     	
@@ -117,4 +122,6 @@ public class OfferedCourse implements Serializable {
         System.out.printf("%s | Section: %s | Days: %s | Time: %s | Room: %s%n",
                 baseCourse.getCourseCode(), section, days, times, room);
     }
+
+	
 }

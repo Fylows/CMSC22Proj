@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.OfferedCourse;
 import backend.Student;
 import backend.StudentManager;
 import javafx.util.Duration;
@@ -306,6 +307,9 @@ public class ContentArea implements ScreenChangeListener {
 
 	// Running the screen
 	public void show() {
+		for (OfferedCourse oc : this.student.getEnrolledCourses()) {
+			System.out.println(oc);
+		}
 		StackPane root = new StackPane();
 		root.getStyleClass().add("content-root");
 		root.getChildren().addAll(content, sidebar.getSidebar(), topBar);
