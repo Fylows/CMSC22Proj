@@ -1,6 +1,8 @@
 package frontend;
 
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -11,7 +13,11 @@ import javafx.collections.ObservableList;
 import backend.OfferedCourse;
 import backend.RegSystem;
 import backend.Student;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -28,51 +34,129 @@ public class EnlistmentScreen extends VBox {
 	private GridPane calendar = new GridPane();
 	private ArrayList<OfferedCourse> offered = RegSystem.getAllCourses();
 	private Student student = ContentArea.getStudent();
+	private StackPane root;
 	private ObservableList<OfferedCourse> studentCourses = FXCollections.observableList(student.getEnrolledCourses());
 	 
-	public EnlistmentScreen() {
+	public EnlistmentScreen(StackPane parentStack) {
+		root = parentStack;
 		setSpacing(20);
 		setPadding(new Insets(60, 20, 20, 20)); 
 		setStyle("-fx-background-color: white;");
-        		
-        // ---------- CALENDAR AND ERROR SCREEN ----------
+        // ---------- CALENDAR AND ENLISTMENTS TAB ----------
 		
-		
-		calendar.setPadding(new Insets(20));
-		for (int row = 0; row < 24; row++) {
-		        for (int col = 0; col < 6; col++) {
-		        // Example: a rectangle in each cell
-				Rectangle cell = new Rectangle(80, 30); // width, height
-				cell.setFill(Color.WHITE);
-				cell.setStroke(Color.BLACK);
-				
-				StackPane cellPane = new StackPane();
-		        cellPane.getChildren().add(cell);  // Rectangle is at bottom
-		        calendar.add(cellPane, col, row);
-	        }
+		VBox calendarContainer = new VBox();
+
+		calendarContainer.setPadding(new Insets(20));
+		Label header1 = new Label("Schedule");
+
+		// Column headers (Monday to Saturday)
+		String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+		// Time intervals (7:00 AM to 7:00 PM, 30-min intervals)
+		List<String> times = new ArrayList<>();
+		for (int hour = 7; hour <= 19; hour++) {
+		    String ampm = hour < 12 ? "AM" : "PM";
+		    int displayHour = hour <= 12 ? hour : hour - 12;
+		    times.add(displayHour + ":00 " + ampm);
+		    times.add(displayHour + ":30 " + ampm);
 		}
-		// TODO initiate calendar fill with subjs
+
+		// Add column headers
+		for (int col = 0; col < days.length; col++) {
+		    Label dayLabel = new Label(days[col]);
+		    dayLabel.setStyle("-fx-font-weight: bold; -fx-alignment: center;");
+		    StackPane headerPane = new StackPane(dayLabel);
+		    headerPane.setPrefSize(80, 30);
+		    calendar.add(headerPane, col + 1, 0); // +1 because column 0 is for time labels
+		}
+
+		// Add row headers and cells
+		for (int row = 0; row < times.size(); row++) {
+		    // Time label in first column
+		    Label timeLabel = new Label(times.get(row));
+		    timeLabel.setPrefSize(160, 90);
+		    timeLabel.setStyle("-fx-font-size: 11; -fx-alignment: center;");
+		    calendar.add(timeLabel, 0, row + 1); // +1 because row 0 is for column headers
+
+		    // Cells for each day
+		    for (int col = 0; col < days.length; col++) {
+		        Rectangle cell = new Rectangle(100, 40);
+		        cell.setFill(Color.WHITE);
+		        cell.setStroke(Color.BLACK);
+
+		        StackPane cellPane = new StackPane(cell);
+		        calendar.add(cellPane, col + 1, row + 1);
+		    }
+		}
+
+		// Optional: set grid gaps
+//		calendar.setHgap(1);
+//		calendar.setVgap(1);
+		calendar.setAlignment(Pos.CENTER_LEFT);
+		calendarContainer.getChildren().addAll(header1, calendar);
+		calendarContainer.setAlignment(Pos.CENTER_LEFT);
+		
+		int totalUnits = 0;
 		for (OfferedCourse oc: student.getEnrolledCourses()) {
 			RegSystem.fillTime(calendar, oc);
+			if (oc.getLec() == null) {
+				totalUnits += oc.getCourse().getUnits();
+			}
 		}
 		
-		HBox warnings = new HBox();
-		warnings.setPadding(new Insets(20));
-		Label lab = new Label("Warnings");
-		warnings.getChildren().add(lab);
 		
-		HBox calendarAndWarnings = new HBox(calendar, warnings);
-		 
+		VBox enlistments = new VBox();
+		enlistments.setPadding(new Insets(20));
 
-        // ---------- ACTIVE ENLISTMENTS ----------
-		VBox activeEnlistments = createActiveEnlistments();
+		Label header2 = new Label("Active Enlistments");
+		enlistments.getChildren().add(header2);
 		
+		Label units = new Label("Total units: " + totalUnits);
+				
+		
+		VBox activeEnlistments = createActiveEnlistments();
+		studentCourses.addListener((ListChangeListener<OfferedCourse>) change -> {
+			int total = 0;
+			for (OfferedCourse oc : studentCourses) {
+				if (oc.getLec() == null) {
+					total += oc.getCourse().getUnits();
+				}
+		    }
+            units.setText("Total Units: " + total);
+        });
+		
+		Color[] colors = {Color.PINK, Color.LIGHTBLUE, Color.LIGHTSEAGREEN };
+		String[] states = {"Bookmarked", "Enlisted", "Finalized" };
+		
+		HBox enlistmentDetails = new HBox(20);
+		for (int i = 0; i < 3; i++) {
+			Rectangle rect = new Rectangle(100, 60, colors[i]);
+
+	        // Create label
+	        Label label = new Label(states[i]);
+
+	        // StackPane to put label on top of rectangle
+	        StackPane stack = new StackPane();
+	        stack.getChildren().addAll(rect, label);
+	        stack.setAlignment(Pos.CENTER);
+
+	        // Add to HBox
+	        enlistmentDetails.getChildren().add(stack);
+		}
+		
+		enlistments.getChildren().addAll(enlistmentDetails,units,activeEnlistments);
+		HBox calendarAndCourses = new HBox(calendarContainer, enlistments);
         // ---------- COURSE SEARCH ----------
         VBox courseSearch = createCourseSearchGrid(offered);
-		
-        
+		VBox courseSearchContainer = new VBox();
 
-        getChildren().addAll(calendarAndWarnings,activeEnlistments, courseSearch);
+		Label header3 = new Label("Search Class");
+		courseSearchContainer.getChildren().addAll(header3, courseSearch);
+		
+		
+		calendarAndCourses.setAlignment(Pos.CENTER);
+		courseSearchContainer.setAlignment(Pos.CENTER);
+        getChildren().addAll(calendarAndCourses, courseSearchContainer);
 	}
 
 	private VBox createCourseSearchGrid(ArrayList<OfferedCourse> allOfferedCourses) {
@@ -86,7 +170,7 @@ public class EnlistmentScreen extends VBox {
 
 	    // --- FILTER AND DROPDOWN ---
 	    HBox filterRow = new HBox(10);
-	    filterRow.setAlignment(Pos.CENTER_LEFT);
+	    filterRow.setAlignment(Pos.CENTER);
 
 	    TextField searchField = new TextField();
 	    searchField.setPromptText("Search by course name or section");
@@ -107,7 +191,7 @@ public class EnlistmentScreen extends VBox {
 	    Button nextBtn = new Button("Next");
 	    Label pageLabel = new Label("Page 1");
 	    HBox pagination = new HBox(10, prevBtn, pageLabel, nextBtn);
-	    pagination.setAlignment(Pos.CENTER_LEFT);
+	    pagination.setAlignment(Pos.CENTER);
 	    pagination.setPadding(new Insets(10));
 	    container.getChildren().add(pagination);
 
@@ -151,17 +235,31 @@ public class EnlistmentScreen extends VBox {
 	            // Add button
 	            Button addBtn = new Button("Add");
 	            addBtn.setOnAction(e -> {
-	                if (RegSystem.enrollStudentInOfferedCourse(student, course, studentCourses) == 0) {
+	            	int state = RegSystem.enrollStudentInOfferedCourse(student, course, studentCourses);
+	                if (state == 0) {
 	                    RegSystem.fillTime(calendar, course);
 	                    if (course.getLec() != null) {
 	                        RegSystem.fillTime(calendar, course.getLec());
 	                    }
+	                    showToast(root, "Course list updated!", true);
+	                }
+	                else {
+	                	String message = "";
+	                	switch(state) {
+	                		case(-1) : message = "null pointer exception."; break;
+	                		case (1) : message = "Already enlisted in " + course.getCourseCode() + "."; break;
+	                		case (2) : message = course.getCourseCode() + " is a " + course.getCourse().getType() + " course."; break;
+	                		case (3) : message = "Prerequisites not met."; break;
+	                		case (4) : message = "Course time conflicts"; break;
+	                	}
+	                	System.out.println(state);
+	                	showToast(root, message , false);
 	                }
 	            });
 
 	            // Row HBox with separate columns
 	            HBox row = new HBox(20, codeLabel, lectureBox, labBox, addBtn);
-	            row.setAlignment(Pos.CENTER_LEFT);
+	            row.setAlignment(Pos.CENTER);
 	            gridContainer.getChildren().add(row);
 	        }
 
@@ -209,8 +307,6 @@ public class EnlistmentScreen extends VBox {
 	    VBox vbox = new VBox(10);
 	    vbox.setPadding(new Insets(10));
 
-	    Label header = new Label("Active Enrollments");
-	    vbox.getChildren().add(header);
 
 	    // Container for all courses
 	    VBox courseContainer = new VBox(5);
@@ -235,7 +331,8 @@ public class EnlistmentScreen extends VBox {
 	            VBox lectureDetails = new VBox(5,
             		new Label("Course Code: " + course.getLec().getCourseCode()),
                     new Label("Section: " + course.getLec().getSection()),
-                    new Label("Schedule: " + course.getLec().getTimes())
+                    new Label("Schedule: " + course.getLec().getTimes()),
+                    new Label("Room: " + course.getLec().getRoom())
 	            );
 	            TitledPane lecturePane = new TitledPane("Lecture", lectureDetails);
 	            lecturePane.setExpanded(false);
@@ -246,7 +343,9 @@ public class EnlistmentScreen extends VBox {
 	                labDetails = new VBox(5,
 	                    new Label("Course Code: " + course.getCourseCode()),
 	                    new Label("Section: " + course.getSection()),
-	                    new Label("Schedule: " + course.getTimes())
+	                    new Label("Schedule: " + course.getTimes()),
+	                    new Label("Room: " + course.getLec().getRoom())
+
 	                );
 	            } else {
 	                labDetails = new VBox(5, new Label("No associated lab"));
@@ -270,7 +369,9 @@ public class EnlistmentScreen extends VBox {
 	                }
 	                RegSystem.getStudentManager().updateStudent(student);
 
-	                
+                    showToast(root, "Course list updated!", true);
+
+
 	                refreshGrid[0].run();
 	            });
 
@@ -295,5 +396,37 @@ public class EnlistmentScreen extends VBox {
 
 	    return vbox;
 	}
+	
+	public void showToast(StackPane root, String message, boolean success) {
+	    Label toast = new Label(message);
+	    toast.toFront();
+	    toast.setTextFill(Color.WHITE);
+	    toast.setFont(Font.font(16));
+	    toast.setStyle("-fx-background-radius: 8; -fx-padding: 10px;");
+	    toast.setAlignment(Pos.CENTER);
+
+	    // Background color
+	    if (success) {
+	        toast.setStyle(toast.getStyle() + "-fx-background-color: #4CAF50;"); // green
+	    } else {
+	        toast.setStyle(toast.getStyle() + "-fx-background-color: #f44336;"); // red
+	    }
+
+	    // Center in StackPane
+	    StackPane.setAlignment(toast, Pos.BOTTOM_RIGHT);
+
+	    // Add to the root StackPane
+	    root.getChildren().add(toast);
+
+	    FadeTransition fade = new FadeTransition(Duration.seconds(0.5), toast);
+	    fade.setFromValue(1.0);
+	    fade.setToValue(0.0);
+	    fade.setDelay(Duration.seconds(1.5));
+	    fade.setOnFinished(e -> root.getChildren().remove(toast));
+	    fade.play();
+	}
+
+
+
 
 }

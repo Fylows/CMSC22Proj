@@ -9,10 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 //import backend.CourseManager.Degree;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -36,7 +38,7 @@ public class RegSystem {
         OfferedCourseManager.save(courseManager);
         
         // initialize timeMap
-        int row = 0;
+        int row = 1;
         for (int hour = 7; hour <= 19; hour++) {
             timeMap.put(LocalTime.of(hour, 0), row++);
             timeMap.put(LocalTime.of(hour, 30), row++);
@@ -131,17 +133,17 @@ public class RegSystem {
     		return 1;
     	}
     	
-    	if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
+    	else if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
     		System.out.println("Enrollment failed: not your degree"); 
     		return 2; 
     	}
     	
-    	if (!hasPrerequisites(student, course)) { 
+    	else if (!hasPrerequisites(student, course)) { 
     		System.out.println("Enrollment failed: prerequisites not met."); 
     		return 3; 
     	} 
 
-    	if (hasTimeConflict(student, course)) { 
+    	else if (hasTimeConflict(student, course)) { 
     		System.out.println("Enrollment failed: schedule conflict."); 
     		return 4; 
     	} 
@@ -249,20 +251,42 @@ public class RegSystem {
         if (targetCols == null) return;
 
         for (int col : targetCols) {
+            int middleRow = startRow + (endRow - startRow) / 2;
+
             for (int row = startRow; row < endRow; row++) {
                 Node node = getNodeFromGridPane(timeTable, col, row);
-                if (node instanceof StackPane stack) {  // safe cast
-                	Rectangle rect = (Rectangle) stack.getChildren().get(0);
+                if (node instanceof StackPane stack) {
+                    Rectangle rect = (Rectangle) stack.getChildren().get(0);
                     rect.setFill(Color.PINK);
                     rect.setStroke(Color.PINK);
-                    
 
-                    
-                    boolean hasLabel = stack.getChildren().stream().anyMatch(n -> n instanceof Label);
-                    if (!hasLabel) {
-                        Label code = new Label(courseToEnroll.getCourse().getCourseCode());
-                        code.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
-                        stack.getChildren().add(code);
+                    // Place course title at middleRow - 1
+                    if (row == middleRow - 1) {
+                        boolean hasLabel = stack.getChildren().stream().anyMatch(n -> n instanceof Label && ((Label)n).getText().equals(courseToEnroll.getCourse().getCourseCode()));
+                        if (!hasLabel) {
+                            Label courseLabel = new Label(courseToEnroll.getCourse().getCourseCode());
+                            courseLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+                            stack.getChildren().add(courseLabel);
+                            StackPane.setAlignment(courseLabel, Pos.BOTTOM_CENTER);
+                        }
+                    }
+
+                    // Place section + room at middleRow + 1
+                    if (row == middleRow) {
+                        boolean hasLabel = stack.getChildren().stream().anyMatch(n -> n instanceof Label && ((Label)n).getText().equals(courseToEnroll.getSection() + " - " + courseToEnroll.getRoom()));
+                        if (!hasLabel) {
+                        	VBox detailsLabel = new VBox();
+                        	Label sectionDetails = new Label(courseToEnroll.getSection());
+                        	Label roomDetails = new Label(courseToEnroll.getRoom());
+
+                        	detailsLabel.getChildren().addAll(roomDetails, sectionDetails);
+                        	detailsLabel.setStyle("-fx-font-size: 11;");
+                        	detailsLabel.setAlignment(Pos.CENTER); // center children inside VBox
+                        	detailsLabel.setSpacing(2);
+
+                        	stack.getChildren().add(detailsLabel);
+                        	StackPane.setAlignment(detailsLabel, Pos.CENTER); // center the VBox in the cell
+                        }
                     }
                 }
             }
@@ -273,21 +297,24 @@ public class RegSystem {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
         int endRow = timeMap.get(courseToEnroll.getEndTime());
         List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
+        if (targetCols == null) return;
 
         for (int col : targetCols) {
             for (int row = startRow; row < endRow; row++) {
                 Node node = getNodeFromGridPane(timeTable, col, row);
                 if (node instanceof StackPane stack) {
+                    // Reset the rectangle
                     Rectangle rect = (Rectangle) stack.getChildren().get(0);
                     rect.setFill(Color.WHITE);
                     rect.setStroke(Color.BLACK);
 
-                    // Remove any label inside
-                    stack.getChildren().removeIf(n -> n instanceof Label);
+                    // Remove all other nodes (Labels, VBoxes, etc.)
+                    stack.getChildren().removeIf(n -> n != rect);
                 }
             }
         }
     }
+
 
 
     

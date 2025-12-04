@@ -23,7 +23,7 @@ public class ContentArea implements ScreenChangeListener {
 
 	// Stage and layout screens
 	private final Stage stage;
-	private final StackPane screens;
+	private final StackPane screens = new StackPane();
 	private final DashboardScreen dashboardScreen;
 	
 	private final EnlistmentScreen enlistmentScreen;
@@ -80,7 +80,7 @@ public class ContentArea implements ScreenChangeListener {
 		// Screens (Dashboard, Enlistment, Course, About, Credits)
 		dashboardScreen = new DashboardScreen(student, this); 
 
-		enlistmentScreen = new EnlistmentScreen();
+		enlistmentScreen = new EnlistmentScreen(screens);
 		enlistmentScroll = new ScrollPane(enlistmentScreen);
 		enlistmentScroll.setFitToWidth(true);
 		enlistmentScroll.setFitToHeight(true);
@@ -125,7 +125,7 @@ public class ContentArea implements ScreenChangeListener {
 		profileScreen = new ProfilePageScreen(student);
 
 		// StackPane that holds screens (only one visible at a time)
-		screens = new StackPane(
+		screens.getChildren().addAll(
 			dashboardScreen, 
 			enlistmentScroll, 
 			bsScroll, 

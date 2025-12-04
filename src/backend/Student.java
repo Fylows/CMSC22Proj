@@ -18,7 +18,6 @@ public class Student implements Serializable {
 	private String degree; // BSCS, MSCS, MIT, PHD
 	private ArrayList<Course> completedCourses = new ArrayList<>(); // List of the student's completed courses
 	private ArrayList<OfferedCourse> enrolledCourses = new ArrayList<>();
-
     // Constructor
 	public Student(String firstName, String middleName, String lastName, String suffix,
 				String email, String birthday, String sex, String password, String degree) {
@@ -32,7 +31,7 @@ public class Student implements Serializable {
 		this.password = password;
 		this.degree = degree;
 	}
-
+	
 	public void addCompletedCourse(Course c) {
 		if (!completedCourses.contains(c)) {
             completedCourses.add(c);
