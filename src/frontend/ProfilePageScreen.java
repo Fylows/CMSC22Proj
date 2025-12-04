@@ -16,7 +16,7 @@ public class ProfilePageScreen extends HBox{
 		this.student = student;
 		
         setSpacing(20);
-        setPadding(new Insets(20));
+        setPadding(new Insets(60, 20, 20, 20));
         setStyle("-fx-background-color: white;");
         
         
@@ -127,10 +127,6 @@ public class ProfilePageScreen extends HBox{
     }
 	
     private HBox createItem(String title, String iconPath) {
-        setAlignment(Pos.CENTER_LEFT);
-        setPadding(new Insets(10));
-        setSpacing(10);
-    	
         ImageView icon = new ImageView(new Image(getClass().getResourceAsStream(iconPath)));
         icon.setFitWidth(25);
         icon.setFitHeight(25);
