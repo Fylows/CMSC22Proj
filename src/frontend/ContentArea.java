@@ -104,26 +104,22 @@ public class ContentArea implements ScreenChangeListener {
 		phdScroll.setFitToWidth(true);
 		phdScroll.setFitToHeight(true);
 		phdScroll.getStyleClass().add("transparent-scroll");
+		
+		profileScreen = new ProfilePageScreen(student);
 
 
 		// StackPane that holds screens (only one visible at a time)
 		screens = new StackPane(dashboardScreen, enlistmentScroll, bsScroll, 
 				msScroll, 
 				mitScroll, 
-				phdScroll);
+				phdScroll, profileScreen);
 		StackPane.setAlignment(dashboardScreen, Pos.CENTER);
 		StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
 		StackPane.setAlignment(bsScroll, Pos.CENTER);
 		StackPane.setAlignment(msScroll, Pos.CENTER);
 		StackPane.setAlignment(mitScroll, Pos.CENTER);
 		StackPane.setAlignment(phdScroll, Pos.CENTER);
-        profileScreen = new ProfilePageScreen(student);
-		
-		// StackPane that holds screens (only one visible at a time)
-		screens = new StackPane(dashboardScreen, enlistmentScroll, profileScreen);
-		StackPane.setAlignment(dashboardScreen, Pos.CENTER);
-		StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
-        StackPane.setAlignment(profileScreen, Pos.CENTER);
+		StackPane.setAlignment(profileScreen, Pos.CENTER);
 
 		// Ensures scrolling works properly
 		enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
@@ -272,9 +268,6 @@ public class ContentArea implements ScreenChangeListener {
 			case "PHD":
 				phdScroll.setVisible(true);
 				topBarTitle.setText("PhD in Computer Science Courses");
-				break;
-				profileScreen.setVisible(false);
-				topBarTitle.setText("Enlistment");
 				break;
 			
 //	            case "Course List";
