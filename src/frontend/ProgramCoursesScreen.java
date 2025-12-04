@@ -2,7 +2,6 @@ package frontend;
 
 import backend.Course;
 import backend.CourseManager;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -14,123 +13,127 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgramCoursesScreen extends BorderPane {
+	private final String degree;
+	private final VBox courseListContainer;  
+	private final List<VBox> allCourseBoxes = new ArrayList<>();
 
-    private final VBox courseListContainer;  
-    private final ScrollPane scrollPane;
-    private final List<VBox> allCourseBoxes = new ArrayList<>();
-    private final String degree;
+	private final ScrollPane scrollPane;
+	private TextField searchField;
 
-    public ProgramCoursesScreen(String degree) {
-    	this.degree = degree;
-    	this.getStyleClass().add("program-courses-root");
+	public ProgramCoursesScreen(String degree) {
+		this.degree = degree;
+		this.getStyleClass().add("program-courses-root");
 
-    	// Top padding container
-        VBox topContainer = new VBox(10);
-        topContainer.setPadding(new Insets(20, 20, 10, 20));
+		// Top container for search bar
+		VBox topContainer = new VBox(10);
+		topContainer.getStyleClass().add("top-container");
 
-        // Search bar
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search courses by code or title...");
-        searchField.getStyleClass().add("search-bar");
+		// Search bar
+		searchField = new TextField();
+		searchField.setPromptText("Search courses by code or title...");
+		searchField.getStyleClass().add("search-bar");
 
-        topContainer.getChildren().addAll(searchField);
-        this.setTop(topContainer);
-        BorderPane.setAlignment(topContainer, Pos.TOP_LEFT);
+		topContainer.getChildren().addAll(searchField);
+		this.setTop(topContainer);
+		BorderPane.setAlignment(topContainer, Pos.TOP_LEFT);
 
-        // Container for all course boxes
-        courseListContainer = new VBox(15);
-        courseListContainer.setPadding(new Insets(10, 20, 30, 20));
-        
-        scrollPane = new ScrollPane(courseListContainer);
-        scrollPane.setFitToWidth(true);
-        scrollPane.getStyleClass().add("scroll-pane");
+		// Container for all course boxes
+		courseListContainer = new VBox(15);
+		courseListContainer.getStyleClass().add("course-list-container");
 
-        this.setCenter(scrollPane);
+		scrollPane = new ScrollPane(courseListContainer);
+		scrollPane.setFitToWidth(true);
+		scrollPane.getStyleClass().add("scroll-pane");
 
-        loadCourses(degree);
-        // for push only
-        
-     // Live search
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
-            String filter = (newVal == null) ? "" : newVal.toLowerCase().trim();
-            courseListContainer.getChildren().clear();
+		this.setCenter(scrollPane);
 
-            boolean anyMatch = false; // Track if we added any course
+		loadCourses(degree); // Load all courses per degree
 
-            for (VBox box : allCourseBoxes) {
-                Label codeLabel = (Label) box.getChildren().get(0);  // course code
-                Label titleLabel = (Label) box.getChildren().get(1); // course title
+		// Apply live searching
+		searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+			String filter = (newVal == null) ? "" : newVal.toLowerCase().trim();
+			courseListContainer.getChildren().clear();
 
-                String code = codeLabel.getText().toLowerCase();
-                String title = titleLabel.getText().toLowerCase();
+			boolean anyMatch = false; // Track if we added any course
 
-                if (code.contains(filter) || title.contains(filter)) {
-                    courseListContainer.getChildren().add(box);
-                    anyMatch = true;
-                }
-            }
+			for (VBox box : allCourseBoxes) {
+				Label codeLabel = (Label) box.getChildren().get(0); // course code
+				Label titleLabel = (Label) box.getChildren().get(1); // course title
 
-            // Show "no results" message if nothing matched
-            if (!anyMatch) {
-                Label noResults = new Label("No courses found :(");
-                noResults.getStyleClass().add("no-results-label"); // Make sure you have this in your CSS
+				String code = codeLabel.getText().toLowerCase();
+				String title = titleLabel.getText().toLowerCase();
 
-                StackPane placeholder = new StackPane(noResults);
-                placeholder.setPrefHeight(scrollPane.getViewportBounds().getHeight());
-                placeholder.setAlignment(Pos.CENTER);
+				if (code.contains(filter) || title.contains(filter)) {
+					courseListContainer.getChildren().add(box);
+					anyMatch = true;
+				}
+			}
 
-                courseListContainer.getChildren().add(placeholder);
-            }
-        });
-    }
+			// Show "no results" message if nothing matched
+			if (!anyMatch) {
+				Label noResults = new Label("No courses found :(");
+				noResults.getStyleClass().add("no-results-label"); // Make sure you have this in your CSS
 
-    /** Loads and displays all courses belonging to a degree */
-    private void loadCourses(String degree) {
-        List<Course> courses = CourseManager.getCoursesByDegree(degree);
-        allCourseBoxes.clear();
-        courseListContainer.getChildren().clear();
+				StackPane placeholder = new StackPane(noResults);
+				placeholder.setPrefHeight(scrollPane.getViewportBounds().getHeight());
+				placeholder.setAlignment(Pos.CENTER);
 
-        for (Course c : courses) {
-            VBox box = createCourseBox(c);
-            allCourseBoxes.add(box);
-            courseListContainer.getChildren().add(box);
-        }
-    }
+				courseListContainer.getChildren().add(placeholder);
+			}
+		});
+	}
 
-    /** Creates UI item for ONE course */
-    private VBox createCourseBox(Course c) {
-        VBox box = new VBox(5);
-        box.getStyleClass().add("course-box");
-        box.setPadding(new Insets(15));
-        box.setPrefWidth(900);
+	// Loads and displays all courses belonging to a degree
+	private void loadCourses(String degree) {
+		List<Course> courses = CourseManager.getCoursesByDegree(degree);
+		allCourseBoxes.clear();
+		courseListContainer.getChildren().clear();
 
-        Label code = new Label(c.getCourseCode());
-        code.getStyleClass().add("course-code");
+		// Loop through all courses and add to the container
+		for (Course c : courses) {
+			VBox box = createCourseBox(c);
+			allCourseBoxes.add(box);
+			courseListContainer.getChildren().add(box);
+		}
+	}
 
-        Label title = new Label(c.getCourseTitle());
-        title.getStyleClass().add("course-title");
+    // Creates UI item for one course (subject)
+	private VBox createCourseBox(Course c) {
+		VBox box = new VBox(5);
+		box.getStyleClass().add("course-box");
 
-        Label units = new Label(c.getUnits() + " units");
-        units.getStyleClass().add("course-units");
+		Label code = new Label(c.getCourseCode());
+		code.getStyleClass().add("course-code");
 
-        Text desc = new Text(c.getDescription());
-        desc.getStyleClass().add("course-description");
-        desc.setWrappingWidth(820);
+		Label title = new Label(c.getCourseTitle());
+		title.getStyleClass().add("course-title");
 
-        // Prerequisites
-        List<String> prereq = c.getPrerequisites();
-        Label prereqLabel = new Label(
-                prereq.isEmpty() ? 
-                "Prerequisites: None" : 
-                "Prerequisites: " + String.join(", ", prereq)
-        );
-        prereqLabel.getStyleClass().add("course-prereq");
+		Label units = new Label(c.getUnits() + " units");
+		units.getStyleClass().add("course-units");
 
-        box.getChildren().addAll(code, title, units, desc, prereqLabel);
-        return box;
-    }
+		Text desc = new Text(c.getDescription());
+		desc.getStyleClass().add("course-description");
+		desc.setWrappingWidth(820); // Wrap text for presentability
 
-    // Getters
+		// Prerequisites
+		List<String> prereq = c.getPrerequisites();
+		Label prereqLabel = new Label(
+				prereq.isEmpty() ? "Prerequisites: None" : "Prerequisites: " + String.join(", ", prereq)
+		);
+		prereqLabel.getStyleClass().add("course-prereq");
+
+		box.getChildren().addAll(code, title, units, desc, prereqLabel);
+		return box;
+	}
+    
+	// Resets the view to the original view
+	public void resetView() {
+		searchField.clear(); // Reset search      
+		scrollPane.setVvalue(0); // Reset scroll
+		courseListContainer.getChildren().setAll(allCourseBoxes); // Restore full course list
+	}
+
+	// Getters
 	public String getDegree() {
 		return degree;
 	}

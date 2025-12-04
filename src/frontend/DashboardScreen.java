@@ -11,11 +11,14 @@ import javafx.scene.layout.VBox;
 public class DashboardScreen extends StackPane {
 	private final Student student;
 	private final Pane petalPane;
-    private final VBox content;
+	private final VBox content;
+    
+	private final ScreenChangeListener listener;
 
 	// Constructor
-	public DashboardScreen(Student student) {
+	public DashboardScreen(Student student, ScreenChangeListener listener) {
 		this.student = student;
+		this.listener = listener;
 		
 		petalPane = new Pane(); // Petal animation for DashBoard only
 		PetalAnimation.start(petalPane, 50, 0.2);
@@ -48,6 +51,8 @@ public class DashboardScreen extends StackPane {
 
 		Hyperlink tutorial = new Hyperlink("Tutorial on how to use Kurasu System →");
 		tutorial.getStyleClass().add("dashboard-tutorial");
+		
+		tutorial.setOnAction(e -> listener.onScreenChange("About"));
 
 		card.getChildren().addAll(title, subtitle, tutorial);
 		

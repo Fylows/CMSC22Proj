@@ -47,7 +47,10 @@ public class Sidebar {
 		enlistmentBox.setOnMouseClicked(event -> listener.onScreenChange("Enlistment"));
         
 		HBox aboutBox = createItem("About", "/resources/aboutIcon.png");
+		aboutBox.setOnMouseClicked(event -> listener.onScreenChange("About"));
+		
 		HBox creditsBox = createItem("Credits", "/resources/creditsIcon.png");
+		creditsBox.setOnMouseClicked(event -> listener.onScreenChange("Credits"));
 
         // Course List Drop Down
 		HBox courseBox = createItem("Course List", "/resources/courseIcon.png");

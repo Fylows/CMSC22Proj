@@ -41,6 +41,9 @@ public class ContentArea implements ScreenChangeListener {
 	private final ProgramCoursesScreen phdScreen;
 	private final ScrollPane phdScroll;
 	
+	private final AboutScreen aboutScreen;
+	private final CreditsScreen creditsScreen;
+	
 	private final ProfilePageScreen profileScreen;
 	private final HBox topBar;
 	private final Sidebar sidebar;
@@ -72,7 +75,7 @@ public class ContentArea implements ScreenChangeListener {
 		topBar = createTopbar(); // Creates the Top Bar
 
 		// Screens (Dashboard, Enlistment, Course, About, Credits)
-		dashboardScreen = new DashboardScreen(student); 
+		dashboardScreen = new DashboardScreen(student, this); 
 
 		enlistmentScreen = new EnlistmentScreen();
 		enlistmentScroll = new ScrollPane(enlistmentScreen);
@@ -104,18 +107,32 @@ public class ContentArea implements ScreenChangeListener {
 		phdScroll.setFitToHeight(true);
 		phdScroll.getStyleClass().add("transparent-scroll");
 		
-		// ==== Add About and Credits HERE ====
+		aboutScreen = new AboutScreen();
+		creditsScreen = new CreditsScreen();
 		
 		profileScreen = new ProfilePageScreen(student);
 
 		// StackPane that holds screens (only one visible at a time)
-		screens = new StackPane(dashboardScreen, enlistmentScroll, bsScroll, msScroll, mitScroll, phdScroll, profileScreen);
+		screens = new StackPane(
+			dashboardScreen, 
+			enlistmentScroll, 
+			bsScroll, 
+			msScroll, 
+			mitScroll, 
+			phdScroll, 
+			aboutScreen, 
+			creditsScreen, 
+			profileScreen
+		);
+		
 		StackPane.setAlignment(dashboardScreen, Pos.CENTER);
 		StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
 		StackPane.setAlignment(bsScroll, Pos.CENTER);
 		StackPane.setAlignment(msScroll, Pos.CENTER);
 		StackPane.setAlignment(mitScroll, Pos.CENTER);
 		StackPane.setAlignment(phdScroll, Pos.CENTER);
+		StackPane.setAlignment(aboutScreen, Pos.CENTER);
+		StackPane.setAlignment(creditsScreen, Pos.CENTER);
 		StackPane.setAlignment(profileScreen, Pos.CENTER);
 
 		// Ensures scrolling works properly
@@ -226,6 +243,8 @@ public class ContentArea implements ScreenChangeListener {
 		msScroll.setVisible(false);
 		mitScroll.setVisible(false);
 		phdScroll.setVisible(false);
+		aboutScreen.setVisible(false);
+		creditsScreen.setVisible(false);
 		profileScreen.setVisible(false);
 	}
 
@@ -245,25 +264,39 @@ public class ContentArea implements ScreenChangeListener {
 				break;
 
 			case "BSCS":
+				bsScreen.resetView();
 				bsScroll.setVisible(true);
 				topBarTitle.setText("BS Computer Science Courses");
 				break;
 
 			case "MSCS":
+				msScreen.resetView();
 				msScroll.setVisible(true);
 				topBarTitle.setText("MS Computer Science Courses");
 				break;
 
 			case "MSIT":
+				mitScreen.resetView();
 				mitScroll.setVisible(true);
 				topBarTitle.setText("MS Information Technology Courses");
 				break;
 
 			case "PHD":
+				mitScreen.resetView();
 				phdScroll.setVisible(true);
 				topBarTitle.setText("PhD in Computer Science Courses");
 				break;
-				
+			
+			case "About":
+				aboutScreen.setVisible(true);
+				topBarTitle.setText("About");
+				break;
+
+			case "Credits":
+				creditsScreen.setVisible(true);
+				topBarTitle.setText("Credits");
+				break;
+
 			case "Profile":
 				profileScreen.setVisible(true);
 				topBarTitle.setText("Profile Page");
