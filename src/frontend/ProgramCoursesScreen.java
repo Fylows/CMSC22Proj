@@ -48,6 +48,7 @@ public class ProgramCoursesScreen extends BorderPane {
         this.setCenter(scrollPane);
 
         loadCourses(degree);
+        // for push only
         
      // Live search
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
