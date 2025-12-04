@@ -174,7 +174,7 @@ public class RegSystem {
         		course.getLec().getEnrolledStudents().remove(student); 
         		student.getEnrolledCourses().remove(course.getLec()); 
         	}
-    		
+    		studentManager.updateStudent(student);
     		StudentManager.save(studentManager); 
     		OfferedCourseManager.save(courseManager); 
     		return true; 
