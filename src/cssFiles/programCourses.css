@@ -1,0 +1,120 @@
+/* Fonts */
+@font-face {
+    font-family: "Poppins";
+    src: url("PoppinsBold.ttf");
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("Inter.ttf");
+}
+
+@font-face {
+    font-family: "Inter Italic";
+    src: url("InterItalic.ttf");
+}
+
+/* Root background */
+.program-courses-root {
+    -fx-background-color: #fdf6fb;
+    -fx-padding: 80 20 20 20; 
+}
+
+/* Search Bar */
+.search-bar {
+    -fx-pref-width: 400px;
+    -fx-pref-height: 40px;
+
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+
+    -fx-padding: 0 10 0 10;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+
+    -fx-prompt-text-fill: #999; /* Placeholder text color */
+}
+
+/* Search Bar focus */
+.search-bar:focused {
+    -fx-border-color: #fb6f92;
+    -fx-effect: dropshadow(gaussian, rgba(251,111,146,0.25), 6, 0.1, 0, 0);
+}
+
+/* Optional hover effect */
+.search-bar:hover {
+    -fx-border-color: #fb6f92;
+}
+
+.no-results-label {
+    -fx-font-family: "Poppins";
+    -fx-font-size: 40px;
+	-fx-alignment: center;   /* centers text inside the label */
+}
+
+
+/* Course box (card style) */
+.course-box {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 16px;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 15, 0.2, 0, 4);
+    -fx-spacing: 6;
+}
+
+.course-box:hover {
+    -fx-background-color: #f3f6ff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0.3, 0, 6);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* Course code */
+.course-code {
+    -fx-font-family: "Poppins";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #fb6f92;
+}
+
+/* Course title */
+.course-title {
+    -fx-font-family: "Inter";
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #333;
+}
+
+/* Units */
+.course-units {
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
+
+/* Description */
+.course-description {
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+    -fx-text-fill: #555;
+    -fx-wrap-text: true;
+}
+
+/* Prerequisites */
+.course-prereq {
+    -fx-font-family: "Inter Italic";
+    -fx-font-size: 13px;
+    -fx-text-fill: #2c6e3e;
+    -fx-padding: 6 0 0 0;
+}
+
+/* ScrollPane customization */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}

@@ -25,8 +25,22 @@ public class ContentArea implements ScreenChangeListener {
 	private final Stage stage;
 	private final StackPane screens;
 	private final DashboardScreen dashboardScreen;
-	private final ScrollPane enlistmentScroll;
+	
 	private final EnlistmentScreen enlistmentScreen;
+	private final ScrollPane enlistmentScroll;
+	
+	private final ProgramCoursesScreen bsScreen;
+	private final ScrollPane bsScroll;
+	
+	private final ProgramCoursesScreen msScreen;
+	private final ScrollPane msScroll;
+	
+	private final ProgramCoursesScreen mitScreen;
+	private final ScrollPane mitScroll;
+	
+	private final ProgramCoursesScreen phdScreen;
+	private final ScrollPane phdScroll;
+	
 	private final HBox topBar;
 	private final Sidebar sidebar;
 	private final VBox content; // Top Bar + Screen containers
@@ -64,11 +78,43 @@ public class ContentArea implements ScreenChangeListener {
 		enlistmentScroll.setFitToWidth(true);
 		enlistmentScroll.setFitToHeight(true);
 		enlistmentScroll.getStyleClass().add("transparent-scroll");
+		
+		bsScreen = new ProgramCoursesScreen("BSCS");
+		bsScroll = new ScrollPane(bsScreen);
+		bsScroll.setFitToWidth(true);
+		bsScroll.setFitToHeight(true);
+		bsScroll.getStyleClass().add("transparent-scroll");
+
+		msScreen = new ProgramCoursesScreen("MSCS");
+		msScroll = new ScrollPane(msScreen);
+		msScroll.setFitToWidth(true);
+		msScroll.setFitToHeight(true);
+		msScroll.getStyleClass().add("transparent-scroll");
+
+		mitScreen = new ProgramCoursesScreen("MSIT");
+		mitScroll = new ScrollPane(mitScreen);
+		mitScroll.setFitToWidth(true);
+		mitScroll.setFitToHeight(true);
+		mitScroll.getStyleClass().add("transparent-scroll");
+
+		phdScreen = new ProgramCoursesScreen("PHD");
+		phdScroll = new ScrollPane(phdScreen);
+		phdScroll.setFitToWidth(true);
+		phdScroll.setFitToHeight(true);
+		phdScroll.getStyleClass().add("transparent-scroll");
+
 
 		// StackPane that holds screens (only one visible at a time)
-		screens = new StackPane(dashboardScreen, enlistmentScroll);
+		screens = new StackPane(dashboardScreen, enlistmentScroll, bsScroll, 
+				msScroll, 
+				mitScroll, 
+				phdScroll);
 		StackPane.setAlignment(dashboardScreen, Pos.CENTER);
 		StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
+		StackPane.setAlignment(bsScroll, Pos.CENTER);
+		StackPane.setAlignment(msScroll, Pos.CENTER);
+		StackPane.setAlignment(mitScroll, Pos.CENTER);
+		StackPane.setAlignment(phdScroll, Pos.CENTER);
 
 		// Ensures scrolling works properly
 		enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
@@ -174,21 +220,50 @@ public class ContentArea implements ScreenChangeListener {
 		changeScreen(screenName);
 		if (sidebarVisible) toggleSidebar(); // When user selects a screen from side bar, close the side bar (if open)
 	}
+	
+	private void hideAllScreens() {
+		dashboardScreen.setVisible(false);
+		enlistmentScroll.setVisible(false);
+		bsScroll.setVisible(false);
+		msScroll.setVisible(false);
+		mitScroll.setVisible(false);
+		phdScroll.setVisible(false);
+	}
 
 	// Centralized screen switching
 	public void changeScreen(String screen) {
+		hideAllScreens();
+
 		switch(screen) {
 			case "Dashboard":
 				dashboardScreen.setVisible(true);
-				enlistmentScroll.setVisible(false);
 				topBarTitle.setText("Dashboard");
 				break;
 
 			case "Enlistment":
-				dashboardScreen.setVisible(false);
 				enlistmentScroll.setVisible(true);
-				topBarTitle.setText("Enlistment");
-				break;     
+				topBarTitle.setText("Enlistment Module");
+				break;
+
+			case "BSCS":
+				bsScroll.setVisible(true);
+				topBarTitle.setText("BS Computer Science Courses");
+				break;
+
+			case "MSCS":
+				msScroll.setVisible(true);
+				topBarTitle.setText("MS Computer Science Courses");
+				break;
+
+			case "MSIT":
+				mitScroll.setVisible(true);
+				topBarTitle.setText("MS Information Technology Courses");
+				break;
+
+			case "PHD":
+				phdScroll.setVisible(true);
+				topBarTitle.setText("PhD in Computer Science Courses");
+				break;
 		}
 	}
 
@@ -210,6 +285,7 @@ public class ContentArea implements ScreenChangeListener {
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/contentArea.css").toExternalForm()); // Add CSS Styling
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/sidebar.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/dashboard.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/programCourses.css").toExternalForm());
 
 		// Close sidebar when clicking outside
 		scene.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {

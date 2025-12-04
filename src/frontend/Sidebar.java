@@ -54,15 +54,19 @@ public class Sidebar {
         
 		Label bs = new Label("BS Computer Science");
 		bs.getStyleClass().add("sidebar-course-item");
+		bs.setOnMouseClicked(event -> listener.onScreenChange("BSCS"));
 
 		Label ms = new Label("MS Computer Science");
 		ms.getStyleClass().add("sidebar-course-item");
+		ms.setOnMouseClicked(event -> listener.onScreenChange("MSCS"));
 
 		Label mit = new Label("MS Information Technology");
 		mit.getStyleClass().add("sidebar-course-item");
+		mit.setOnMouseClicked(event -> listener.onScreenChange("MSIT"));
 
 		Label phd = new Label("PhD in Computer Science");
 		phd.getStyleClass().add("sidebar-course-item");
+		phd.setOnMouseClicked(event -> listener.onScreenChange("PHD"));
 
 		VBox courseDropdown = new VBox(bs, ms, mit, phd);
 		courseDropdown.getStyleClass().add("sidebar-course-dropdown");

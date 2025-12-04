@@ -205,7 +205,7 @@ public class CourseSelectionScreen {
 		root.setCenter(form);
 
 		Scene scene = new Scene(root, 600, 620);
-		scene.getStylesheets().add(getClass().getResource("/cssFiles/courseselection.css").toExternalForm()); // Add CSS Styling
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/courseSelection.css").toExternalForm()); // Add CSS Styling
 		
 		popup.setScene(scene); // Apply to stage
 		popup.show(); // Show the pop-up screen

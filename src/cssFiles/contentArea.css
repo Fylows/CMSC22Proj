@@ -14,69 +14,66 @@
 	src: url("InterItalic.ttf");
 }
 
-/* ===========================
-   TOP BAR
-=========================== */
+/* Top Bar */
 .topbar {
-    -fx-background-color: #ffc2d1;
-    -fx-padding: 10 20;
-    -fx-spacing: 20;
-    -fx-alignment: center-left;
-    -fx-background-radius: 0 0 12 12;
+	-fx-background-color: #ffc2d1;
+	-fx-padding: 10 20;
+	-fx-spacing: 20;
+	-fx-alignment: center-left;
+	-fx-background-radius: 0 0 12 12;
 }
 
 /* Dashboard Title */
 .dashboard-title {
-    -fx-font-family: "Poppins";
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #000000;
+	-fx-font-family: "Poppins";
+	-fx-font-size: 32px;
+	-fx-font-weight: bold;
 }
 
 /* Hamburger Button */
 .hamburger-btn {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-    -fx-cursor: hand;
+	-fx-background-color: transparent;
+	-fx-padding: 0;
+	-fx-cursor: hand;
 }
 
 .hamburger-btn:hover {
-    -fx-opacity: 0.75;
+	-fx-opacity: 0.75;
 }
 
 /* ScrollPane — fully transparent background */
 .transparent-scroll {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 /* Removes inner viewport background */
 .transparent-scroll > .viewport {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 /* Removes default corner fill */
 .transparent-scroll .corner {
-    -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 /* Profile */
 .profile-box {
-    -fx-spacing: 10;
-    -fx-alignment: center-right;
+	-fx-spacing: 10;
+	-fx-alignment: center-right;
 }
 
 .profile-name {
-    -fx-font-family: "Poppins";
-    -fx-font-size: 22px;
-    -fx-text-fill: #222;
+	-fx-font-family: "Poppins";
+	-fx-font-size: 22px;
+	-fx-text-fill: #222;
 }
 
 .profile-email {
-    -fx-font-family: "Inter Italic";
-    -fx-font-size: 14px;
-    -fx-text-fill: #666;
+	-fx-font-family: "Inter Italic";
+	-fx-font-size: 14px;
+	-fx-text-fill: #666;
 }
 
 .content-root {
-    -fx-background-color: #FAFAFA;
+	-fx-background-color: #FAFAFA;
 }

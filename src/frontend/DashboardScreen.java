@@ -1,7 +1,6 @@
 package frontend;
 
 import backend.Student;
-import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -27,7 +26,6 @@ public class DashboardScreen extends StackPane {
 		petalPane.prefHeightProperty().bind(heightProperty());
 
 		content = new VBox(20);
-		content.setPadding(new Insets(60, 20, 20, 20)); 
 		getStyleClass().add("dashboard-root");
 
 		VBox welcomeCard = createWelcomeCard(student); // Welcome Card

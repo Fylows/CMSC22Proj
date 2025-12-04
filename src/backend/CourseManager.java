@@ -113,6 +113,7 @@ public class CourseManager {
 			Map.entry("CMSC 22", List.of("CMSC 12")),
 			Map.entry("CMSC 123", List.of("CMSC 21","CMSC 57")),
 			Map.entry("CMSC 130", List.of("CMSC 57")),
+			Map.entry("CMSC 150", List.of("CMSC 21")),
 			
 			Map.entry("CMSC 23", List.of("CMSC 22")),
 			Map.entry("CMSC 100", List.of("CMSC 22")),
@@ -128,7 +129,7 @@ public class CourseManager {
 			Map.entry("CMSC 137", List.of("CMSC 125")),
 			Map.entry("CMSC 128", List.of("CMSC 123")),
 			Map.entry("CMSC 142", List.of("CMSC 123")),
-			Map.entry("CMSC 174", List.of("CMSC 123")),
+			Map.entry("CMSC 173", List.of("CMSC 123")),
 			Map.entry("CMSC 180", List.of("CMSC 132")),
 			
 			// Electives in BSCS
@@ -139,6 +140,7 @@ public class CourseManager {
 			Map.entry("CMSC 191", List.of("CMSC 123")),
 			
 			// Master of Science in Computer Science (MSCS)
+//			Map.entry("CMSC 214", List.of("CMSC 124", "CMSC 141")),
 			Map.entry("CMSC 245", List.of("CMSC 244")),
 	
 	
@@ -146,6 +148,20 @@ public class CourseManager {
 			Map.entry("IT 227", List.of("IT 210", "IT 226")),
 			Map.entry("IT 280", List.of("IT 238"))
 		);
+	
+//	public static boolean isBSCSCourse(String code) {
+//	    // Example: all BSCS courses start with CMSC and number < 200
+//	    if (code.startsWith("CMSC")) {
+//	        try {
+//	            int num = Integer.parseInt(code.split(" ")[1]);
+//	            return num < 200; // BSCS courses are below 200
+//	        } catch (Exception e) {
+//	            return true; // default to true if parsing fails
+//	        }
+//	    }
+//	    return false;
+//	}
+
 	
 
 	
