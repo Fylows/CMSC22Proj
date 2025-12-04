@@ -4,6 +4,7 @@ import javafx.scene.control.Label;
 import java.time.LocalTime;
 //import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class RegSystem {
-    private StudentManager studentManager;
-    private OfferedCourseManager courseManager;
+    private static StudentManager studentManager;
+    private static OfferedCourseManager courseManager;
 
     private final static Map<LocalTime, Integer> timeMap = new LinkedHashMap<>();
    
@@ -30,8 +31,8 @@ public class RegSystem {
     
     //Constructor
     public RegSystem() {
-        this.studentManager = StudentManager.load();
-        this.courseManager = OfferedCourseManager.load();
+    	RegSystem.studentManager = StudentManager.load();
+    	RegSystem.courseManager = OfferedCourseManager.load();
         OfferedCourseManager.save(courseManager);
 
         // initialize timeMap
@@ -67,12 +68,12 @@ public class RegSystem {
     }
 
     // Gets student by email address
-    public Student getStudent(String studentEmail) {
+    public static Student getStudent(String studentEmail) {
         return studentManager.getStudentByEmail(studentEmail);
     }
 
     // Gets a list of all students in the system
-    public ArrayList<Student> getAllStudents() {
+    public static ArrayList<Student> getAllStudents() {
         return studentManager.getStudents();
     }
 
@@ -83,8 +84,8 @@ public class RegSystem {
     }
 
     // Gets a specific course from the system using course codes
-    public OfferedCourse getOfferedCourse(String courseCode, String section, String term) {
-        ArrayList<OfferedCourse> courses = courseManager.getOfferedCourses();
+    public static OfferedCourse getOfferedCourse(String courseCode, String section, String term) {
+        ArrayList<OfferedCourse> courses = OfferedCourseManager.getOfferedCourses();
         for (OfferedCourse oc : courses) {
             if (oc.getCourse().getCourseCode().equalsIgnoreCase(courseCode) &&
                 oc.getSection().equalsIgnoreCase(section) &&
@@ -97,115 +98,115 @@ public class RegSystem {
     // Enrolls students into offered courses
     // Checks if students meet the prerequisites before enrolling in the course
     // Saves the updated list
-    public boolean enrollStudentInOfferedCourse(String studentEmail, String courseCode, String section, String term) {
-        Student s = getStudent(studentEmail);
-        OfferedCourse oc = getOfferedCourse(courseCode, section, term);
+    public static boolean enrollStudentInOfferedCourse(Student student, OfferedCourse course) { 
+    	if (student == null || course == null) return false; 
+    	for (OfferedCourse oc : courseManager.getOfferedCourses()) { 
+    		if (oc.getCourseCode().equalsIgnoreCase(course.getCourseCode()) && 
+    				oc.getTerm().equalsIgnoreCase(course.getTerm()) && 
+    				oc.getEnrolledStudents().contains(student)) { 
+    			System.out.println("Enrollment failed: already enrolled in another section of " + course.getCourseCode()); 
+    			return false; 
+    			} 
+    		} 
 
-        if (s == null || oc == null) return false;
+    	if (!hasPrerequisites(student, course)) { 
+    		System.out.println("Enrollment failed: prerequisites not met."); 
+    		return false; 
+    		} 
 
-        if (!hasPrerequisites(s, oc.getCourse())) {
-            System.out.println("Enrollment failed: prerequisites not met.");
-            return false;
-        }
+    	if (hasTimeConflict(student, course)) { 
+    		System.out.println("Enrollment failed: schedule conflict."); 
+    		return false; 
+    		} 
 
-        if (hasTimeConflict(s, oc)) {
-            System.out.println("Enrollment failed: time schedule conflict.");
-            return false;
-        }
-
-        if (!oc.getEnrolledStudents().contains(s)) {
-            oc.getEnrolledStudents().add(s);
-            if (!s.getEnrolledCourses().contains(courseCode)) {
-                s.getEnrolledCourses().add(courseCode);
-            }
-            StudentManager.save(studentManager);
-            OfferedCourseManager.save(courseManager);
-            return true;
-        }
-        return false;
+    	if (!course.getEnrolledStudents().contains(student)) { 
+    		course.getEnrolledStudents().add(student); 
+    		if (!student.getEnrolledCourses().contains(course.getCourseCode())) { 
+    			student.getEnrolledCourses().add(course);
+    			} 
+    		StudentManager.save(studentManager); 
+    		OfferedCourseManager.save(courseManager); 
+    		return true; 
+    		} 
+    	return false; 
     }
-
+    
+    
     // Removes student from enrolled courses
     // Saves the updated list
-    public boolean dropStudentFromOfferedCourse(String studentEmail, String courseCode, String section, String term) {
-        Student s = getStudent(studentEmail);
-        OfferedCourse oc = getOfferedCourse(courseCode, section, term);
+    public boolean dropStudentFromOfferedCourse(Student student, OfferedCourse course) { 
+    	if (student == null || course == null) return false;
+    	
+    	if (course.getEnrolledStudents().contains(student)) { 
+    		course.getEnrolledStudents().remove(student); 
+    		student.getEnrolledCourses().remove(course.getCourseCode()); 
+    		StudentManager.save(studentManager); 
+    		OfferedCourseManager.save(courseManager); 
+    		return true; 
+    		} 
+    	return false; 
+    }
+    
+    // Gets list of all students currently enrolled in a specific course
+    public ArrayList<Student> getStudentsInOfferedCourse(OfferedCourse course) { 
+    	if (course != null) { 
+    		return course.getEnrolledStudents(); 
+    		} 
+    	return new ArrayList<Student>(); 
+    	}
 
-        if (s == null || oc == null) return false;
+    // Checks if a specific course has prerequisites
+    private static boolean hasPrerequisites(Student student, OfferedCourse course) { 
+        if (course.getCourse() == null || course.getCourse().getPrerequisites() == null || course.getCourse().getPrerequisites().isEmpty())
+            return true; 
 
-        if (oc.getEnrolledStudents().contains(s)) {
-            oc.getEnrolledStudents().remove(s);
-            s.getEnrolledCourses().remove(courseCode);
-            StudentManager.save(studentManager);
-            OfferedCourseManager.save(courseManager);
-            return true;
+        for (String req : course.getCourse().getPrerequisites()) { 
+            if (!student.getCompletedCourses().contains(req)) { 
+                System.out.println("Missing prerequisite: " + req); 
+                return false; 
+            } 
+        } 
+        return true; 
+    }
+    
+    
+
+    // Compares two courses and checks if they have overlapping time frames
+    private static boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
+        for (OfferedCourse enrolledCourse : student.getEnrolledCourses()) {
+            if (!enrolledCourse.getTerm().equalsIgnoreCase(courseToEnroll.getTerm())) continue;
+
+            if (enrolledCourse.getDay() != null && courseToEnroll.getDay() != null) {
+                String[] days1 = enrolledCourse.getDay().split(",");
+                String[] days2 = courseToEnroll.getDay().split(",");
+
+                boolean sharesDay = false;
+                for (String d1 : days1) {
+                    for (String d2 : days2) {
+                        if (d1.trim().equalsIgnoreCase(d2.trim())) {
+                            sharesDay = true;
+                            break;
+                        }
+                    }
+                    if (sharesDay) break;
+                }
+
+                if (sharesDay) {
+                    boolean overlap =
+                        !(courseToEnroll.getEndTime().isBefore(enrolledCourse.getStartTime()) ||
+                          courseToEnroll.getStartTime().isAfter(enrolledCourse.getEndTime()));
+
+                    if (overlap) {
+                        System.out.println("Time conflict with " +
+                                           enrolledCourse.getCourseCode() +
+                                           " (" + enrolledCourse.getSection() + ")");
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
-
-    // Gets list of all students currently enrolled in a specific course
-    public ArrayList<Student> getStudentsInOfferedCourse(String courseCode, String section, String term) {
-        OfferedCourse oc = getOfferedCourse(courseCode, section, term);
-        if (oc != null) {
-            return oc.getEnrolledStudents();
-        }
-        return new ArrayList<Student>();
-    }
-
-    // Checks if a specific course has prerequisites
-    private boolean hasPrerequisites(Student student, Course course) {
-        if (course.getPrerequisites() == null || course.getPrerequisites().isEmpty()) return true;
-
-        for (String req : course.getPrerequisites()) {
-            if (!student.getCompletedCourses().contains(req)) {
-                System.out.println("Missing prerequisite: " + req);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // Compares two courses and checks if they have overlapping time frames
-    private boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
-    	for (String code : student.getEnrolledCourses()) {
-    		for (OfferedCourse enrolledCourse : courseManager.getOfferedCourses()) {
-    				if (enrolledCourse.getCourse().getCourseCode().equalsIgnoreCase(code) &&
-    					enrolledCourse.getTerm().equalsIgnoreCase(courseToEnroll.getTerm())) {
-
-    	            if (enrolledCourse.getSection().equalsIgnoreCase(courseToEnroll.getSection())) {
-    	                continue;
-    	            }
-
-    	            if (enrolledCourse.getDay() != null && courseToEnroll.getDay() != null) {
-    	                String[] enrolledDays = enrolledCourse.getDay().split(",");
-    	                String[] newDays = courseToEnroll.getDay().split(",");
-    	                boolean conflict = false;
-
-    	                for (String d1 : enrolledDays) {
-    	                    for (String d2 : newDays) {
-    	                        if (d1.trim().equalsIgnoreCase(d2.trim())) {
-    	                            conflict = true;
-    	                            break;
-    	                        }
-    	                    }
-    	                    if (conflict) break;
-    	                }
-
-    	                if (conflict) {
-    	                    boolean overlap = !(courseToEnroll.getEndTime().isBefore(enrolledCourse.getStartTime()) ||
-    	                                        courseToEnroll.getStartTime().isAfter(enrolledCourse.getEndTime()));
-    	                    if (overlap) {
-    	                        System.out.println("Time conflict with " + enrolledCourse.getCourse().getCourseCode() +
-    	                                           " (" + enrolledCourse.getSection() + ")");
-    	                        return true;
-    	                    }
-    	                }
-    	            }
-    	        }
-    	    }
-    	}
-    	return false;
-    	}
     
     public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());

@@ -21,7 +21,7 @@ public class Course implements Serializable {
 		this.description = description;
 		this.type = CourseManager.courseDegreeMap.get(code).name();
 	}
-	
+
 	public void addPrereq(String course) { prereq.add(course); }
 	
 	// View State

@@ -115,6 +115,7 @@ public class CourseManager {
 			Map.entry("CMSC 130", List.of("CMSC 57")),
 			Map.entry("CMSC 150", List.of("CMSC 21")),
 			
+
 			Map.entry("CMSC 23", List.of("CMSC 22")),
 			Map.entry("CMSC 100", List.of("CMSC 22")),
 			Map.entry("CMSC 127", List.of("CMSC 22")),

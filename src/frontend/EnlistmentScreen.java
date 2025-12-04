@@ -6,43 +6,32 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 
-import backend.CourseManager;
 import backend.OfferedCourse;
 import backend.RegSystem;
+import backend.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class EnlistmentScreen extends VBox {
-	private final int ITEMS_PER_PAGE = 10;
-	private int currentPage = 0;
-	private ObservableList<OfferedCourse> allCourses;
-	private TableView<OfferedCourse> table;
+	private GridPane calendar = new GridPane();
 	private ArrayList<OfferedCourse> offered = RegSystem.getAllCourses();
-	private OfferedCourse oc = offered.get(0);
-	private int cou = 0;
-	
+	private Student student = ContentArea.getStudent();
 	public EnlistmentScreen() {
 		setSpacing(20);
-		setPadding(new Insets(20));
+		setPadding(new Insets(60, 20, 20, 20)); 
 		setStyle("-fx-background-color: white;");
 
         		
         // ---------- CALENDAR AND ERROR SCREEN ----------
 		
 		
-		GridPane calendar = new GridPane();
 		calendar.setPadding(new Insets(20));
 		for (int row = 0; row < 24; row++) {
 		        for (int col = 0; col < 6; col++) {
@@ -66,99 +55,86 @@ public class EnlistmentScreen extends VBox {
 		 
 
         // ---------- ACTIVE ENLISTMENTS ----------
-        Button b = new Button("Active Enlistment");
-        
-        b.setOnAction(e -> { RegSystem.fillTime(calendar, oc);});
-        
-        Button d = new Button("Increment course");
-        d.setOnAction(e -> {
-        	oc = offered.get(++cou);
-        });
+
         // ---------- COURSE SEARCH ----------
-        Button c = new Button("Course Search");
-        VBox courseSearch = createCourseSearch(RegSystem.getAllCourses());
-        c.setOnAction(e -> RegSystem.resetTime(calendar, oc));
-        // Add all to layout
-        getChildren().addAll(calendarAndWarnings,courseSearch, b,c,d);
+        VBox courseSearch = createCourseSearchGrid(offered);
+
+        getChildren().addAll(calendarAndWarnings,courseSearch);
 	}
 	
-	
-	private VBox createCourseSearch(ArrayList<OfferedCourse> allOfferedCourses) {
-//		System.out.println(allOfferedCourses.size());
+	private VBox createCourseSearchGrid(ArrayList<OfferedCourse> allOfferedCourses) {
+	    // Observable list for easier pagination
+	    ObservableList<OfferedCourse> allCourses = FXCollections.observableArrayList(allOfferedCourses);
 
-		// CREATE A TABLE
-		 // Store full list
-	    allCourses = FXCollections.observableArrayList(allOfferedCourses);
+	    // Pagination variables
+	    final int ITEMS_PER_PAGE = 10;
+	    final int[] currentPage = {0}; // Using array to allow modification inside lambda
 
-	    // --- Table Setup ---
-	    table = new TableView<>();
-	    table.setPrefHeight(400);
-	    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+	    // Create the GridPane
+	    GridPane grid = new GridPane();
+	    grid.setHgap(10);
+	    grid.setVgap(5);
+	    grid.setPadding(new Insets(10));
 
-	    TableColumn<OfferedCourse, String> codeCol = new TableColumn<>("Code");
-	    codeCol.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
+	    // Column headers
+	    grid.addRow(0,
+	        new Label("Course"),
+	        new Label("Associated Lab"),
+	        new Label("Action")
+	    );
 
-	    TableColumn<OfferedCourse, String> sectionCol = new TableColumn<>("Section");
-	    sectionCol.setCellValueFactory(new PropertyValueFactory<>("section"));
+	    // Method to update the grid for a given page
+	    Runnable showPage = () -> {
+	        grid.getChildren().removeIf(node -> GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
 
-	    table.getColumns().addAll(codeCol, sectionCol);
+	        int start = currentPage[0] * ITEMS_PER_PAGE;
+	        int end = Math.min(start + ITEMS_PER_PAGE, allCourses.size());
 
-	    for (TableColumn<OfferedCourse, ?> col : table.getColumns()) {
-	        col.setReorderable(false);
-	    }
+	        for (int i = start; i < end; i++) {
+	            OfferedCourse course = allCourses.get(i);
 
-	    // --- Pagination Controls ---
+	            Label courseLabel = new Label(course.getCourseCode());
+	            Label labLabel = new Label(course.getSection()); // Assuming section is the lab info
+	            Button enlistBtn = new Button("Add");
+
+	            // Example action for the button
+	            enlistBtn.setOnAction(e -> {
+	            	if(RegSystem.enrollStudentInOfferedCourse(student, course)) RegSystem.fillTime(calendar, course);
+	            });
+
+	            grid.addRow(i - start + 1, courseLabel, labLabel, enlistBtn);
+	        }
+	    };
+
+	    // Pagination controls
 	    Button prevBtn = new Button("Previous");
 	    Button nextBtn = new Button("Next");
 	    Label pageLabel = new Label();
 
-	    HBox pagination = new HBox(10, prevBtn, pageLabel, nextBtn);
-	    pagination.setPadding(new Insets(10));
-
 	    prevBtn.setOnAction(e -> {
-	        if (currentPage > 0) {
-	            currentPage--;
-	            showPage(currentPage);
-	            updatePageLabel(pageLabel);
+	        if (currentPage[0] > 0) {
+	            currentPage[0]--;
+	            showPage.run();
+	            pageLabel.setText("Page " + (currentPage[0] + 1));
 	        }
 	    });
 
 	    nextBtn.setOnAction(e -> {
-	        if ((currentPage + 1) * ITEMS_PER_PAGE < allCourses.size()) {
-	            currentPage++;
-	            showPage(currentPage);
-	            updatePageLabel(pageLabel);
+	        if ((currentPage[0] + 1) * ITEMS_PER_PAGE < allCourses.size()) {
+	            currentPage[0]++;
+	            showPage.run();
+	            pageLabel.setText("Page " + (currentPage[0] + 1));
 	        }
 	    });
 
-	    // --- Initial Page ---
-	    currentPage = 0;
-	    showPage(currentPage);
-	    updatePageLabel(pageLabel);
+	    HBox pagination = new HBox(10, prevBtn, pageLabel, nextBtn);
+	    pagination.setPadding(new Insets(10));
+	    pageLabel.setText("Page 1");
 
-	    // --- Layout ---
-	    VBox box = new VBox(10, table, pagination);
-	    VBox.setVgrow(table, Priority.ALWAYS);
-	    box.setPadding(new Insets(10));
+	    // Initial page
+	    showPage.run();
 
-	    return box;
-	}
-	
-	// --- Helper: show a page in the table ---
-	private void showPage(int page) {
-	    int fromIndex = page * ITEMS_PER_PAGE;
-	    int toIndex = Math.min(fromIndex + ITEMS_PER_PAGE, allCourses.size());
-
-	    if (fromIndex >= allCourses.size() || fromIndex < 0) return;
-
-	    ObservableList<OfferedCourse> pageData =
-	            FXCollections.observableArrayList(allCourses.subList(fromIndex, toIndex));
-	    table.setItems(pageData);
-	}
-	
-	// --- Helper: update page number label ---
-	private void updatePageLabel(Label pageLabel) {
-	    int totalPages = (int) Math.ceil((double) allCourses.size() / ITEMS_PER_PAGE);
-	    pageLabel.setText("Page " + (currentPage + 1) + " of " + totalPages);
+	    VBox container = new VBox(10, grid, pagination);
+	    return container;
 	}
 }

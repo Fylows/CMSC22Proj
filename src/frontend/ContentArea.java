@@ -18,7 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class ContentArea implements ScreenChangeListener {
-	private final Student student;
+	private static Student student = null;
 	private final StudentManager manager;
 
 	// Stage and layout screens
@@ -41,6 +41,7 @@ public class ContentArea implements ScreenChangeListener {
 	private final ProgramCoursesScreen phdScreen;
 	private final ScrollPane phdScroll;
 	
+	private final ProfilePageScreen profileScreen;
 	private final HBox topBar;
 	private final Sidebar sidebar;
 	private final VBox content; // Top Bar + Screen containers
@@ -51,8 +52,9 @@ public class ContentArea implements ScreenChangeListener {
 
 	// Constructor
 	public ContentArea(Student student, StudentManager manager) {
-		this.student = student;
+		ContentArea.student = student;
 		this.manager = manager;
+
 
 		// Stage setting
 		this.stage = new Stage();
@@ -115,10 +117,18 @@ public class ContentArea implements ScreenChangeListener {
 		StackPane.setAlignment(msScroll, Pos.CENTER);
 		StackPane.setAlignment(mitScroll, Pos.CENTER);
 		StackPane.setAlignment(phdScroll, Pos.CENTER);
+        profileScreen = new ProfilePageScreen(student);
+		
+		// StackPane that holds screens (only one visible at a time)
+		screens = new StackPane(dashboardScreen, enlistmentScroll, profileScreen);
+		StackPane.setAlignment(dashboardScreen, Pos.CENTER);
+		StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
+        StackPane.setAlignment(profileScreen, Pos.CENTER);
 
 		// Ensures scrolling works properly
 		enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
 		enlistmentScroll.prefHeightProperty().bind(screens.heightProperty());
+
 		
 		// ==== ADD OTHER CLASSES HERE ====
 
@@ -163,7 +173,7 @@ public class ContentArea implements ScreenChangeListener {
 		VBox profileTexts = new VBox(nameLabel, emailLabel);
 		profileTexts.setAlignment(Pos.CENTER_RIGHT);
 
-		ImageView profilePic = new ImageView(new Image(getClass().getResourceAsStream("/resources/logo.png")));
+		ImageView profilePic = new ImageView(new Image(getClass().getResourceAsStream("/resources/defaultPFP.png")));
 		profilePic.setFitHeight(50);
 		profilePic.setFitWidth(50);
 		profilePic.setPreserveRatio(true);
@@ -172,12 +182,9 @@ public class ContentArea implements ScreenChangeListener {
 		Circle clip = new Circle(25, 25, 25);
 		profilePic.setClip(clip);
 
-//        profilePic.setOnMouseClicked(e -> {
-//            onScreenChange("Profile");
-//        });
-
-		HBox profileBox = new HBox(profileTexts, profilePic);
+        HBox profileBox = new HBox(profilePic, profileTexts);
 		profileBox.getStyleClass().add("profile-box");
+        profileBox.setOnMouseClicked(e -> { onScreenChange("Profile"); });
 
 		topBarTitle.setPickOnBounds(true);
 	    profileBox.setPickOnBounds(true);
@@ -237,6 +244,8 @@ public class ContentArea implements ScreenChangeListener {
 		switch(screen) {
 			case "Dashboard":
 				dashboardScreen.setVisible(true);
+				enlistmentScroll.setVisible(false);
+				profileScreen.setVisible(false);
 				topBarTitle.setText("Dashboard");
 				break;
 
@@ -264,14 +273,44 @@ public class ContentArea implements ScreenChangeListener {
 				phdScroll.setVisible(true);
 				topBarTitle.setText("PhD in Computer Science Courses");
 				break;
+				profileScreen.setVisible(false);
+				topBarTitle.setText("Enlistment");
+				break;
+			
+//	            case "Course List";
+//            	dashboardScreen.setVisible(false);
+//            	enlistmentScroll.setVisible(false);
+//              profileScreen.setVisible(false);
+//                break;
+				
+//          case  "About";
+//            	dashboardScreen.setVisible(false);
+//            	enlistmentScroll.setVisible(false);
+//              profileScreen.setVisible(false);
+//				break;
+				
+//          case  "Credits";
+//            	dashboardScreen.setVisible(false);
+//            	enlistmentScroll.setVisible(false);
+//              profileScreen.setVisible(false);
+//				break;
+				
+            case "Profile":
+                dashboardScreen.setVisible(false);
+                enlistmentScroll.setVisible(false);
+                profileScreen.setVisible(true);
+				topBarTitle.setText("Profile Page");
+                break;
 		}
 	}
+
 
 	// Running the screen
 	public void show() {
 		StackPane root = new StackPane();
 		root.getStyleClass().add("content-root");
 		root.getChildren().addAll(content, sidebar.getSidebar(), topBar);
+
 
 	    // Anchor elements
 	    StackPane.setAlignment(topBar, Pos.TOP_CENTER);
@@ -308,5 +347,9 @@ public class ContentArea implements ScreenChangeListener {
 	// Getters
 	public StudentManager getManager() {
 		return manager;
+	}
+	
+	public static Student getStudent() {
+		return student;
 	}
 }
