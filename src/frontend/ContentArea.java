@@ -35,10 +35,24 @@ public class ContentArea implements ScreenChangeListener {
 	private final Button externalHamburger; // Hamburger button
 	private Label topBarTitle;
 
+<<<<<<< Updated upstream
 	// Constructor
 	public ContentArea(Student student, StudentManager manager) {
 		ContentArea.student = student;
 		this.manager = manager;
+=======
+    // Stage & layout
+    private final Stage stage;
+    private final StackPane screens;
+    private final VBox dashboardScreen;
+    private final ScrollPane enlistmentScroll;
+    private final EnlistmentScreen enlistmentScreen; // your existing class
+    private final ProfilePageScreen profileScreen;
+    private final HBox topBar;
+    private final Sidebar sidebar;
+    private final VBox content; // topbar + screens container
+    private boolean sidebarVisible = false;
+>>>>>>> Stashed changes
 
 		// Stage setting
 		this.stage = new Stage();
@@ -59,6 +73,7 @@ public class ContentArea implements ScreenChangeListener {
 		// Screens (Dashboard, Enlistment, Course, About, Credits)
 		dashboardScreen = new DashboardScreen(student); 
 
+<<<<<<< Updated upstream
 		enlistmentScreen = new EnlistmentScreen();
 		enlistmentScroll = new ScrollPane(enlistmentScreen);
 		enlistmentScroll.setFitToWidth(true);
@@ -69,6 +84,26 @@ public class ContentArea implements ScreenChangeListener {
 		screens = new StackPane(dashboardScreen, enlistmentScroll);
 		StackPane.setAlignment(dashboardScreen, Pos.CENTER);
 		StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
+=======
+        // Create screens
+        dashboardScreen = new DashboardScreen(student, inter, poppinsBold, japaneseFont, interItalic);
+        enlistmentScreen = new EnlistmentScreen(); // keep your implementation
+        enlistmentScroll = new ScrollPane(enlistmentScreen);
+        enlistmentScroll.setFitToWidth(true);
+        enlistmentScroll.setFitToHeight(true);
+        enlistmentScroll.setStyle("-fx-background-color: transparent;");
+        profileScreen = new ProfilePageScreen(student);
+        
+
+        // StackPane that holds screens (only one visible at a time)
+        screens = new StackPane(dashboardScreen, enlistmentScroll, profileScreen);
+        StackPane.setAlignment(dashboardScreen, Pos.CENTER);
+        StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
+        StackPane.setAlignment(profileScreen, Pos.CENTER);
+        // Ensure both fill area
+        enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
+        enlistmentScroll.prefHeightProperty().bind(screens.heightProperty());
+>>>>>>> Stashed changes
 
 		// Ensures scrolling works properly
 		enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
@@ -126,12 +161,26 @@ public class ContentArea implements ScreenChangeListener {
 		Circle clip = new Circle(25, 25, 25);
 		profilePic.setClip(clip);
 
+<<<<<<< Updated upstream
 //        profilePic.setOnMouseClicked(e -> {
 //            onScreenChange("Profile");
 //        });
 
 		HBox profileBox = new HBox(profileTexts, profilePic);
 		profileBox.getStyleClass().add("profile-box");
+=======
+        ImageView profilePic = new ImageView(new Image(getClass().getResourceAsStream("/resources/defaultPFP.png")));
+        profilePic.setFitHeight(50);
+        profilePic.setFitWidth(50);
+        profilePic.setClip(new Circle(25, 25, 25));
+        
+        
+        HBox profileBox = new HBox(profilePic, profileTexts);
+        profileBox.setSpacing(10);
+        profileBox.setAlignment(Pos.CENTER_RIGHT);
+        
+        profileBox.setOnMouseClicked(e -> { onScreenChange("Profile"); });
+>>>>>>> Stashed changes
 
 		topBarTitle.setPickOnBounds(true);
 	    profileBox.setPickOnBounds(true);
@@ -192,11 +241,48 @@ public class ContentArea implements ScreenChangeListener {
 		}
 	}
 
+<<<<<<< Updated upstream
 	// Running the screen
 	public void show() {
 		StackPane root = new StackPane();
 		root.getStyleClass().add("content-root");
 		root.getChildren().addAll(content, sidebar.getSidebar(), topBar);
+=======
+    // Centralized screen switching
+    public void changeScreen(String screen) {
+        switch(screen) {
+            case "Dashboard":
+                dashboardScreen.setVisible(true);
+                enlistmentScroll.setVisible(false);
+                profileScreen.setVisible(false);
+                break;
+            case "Enlistment":
+                dashboardScreen.setVisible(false);
+                enlistmentScroll.setVisible(true);
+                profileScreen.setVisible(false);
+                break;
+//            case "Course List";
+//            	dashboardScreen.setVisible(false);
+//            	enlistmentScroll.setVisible(false);
+//              profileScreen.setVisible(false);
+//                break;
+//          case  "About";
+//            	dashboardScreen.setVisible(false);
+//            	enlistmentScroll.setVisible(false);
+//              profileScreen.setVisible(false);
+//          case  "Credits";
+//            	dashboardScreen.setVisible(false);
+//            	enlistmentScroll.setVisible(false);
+//              profileScreen.setVisible(false);
+            case "Profile":
+                dashboardScreen.setVisible(false);
+                enlistmentScroll.setVisible(false);
+                profileScreen.setVisible(true);
+                break;
+                
+        }
+    }
+>>>>>>> Stashed changes
 
 	    // Anchor elements
 	    StackPane.setAlignment(topBar, Pos.TOP_CENTER);
