@@ -33,70 +33,61 @@ public class OfferedCourseManager implements Serializable {
 	// Savers and Loaders
 	// Loading the CSV file of the offered course for the first semester
 	public static ArrayList<OfferedCourse> loadOfferedCoursesFromCSV() {
-	    ArrayList<OfferedCourse> list = new ArrayList<>();
-	    Map<String, OfferedCourse> lectureMap = new HashMap<>();
-	    Set<String> lecturesWithLabs = new HashSet<>();
+		ArrayList<OfferedCourse> list = new ArrayList<>();
+		Map<String, OfferedCourse> lectureMap = new HashMap<>();
+		Set<String> lecturesWithLabs = new HashSet<>();
 
-	    try (BufferedReader br = new BufferedReader(
-	            new InputStreamReader(OfferedCourseManager.class.getResourceAsStream(
-	                    "/dataset/course_offerings.csv")))) {
+		try (BufferedReader br = new BufferedReader(
+				new InputStreamReader(OfferedCourseManager.class.getResourceAsStream("/dataset/course_offerings.csv")))) {
+			
+			String line;
+			
+			while ((line = br.readLine()) != null) {
+				if (line.isBlank() || line.toLowerCase().contains("course code")) continue; // Skip the header of the CSV file
 
-	        String line;
-	        while ((line = br.readLine()) != null) {
+				String[] parts = line.split(","); // Split the lines by commas
+				if (parts.length < 7) continue; // Must contain code, title, units, section, time, days, room, if one is missing, skip
 
-	            if (line.isBlank() || line.toLowerCase().contains("course code")) continue;
+				String code = parts[0].trim(); // Trims the course code
+				String section = parts[3].trim(); // Trims the section (e.g., "U-1L")
+				String times = parts[4].trim(); // Trims the time range
+				String days = parts[5].trim(); // Trims the days
+				String room = parts[6].trim(); // Trims the room
 
-	            String[] parts = line.split(",");
-	            if (parts.length < 7) continue;
+				Course baseCourse = CourseManager.getCourse(code, CourseManager.courseDegreeMap.get(code).name());
+				if (baseCourse == null) continue;
 
-	            String code = parts[0].trim();
-	            String section = parts[3].trim();
-	            String times = parts[4].trim();
-	            String days = parts[5].trim();
-	            String room = parts[6].trim();
+				// Build OfferedCourse using course info + schedule info
+				OfferedCourse oc = new OfferedCourse(baseCourse, section, times, days, room, "1st Semester"); 
 
-	            Course baseCourse = CourseManager.getCourse(code,
-	                    CourseManager.courseDegreeMap.get(code).name());
-	            if (baseCourse == null) continue;
+				if (isLab(section)) {
+					String parentSection = section.substring(0, section.indexOf("-")); // Extract lecture prefix: everything before the dash
 
-	            OfferedCourse oc = new OfferedCourse(baseCourse, section, times, days, room, "1st Semester");
+					// Assign parent lecture if it exists
+					OfferedCourse parentLecture = lectureMap.get(parentSection);
+					if (parentLecture != null) {
+						oc.setLec(parentLecture); // Assign instance field
+						lecturesWithLabs.add(parentSection);
+					}
 
-	            if (isLab(section)) {
-	                // Extract lecture prefix: everything before the dash
-	                String parentSection = section.substring(0, section.indexOf("-"));
-
-	                // Assign parent lecture if it exists
-	                OfferedCourse parentLecture = lectureMap.get(parentSection);
-	                if (parentLecture != null) {
-	                    oc.setLec(parentLecture); // assign instance field
-	                    lecturesWithLabs.add(parentSection);
-	                }
-
-	                // Always add the lab
-	                list.add(oc);
-
+					list.add(oc); // Always add the lab
 	            } else {
-	                // Lecture row: store it in the map, do not add yet
-	                lectureMap.put(section, oc);
-	                oc.setLastLec(); // set global static reference
+	            	lectureMap.put(section, oc); // Lecture row: store it in the map, do not add yet
+	            	oc.setLastLec(); // Set global static reference
 	            }
-	        }
+			}
 
-	        // After reading CSV, add only lectures that have no labs
-	        for (String lecSection : lectureMap.keySet()) {
-	            if (!lecturesWithLabs.contains(lecSection)) {
-	                list.add(lectureMap.get(lecSection));
-	            }
-	        }
-
+			// After reading CSV, add only lectures that have no labs
+			for (String lecSection : lectureMap.keySet()) {
+				if (!lecturesWithLabs.contains(lecSection)) {
+					list.add(lectureMap.get(lecSection));
+				}
+			}
 	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return null;
+	    	e.printStackTrace();
+	    	return null;
 	    }
-//	    for (OfferedCourse oc : list) {
-//	    	if (oc.getParentLecture() != null) System.out.println(oc.getCourseCode() + " | " + oc.getParentLecture().getCourseCode());
-//	    }
-	    return list;
+		return list;
 	}
 	
 	// Persistence Functions (saving/loading)
