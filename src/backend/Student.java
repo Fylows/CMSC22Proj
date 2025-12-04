@@ -1,6 +1,10 @@
 package backend;
 
 import java.util.ArrayList;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.Serializable;
 
 public class Student implements Serializable {
@@ -43,7 +47,10 @@ public class Student implements Serializable {
 	public ArrayList<OfferedCourse> getEnrolledCourses() { 
 		return enrolledCourses; 
 	}
-	
+	public ObservableList<OfferedCourse> getEnrolledObLi() {
+	    return FXCollections.observableList(enrolledCourses); 
+	}
+
 	public String getName() { return firstName + " " + lastName; }
 	public String getFirstName() { return firstName; }
 	public String getMiddleName() { return middleName; }
