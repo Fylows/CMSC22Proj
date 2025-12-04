@@ -7,7 +7,7 @@ import javafx.scene.layout.*;
 public class Sidebar {
 	private VBox sidebar; // The whole sidebar UI
 	private Button internalHamburger; // Hamburger button
-	private ScreenChangeListener listener;
+	private ScreenChangeListener listener; // Handles the changing of screens for ContentArea
 
 	// Constructor
 	public Sidebar(ScreenChangeListener listener) {
@@ -117,10 +117,12 @@ public class Sidebar {
 	}
 
 	// Getters and Setters
+	@SuppressWarnings("exports")
 	public VBox getSidebar() {
 		return sidebar;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getInternalHamburger() {
 		return internalHamburger;
 	}

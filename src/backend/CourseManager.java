@@ -99,62 +99,75 @@ public class CourseManager {
 			Map.entry("CMSC 57", List.of("CMSC 56")),
 			
 			Map.entry("CMSC 22", List.of("CMSC 12")),
-			Map.entry("CMSC 123", List.of("CMSC 21","CMSC 57")),
+			Map.entry("CMSC 123", List.of("CMSC 21","CMSC 57 or COI")),
 			Map.entry("CMSC 130", List.of("CMSC 57")),
-			Map.entry("CMSC 150", List.of("CMSC 21", "MATH 27 or MATH 36")),
+			Map.entry("CMSC 150", List.of("CMSC 21", "MATH 27 or MATH 36, or COI")),
 			
 			Map.entry("CMSC 23", List.of("CMSC 22")),
 			Map.entry("CMSC 100", List.of("CMSC 22")),
-			Map.entry("CMSC 127", List.of("CMSC 22")),
-			Map.entry("CMSC 131", List.of("CMSC 21")),
+			Map.entry("CMSC 127", List.of("CMSC 22 or COI")),
+			Map.entry("CMSC 131", List.of("CMSC 21 or COI")),
 			
-			Map.entry("CMSC 124", List.of("CMSC 123")),
-			Map.entry("CMSC 125", List.of("CMSC 123")),
-			Map.entry("CMSC 141", List.of("CMSC 123")),
+			Map.entry("CMSC 124", List.of("CMSC 123 or COI")),
+			Map.entry("CMSC 125", List.of("CMSC 123 or COI")),
+			Map.entry("CMSC 141", List.of("CMSC 123 or COI")),
 			Map.entry("CMSC 170", List.of("CMSC 123")),
 			Map.entry("CMSC 132", List.of("CMSC 131")),
 			
 			Map.entry("CMSC 137", List.of("CMSC 125")),
-			Map.entry("CMSC 128", List.of("CMSC 123")),
-			Map.entry("CMSC 142", List.of("CMSC 123")),
+			Map.entry("CMSC 128", List.of("CMSC 123 or COI")),
+			Map.entry("CMSC 142", List.of("CMSC 123 or COI")),
 			Map.entry("CMSC 173", List.of("CMSC 123", "STAT 101")),
 			Map.entry("CMSC 180", List.of("CMSC 132")),
 
 			Map.entry("CMSC 129", List.of("CMSC 124")),
-			Map.entry("CMSC 161", List.of("CMSC 123")),
-			Map.entry("CMSC 165", List.of("CMSC 123")),
+			Map.entry("CMSC 161", List.of("CMSC 123 or COI")),
+			Map.entry("CMSC 165", List.of("CMSC 123 or COI")),
 			Map.entry("CMSC 172", List.of("CMSC 123")),
 			Map.entry("CMSC 191", List.of("CMSC 123")),
 			
 			Map.entry("CMSC 11", List.of("MATH 11 or MATH 17")),
+			Map.entry("CMSC 190", List.of("COI")),
+			Map.entry("CMSC 198", List.of("COI")),
+			Map.entry("CMSC 199", List.of("COI")),
+			Map.entry("CMSC 200", List.of("COI")),
 			
 			// Master of Science in Computer Science (MSCS)
 			Map.entry("CMSC 245", List.of("CMSC 244")),
 	
-			Map.entry("CMSC 214", List.of("CMSC 124", "CMSC 141")),
-			Map.entry("CMSC 215", List.of("CMSC 125", "CMSC 131")),
-			Map.entry("CMSC 227", List.of("CMSC 127")),
-			Map.entry("CMSC 241", List.of("CMSC 141")),
-			Map.entry("CMSC 244", List.of("CMSC 142")),
-			Map.entry("CMSC 250", List.of("MATH 28 or MATH 38")),
-			Map.entry("CMSC 265", List.of("CMSC 165")),
-			Map.entry("CMSC 271", List.of("CMSC 127")),
-			Map.entry("CMSC 272", List.of("CMSC 127")),
-			Map.entry("CMSC 280", List.of("CMSC 132")),
+			Map.entry("CMSC 214", List.of("CMSC 124", "CMSC 141 or COI")),
+			Map.entry("CMSC 215", List.of("CMSC 125", "CMSC 131 or COI")),
+			Map.entry("CMSC 227", List.of("CMSC 127 or COI")),
+			Map.entry("CMSC 241", List.of("CMSC 141 or COI")),
+			Map.entry("CMSC 244", List.of("CMSC 142 or COI")),
+			Map.entry("CMSC 250", List.of("MATH 28 or MATH 38 or COI")),
+			Map.entry("CMSC 265", List.of("CMSC 165 or COI")),
+			Map.entry("CMSC 271", List.of("CMSC 127 or COI")),
+			Map.entry("CMSC 272", List.of("CMSC 127 or COI")),
+			Map.entry("CMSC 280", List.of("CMSC 132 or COI")),
+			Map.entry("CMSC 290", List.of("COI")),
+			Map.entry("CMSC 291", List.of("COI")),
+			Map.entry("CMSC 300", List.of("COI")),
 	
 			// Master of Information Technology (MIT)
-			Map.entry("IT 227", List.of("IT 210", "IT 226")),
-			Map.entry("IT 280", List.of("IT 238")),
+			Map.entry("IT 227", List.of("IT 210", "IT 226 or COI")),
+			Map.entry("IT 280", List.of("IT 238 or COI")),
 			
-			Map.entry("IT 210", List.of("CMSC 100")),
-			Map.entry("IT 238", List.of("CMSC 137")),
+			Map.entry("IT 210", List.of("CMSC 100 or COI")),
+			Map.entry("IT 226", List.of("COI")),
+			Map.entry("IT 238", List.of("CMSC 137 or COI")),
+			Map.entry("IT 295", List.of("COI")),
+			Map.entry("IT 299", List.of("COI")),
 			
 			// PhD in Computer Science (PhD)
 			Map.entry("CMSC 341", List.of("CMSC 241")),
-			Map.entry("CMSC 342", List.of("CMSC 245"))
+			Map.entry("CMSC 342", List.of("CMSC 245")),
+			Map.entry("CMSC 391", List.of("COI")),
+			Map.entry("CMSC 399", List.of("COI")),
+			Map.entry("CMSC 400", List.of("COI"))
 		);
 	
-	// An Immutable map that consists of the prerequisites of all the courses (for sign-up)
+	// An Immutable map that consists of the prerequisites of all the courses (for sign-up checking)
 	public static Map<String, List<String>> prereqEnforcedMap = Map.ofEntries(
 			// Bachelor of Science in Computer Science (BSCS)
 			Map.entry("CMSC 21", List.of("CMSC 12")),
@@ -163,7 +176,7 @@ public class CourseManager {
 			Map.entry("CMSC 22", List.of("CMSC 12")),
 			Map.entry("CMSC 123", List.of("CMSC 21","CMSC 57")),
 			Map.entry("CMSC 130", List.of("CMSC 57")),
-			Map.entry("CMSC 150", List.of("CMSC 21")),
+			Map.entry("CMSC 150", List.of("CMSC 21")), // Assumes non-CMSC courses are already passed
 
 			Map.entry("CMSC 23", List.of("CMSC 22")),
 			Map.entry("CMSC 100", List.of("CMSC 22")),
@@ -190,6 +203,7 @@ public class CourseManager {
 			Map.entry("CMSC 191", List.of("CMSC 123")),
 			
 			// Master of Science in Computer Science (MSCS)
+			// Assumes that non-degree courses are already taken and finished
 			Map.entry("CMSC 245", List.of("CMSC 244")),
 	
 			// Master of Information Technology (MIT)

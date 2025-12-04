@@ -48,13 +48,12 @@ public class ContentArea implements ScreenChangeListener {
 	private boolean sidebarVisible = false;
 	
 	private final Button externalHamburger; // Hamburger button
-	private Label topBarTitle;
+	private Label topBarTitle; // Top Bar Titles
 
 	// Constructor
 	public ContentArea(Student student, StudentManager manager) {
 		ContentArea.student = student;
 		this.manager = manager;
-
 
 		// Stage setting
 		this.stage = new Stage();
@@ -105,14 +104,12 @@ public class ContentArea implements ScreenChangeListener {
 		phdScroll.setFitToHeight(true);
 		phdScroll.getStyleClass().add("transparent-scroll");
 		
+		// ==== Add About and Credits HERE ====
+		
 		profileScreen = new ProfilePageScreen(student);
 
-
 		// StackPane that holds screens (only one visible at a time)
-		screens = new StackPane(dashboardScreen, enlistmentScroll, bsScroll, 
-				msScroll, 
-				mitScroll, 
-				phdScroll, profileScreen);
+		screens = new StackPane(dashboardScreen, enlistmentScroll, bsScroll, msScroll, mitScroll, phdScroll, profileScreen);
 		StackPane.setAlignment(dashboardScreen, Pos.CENTER);
 		StackPane.setAlignment(enlistmentScroll, Pos.CENTER);
 		StackPane.setAlignment(bsScroll, Pos.CENTER);
@@ -124,9 +121,6 @@ public class ContentArea implements ScreenChangeListener {
 		// Ensures scrolling works properly
 		enlistmentScroll.prefWidthProperty().bind(screens.widthProperty());
 		enlistmentScroll.prefHeightProperty().bind(screens.heightProperty());
-
-		
-		// ==== ADD OTHER CLASSES HERE ====
 
 		// Content VBox (Top Bar + Screens)
 		content = new VBox(5, topBar, screens);
@@ -195,7 +189,7 @@ public class ContentArea implements ScreenChangeListener {
 		externalHamburger.setOnAction(e -> toggleSidebar()); // Toggle when external hamburger is clicked
 		sidebar.getInternalHamburger().setOnAction(e -> toggleSidebar()); // Toggle when internal hamburger (inside sidebar) is clicked
 
-        // Clicking outside the side bar closes it (only when visible)
+		// Clicking outside the side bar closes it (only when visible)
     }
 
 	// Helper method for toggling the side bar
@@ -224,6 +218,7 @@ public class ContentArea implements ScreenChangeListener {
 		if (sidebarVisible) toggleSidebar(); // When user selects a screen from side bar, close the side bar (if open)
 	}
 	
+	// Hides all screens by default
 	private void hideAllScreens() {
 		dashboardScreen.setVisible(false);
 		enlistmentScroll.setVisible(false);
@@ -231,6 +226,7 @@ public class ContentArea implements ScreenChangeListener {
 		msScroll.setVisible(false);
 		mitScroll.setVisible(false);
 		phdScroll.setVisible(false);
+		profileScreen.setVisible(false);
 	}
 
 	// Centralized screen switching
@@ -240,8 +236,6 @@ public class ContentArea implements ScreenChangeListener {
 		switch(screen) {
 			case "Dashboard":
 				dashboardScreen.setVisible(true);
-				enlistmentScroll.setVisible(false);
-				profileScreen.setVisible(false);
 				topBarTitle.setText("Dashboard");
 				break;
 
@@ -269,34 +263,13 @@ public class ContentArea implements ScreenChangeListener {
 				phdScroll.setVisible(true);
 				topBarTitle.setText("PhD in Computer Science Courses");
 				break;
-			
-//	            case "Course List";
-//            	dashboardScreen.setVisible(false);
-//            	enlistmentScroll.setVisible(false);
-//              profileScreen.setVisible(false);
-//                break;
 				
-//          case  "About";
-//            	dashboardScreen.setVisible(false);
-//            	enlistmentScroll.setVisible(false);
-//              profileScreen.setVisible(false);
-//				break;
-				
-//          case  "Credits";
-//            	dashboardScreen.setVisible(false);
-//            	enlistmentScroll.setVisible(false);
-//              profileScreen.setVisible(false);
-//				break;
-				
-            case "Profile":
-                dashboardScreen.setVisible(false);
-                enlistmentScroll.setVisible(false);
-                profileScreen.setVisible(true);
+			case "Profile":
+				profileScreen.setVisible(true);
 				topBarTitle.setText("Profile Page");
-                break;
+				break;
 		}
 	}
-
 
 	// Running the screen
 	public void show() {
@@ -304,14 +277,12 @@ public class ContentArea implements ScreenChangeListener {
 		root.getStyleClass().add("content-root");
 		root.getChildren().addAll(content, sidebar.getSidebar(), topBar);
 
+		// Anchor elements with correct layering
+		StackPane.setAlignment(topBar, Pos.TOP_CENTER);
+		StackPane.setAlignment(sidebar.getSidebar(), Pos.CENTER_LEFT);
 
-	    // Anchor elements
-	    StackPane.setAlignment(topBar, Pos.TOP_CENTER);
-	    StackPane.setAlignment(sidebar.getSidebar(), Pos.CENTER_LEFT);
-
-	    // Ensure correct layering
-	    topBar.toFront();
-	    sidebar.getSidebar().toFront();
+		topBar.toFront();
+		sidebar.getSidebar().toFront();
 
 		Scene scene = new Scene(root, 1200, 800);
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/contentArea.css").toExternalForm()); // Add CSS Styling

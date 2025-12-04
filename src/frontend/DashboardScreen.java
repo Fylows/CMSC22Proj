@@ -17,7 +17,7 @@ public class DashboardScreen extends StackPane {
 	public DashboardScreen(Student student) {
 		this.student = student;
 		
-		petalPane = new Pane();
+		petalPane = new Pane(); // Petal animation for DashBoard only
 		PetalAnimation.start(petalPane, 50, 0.2);
 		petalPane.setMouseTransparent(true);
 		petalPane.setPickOnBounds(false);
@@ -29,12 +29,13 @@ public class DashboardScreen extends StackPane {
 		getStyleClass().add("dashboard-root");
 
 		VBox welcomeCard = createWelcomeCard(student); // Welcome Card
-        HBox statsRow = createStatsRow(); // Stats Row
+		HBox statsRow = createStatsRow(); // Stats Row
 
-        content.getChildren().addAll(welcomeCard, statsRow);
-        getChildren().addAll(petalPane, content);
+		content.getChildren().addAll(welcomeCard, statsRow);
+		getChildren().addAll(petalPane, content);
 	}
 
+	// Welcome Box
 	private VBox createWelcomeCard(Student student) {
 		VBox card = new VBox();
 		card.getStyleClass().add("dashboard-welcome-card");
@@ -53,6 +54,7 @@ public class DashboardScreen extends StackPane {
 		return card;
 	}
 
+	// Stats Boxes
 	private HBox createStatsRow() {
 		HBox row = new HBox();
 		row.getStyleClass().add("dashboard-stats-row");
