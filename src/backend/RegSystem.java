@@ -4,6 +4,7 @@ import javafx.scene.control.Label;
 import java.time.LocalTime;
 //import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,14 +114,11 @@ public class RegSystem {
     	        .anyMatch(c -> c.getCourseCode().equals(course.getCourseCode())
     	                   && !c.getSection().equals(course.getSection()));
     	
-<<<<<<< Updated upstream
     	if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
     		System.out.println("Enrollment failed: not your degree"); 
     		return false; 
     	}
     	
-=======
->>>>>>> Stashed changes
     	if (!hasPrerequisites(student, course)) { 
     		System.out.println("Enrollment failed: prerequisites not met."); 
     		return false; 
@@ -136,20 +134,12 @@ public class RegSystem {
     		course.getEnrolledStudents().add(student); 
     		
 			if (!alreadyEnrolled) {
-<<<<<<< Updated upstream
 				// student.getEnrolledCourses().add(course);
 				off.add(course);
 			    // auto-enroll lecture for labs
 				if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
 			        //student.getEnrolledCourses().add(course.getLec());
 			        off.add(course.getLec());
-=======
-				student.getEnrolledCourses().add(course);
-			    // auto-enroll lecture for labs
-				if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
-			        student.getEnrolledCourses().add(course.getLec());
-		    		return true; 
->>>>>>> Stashed changes
 				}
 			    
 	    		return true;

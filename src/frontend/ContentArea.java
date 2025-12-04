@@ -307,13 +307,6 @@ public class ContentArea implements ScreenChangeListener {
 
 	// Running the screen
 	public void show() {
-<<<<<<< Updated upstream
-		for (OfferedCourse oc : ContentArea.getStudent().getEnrolledCourses()) {
-=======
-		for (OfferedCourse oc : this.student.getEnrolledCourses()) {
->>>>>>> Stashed changes
-			System.out.println(oc);
-		}
 		StackPane root = new StackPane();
 		root.getStyleClass().add("content-root");
 		root.getChildren().addAll(content, sidebar.getSidebar(), topBar);
