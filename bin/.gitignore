@@ -1,14 +1,3 @@
-<<<<<<< Updated upstream
-/.DS_Store
-/backend/
-/cssFiles/
-/dataset/
 /frontend/
-/main/
-/resources/
 /storage/
-/module-info.class
-=======
-/frontend/
 /backend/
->>>>>>> Stashed changes
