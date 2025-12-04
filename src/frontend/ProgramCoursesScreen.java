@@ -13,17 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgramCoursesScreen extends BorderPane {
-	private final String degree;
-	private final VBox courseListContainer;  
+	private final String degree; 
 	private final List<VBox> allCourseBoxes = new ArrayList<>();
 
-	private final ScrollPane scrollPane;
+	private VBox courseListContainer; 
+	private ScrollPane scrollPane;
 	private TextField searchField;
 
+	// Constructor
 	public ProgramCoursesScreen(String degree) {
 		this.degree = degree;
 		this.getStyleClass().add("program-courses-root");
 
+		this.setTop(createTopContainer()); // Search bar
+		this.setCenter(createCenterContainer()); // Content
+     
+		loadCourses(degree); // Load all courses for this degree
+		setupSearch(); // Enable live search
+	}
+	
+	// Constructs the top container
+	private VBox createTopContainer() {
 		// Top container for search bar
 		VBox topContainer = new VBox(10);
 		topContainer.getStyleClass().add("top-container");
@@ -33,10 +43,14 @@ public class ProgramCoursesScreen extends BorderPane {
 		searchField.setPromptText("Search courses by code or title...");
 		searchField.getStyleClass().add("search-bar");
 
-		topContainer.getChildren().addAll(searchField);
-		this.setTop(topContainer);
+		topContainer.getChildren().add(searchField);
 		BorderPane.setAlignment(topContainer, Pos.TOP_LEFT);
 
+		return topContainer;
+	}
+	
+	// Constructs the center container
+	private ScrollPane createCenterContainer() {
 		// Container for all course boxes
 		courseListContainer = new VBox(15);
 		courseListContainer.getStyleClass().add("course-list-container");
@@ -45,25 +59,23 @@ public class ProgramCoursesScreen extends BorderPane {
 		scrollPane.setFitToWidth(true);
 		scrollPane.getStyleClass().add("scroll-pane");
 
-		this.setCenter(scrollPane);
+		return scrollPane;
+	}
 
-		loadCourses(degree); // Load all courses per degree
-
+	// Search Functionality
+	private void setupSearch() {
 		// Apply live searching
 		searchField.textProperty().addListener((obs, oldVal, newVal) -> {
 			String filter = (newVal == null) ? "" : newVal.toLowerCase().trim();
 			courseListContainer.getChildren().clear();
 
 			boolean anyMatch = false; // Track if we added any course
-
+			
 			for (VBox box : allCourseBoxes) {
 				Label codeLabel = (Label) box.getChildren().get(0); // course code
 				Label titleLabel = (Label) box.getChildren().get(1); // course title
 
-				String code = codeLabel.getText().toLowerCase();
-				String title = titleLabel.getText().toLowerCase();
-
-				if (code.contains(filter) || title.contains(filter)) {
+				if (codeLabel.getText().toLowerCase().contains(filter) || titleLabel.getText().toLowerCase().contains(filter)) {
 					courseListContainer.getChildren().add(box);
 					anyMatch = true;
 				}
@@ -72,7 +84,7 @@ public class ProgramCoursesScreen extends BorderPane {
 			// Show "no results" message if nothing matched
 			if (!anyMatch) {
 				Label noResults = new Label("No courses found :(");
-				noResults.getStyleClass().add("no-results-label"); // Make sure you have this in your CSS
+				noResults.getStyleClass().add("no-results-label");
 
 				StackPane placeholder = new StackPane(noResults);
 				placeholder.setPrefHeight(scrollPane.getViewportBounds().getHeight());

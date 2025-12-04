@@ -1,0 +1,115 @@
+/* Fonts */
+@font-face {
+	font-family: "Poppins";
+	src: url("PoppinsBold.ttf");
+}
+
+@font-face {
+	font-family: "Inter";
+	src: url("Inter.ttf");
+}
+
+@font-face {
+	font-family: "Inter Italic";
+	src: url("InterItalic.ttf");
+}
+
+/* Root background */
+.credits-root {
+	-fx-background-color: linear-gradient(to bottom, #ffeef3, #ffdce7);
+}
+
+.credits-padding {
+	-fx-padding: 80 40 40 40; 
+}
+
+.credits-content {
+	-fx-alignment: top-center;
+	-fx-spacing: 15;
+	-fx-padding: 0 0 30 0;
+}
+
+/* Title */
+.credits-title {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 36px;
+	-fx-font-weight: 700;
+	-fx-text-fill: #d14d79;
+	-fx-padding: 10 0 20 0;
+}
+
+/* Grid Container */
+.credits-grid-wrapper {
+	-fx-alignment: center;
+	-fx-spacing: 10;
+}
+
+.credits-grid {
+	-fx-hgap: 30;
+	-fx-vgap: 30;
+	-fx-alignment: center;
+}
+
+/* Bottom Area */
+.credits-bottom {
+	-fx-alignment: center;
+}
+
+/* Developer Cards */
+.dev-card {
+	-fx-background-color: #FAFAFA;
+	-fx-padding: 15 20 15 20;
+	-fx-background-radius: 20;
+	-fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.12), 12, 0, 0, 6);
+	-fx-min-width: 480px;
+	-fx-min-height: 190px;
+	-fx-spacing: 20;
+	-fx-alignment: center-left;
+}
+   
+.dev-card:hover {
+	-fx-background-color: #f3f6ff;
+	-fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.12), 12, 0, 0, 6);
+	-fx-scale-x: 1.02;
+	-fx-scale-y: 1.02;
+}
+
+.dev-image-wrapper {
+	-fx-pref-width: 150;
+	-fx-pref-height: 150;
+}
+
+/* Developer Details */
+.dev-name {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 20px;
+	-fx-font-weight: 700;
+	-fx-text-fill: #b83e63;
+}
+
+.dev-details {
+	-fx-font-family: "Inter";
+	-fx-font-size: 14px;
+	-fx-text-fill: #444;
+}
+
+.dev-school {
+	-fx-font-family: "Inter Italic";
+	-fx-font-size: 12px;
+	-fx-text-fill: #666;
+}
+
+/* References */
+.references-box {
+	-fx-background-color: #ffe6ef;
+	-fx-background-radius: 15;
+	-fx-padding: 10 0 10 10;
+	-fx-max-width: 780px;
+	-fx-spacing: 10;
+}
+
+.references-list {
+	-fx-font-family: "Inter";
+	-fx-font-size: 14px;
+	-fx-text-fill: #444;
+}

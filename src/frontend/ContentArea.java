@@ -44,6 +44,7 @@ public class ContentArea implements ScreenChangeListener {
 	
 	private final AboutScreen aboutScreen;
 	private final CreditsScreen creditsScreen;
+	private final ScrollPane creditsScroll;
 	
 	private final ProfilePageScreen profileScreen;
 	private final HBox topBar;
@@ -110,6 +111,10 @@ public class ContentArea implements ScreenChangeListener {
 		
 		aboutScreen = new AboutScreen();
 		creditsScreen = new CreditsScreen();
+		creditsScroll = new ScrollPane(creditsScreen);
+		creditsScroll.setFitToWidth(true);
+		creditsScroll.setFitToHeight(true);
+		creditsScroll.getStyleClass().add("transparent-scroll");
 		
 		profileScreen = new ProfilePageScreen(student);
 
@@ -122,7 +127,7 @@ public class ContentArea implements ScreenChangeListener {
 			mitScroll, 
 			phdScroll, 
 			aboutScreen, 
-			creditsScreen, 
+			creditsScroll, 
 			profileScreen
 		);
 		
@@ -133,7 +138,7 @@ public class ContentArea implements ScreenChangeListener {
 		StackPane.setAlignment(mitScroll, Pos.CENTER);
 		StackPane.setAlignment(phdScroll, Pos.CENTER);
 		StackPane.setAlignment(aboutScreen, Pos.CENTER);
-		StackPane.setAlignment(creditsScreen, Pos.CENTER);
+		StackPane.setAlignment(creditsScroll, Pos.CENTER);
 		StackPane.setAlignment(profileScreen, Pos.CENTER);
 
 		// Ensures scrolling works properly
@@ -245,7 +250,7 @@ public class ContentArea implements ScreenChangeListener {
 		mitScroll.setVisible(false);
 		phdScroll.setVisible(false);
 		aboutScreen.setVisible(false);
-		creditsScreen.setVisible(false);
+		creditsScroll.setVisible(false);
 		profileScreen.setVisible(false);
 	}
 
@@ -294,8 +299,8 @@ public class ContentArea implements ScreenChangeListener {
 				break;
 
 			case "Credits":
-				creditsScreen.setVisible(true);
-				topBarTitle.setText("Credits");
+				creditsScroll.setVisible(true);
+				topBarTitle.setText("Credits & Acknowledgements");
 				break;
 
 			case "Profile":
@@ -326,6 +331,7 @@ public class ContentArea implements ScreenChangeListener {
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/sidebar.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/dashboard.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/programCourses.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/credits.css").toExternalForm());
 
 		// Close sidebar when clicking outside
 		scene.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
