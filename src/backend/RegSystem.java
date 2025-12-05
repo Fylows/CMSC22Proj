@@ -120,10 +120,10 @@ public class RegSystem {
         else if (hasTimeConflict(student, course)) { 
             return 4; // Return 4 if current attempt has a time conflict
         } 
-        
-        else if (hasFullTimeConflict(student, course)) { 
-            return 4; 
-        } 
+//        
+//        else if (hasFullTimeConflict(student, course)) { 
+//            return 4; 
+//        } 
 
         off.add(course);
 
@@ -184,28 +184,31 @@ public class RegSystem {
     // Compares two courses and checks if they have overlapping time frames
     private static boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
     	for (OfferedCourse enrolledCourse : student.getEnrolledCourses()) {
-    	if (!enrolledCourse.getTerm().equalsIgnoreCase(courseToEnroll.getTerm())) continue;
+    		if (!enrolledCourse.getTerm().equalsIgnoreCase(courseToEnroll.getTerm())) continue;
 
     	    if (enrolledCourse.getDay() == null || courseToEnroll.getDay() == null) continue;
 
     	    String[] days1 = enrolledCourse.getDay().split(",");
     	    String[] days2 = courseToEnroll.getDay().split(",");
-
+    	    
     	    boolean sharesDay = false;
+    	    
     	    for (String d1 : days1) {
     	        for (String d2 : days2) {
-    	            String a = d1.trim().toLowerCase();
-    	            String b = d2.trim().toLowerCase();
+    	            List<String> daysA = expandDays(d1.trim().toLowerCase());
+    	            List<String> daysB = expandDays(d2.trim().toLowerCase());
+    	            
+    	            boolean overlapDay = daysA.stream().anyMatch(daysB::contains);
 
-    	            if (a.equals(b)) {
+    	            if (overlapDay) {
     	                sharesDay = true;
     	                break;
     	            }
-
-    	            if ((a.length() > 1 && a.contains(b)) || (b.length() > 1 && b.contains(a))) {
-    	                sharesDay = true;
-    	                break;
-    	            }
+    	            
+//    	            if ((a.length() > 1 && a.contains(b)) || (b.length() > 1 && b.contains(a))) {
+//    	                sharesDay = true;
+//    	                break;
+//    	            }
     	        }
     	        if (sharesDay) break;
     	    }
@@ -226,46 +229,40 @@ public class RegSystem {
     	return false;
     }
     
-    // Method for checking time conflicts for courses with two parts (lab/lecture)
-    private static boolean hasFullTimeConflict(Student student, OfferedCourse courseToEnroll) {
-        ArrayList<OfferedCourse> allEnrolled = new ArrayList<>(student.getEnrolledCourses());
-
-        for (OfferedCourse oc : student.getEnrolledCourses()) {
-            if (oc.getLec() != null && !allEnrolled.contains(oc.getLec()))
-                allEnrolled.add(oc.getLec());
-        }
-
-        List<String> newDays = expandDays(courseToEnroll.getDay());
-
-        for (OfferedCourse enrolled : allEnrolled) {
-            List<String> enrolledDays = expandDays(enrolled.getDay());
-
-            boolean overlapDay = newDays.stream().anyMatch(enrolledDays::contains);
-            if (!overlapDay) continue;
-
-            if (enrolled.conflictsWith(courseToEnroll)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // Helper method for turning day codes into their full days
-    private static List<String> expandDays(String dayCode) {
-        if (dayCode == null) return List.of();
-        dayCode = dayCode.trim().toLowerCase();
-        switch(dayCode) {
+    private static List<String> expandDays(String code) {
+        if (code == null) return List.of();
+
+        code = code.trim().toLowerCase();
+
+        switch (code) {
+            case "m":
             case "mon": return List.of("mon");
+
+            case "t":
+            case "tu":
+            case "tue":
             case "tues": return List.of("tues");
+
+            case "w":
             case "wed": return List.of("wed");
+
+            case "th":
+            case "thu":
+            case "thur":
             case "thurs": return List.of("thurs");
+
+            case "f":
             case "fri": return List.of("fri");
+
             case "mw": return List.of("mon", "wed");
             case "tth": return List.of("tues", "thurs");
             case "wf": return List.of("wed", "fri");
-            default: return List.of(dayCode);
         }
+
+        return List.of(code);
     }
+
     
     @SuppressWarnings("exports")
 	public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {

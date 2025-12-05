@@ -96,7 +96,7 @@ public class EnlistmentScreen extends VBox {
 		
 		int totalUnits = 0;
 		for (OfferedCourse oc: student.getEnrolledCourses()) {
-			RegSystem.fillTime(calendar, oc);
+			if (!oc.getTimes().equalsIgnoreCase("tba")) RegSystem.fillTime(calendar, oc);
 			if (oc.getLec() == null) {
 				totalUnits += oc.getCourse().getUnits();
 			}
@@ -269,9 +269,10 @@ public class EnlistmentScreen extends VBox {
 	            addBtn.setOnAction(e -> {
 	            	int state = RegSystem.enrollStudentInOfferedCourse(student, course, studentCourses);
 	                if (state == 0) {
-	                    RegSystem.fillTime(calendar, course);
+	                	if (!course.getTimes().equalsIgnoreCase("TBA")) RegSystem.fillTime(calendar, course);
+;
 	                    if (course.getLec() != null) {
-	                        RegSystem.fillTime(calendar, course.getLec());
+	                    	if (!course.getLec().getTimes().equalsIgnoreCase("TBA")) RegSystem.fillTime(calendar, course.getLec());
 	                    }
 	                    showToast(root, "Course list updated!", true);
 	                }
@@ -363,71 +364,83 @@ public class EnlistmentScreen extends VBox {
 	        }
 
 	        for (OfferedCourse course : studentCourses) {
-	            // Skip labs, only process main lectures
-	            if (course.getLec() == null) continue;
 
-	            // Lecture details pane
+	            // Skip LAB objects (they will be displayed under their lecture)
+	            boolean isLab = studentCourses.stream()
+	                    .anyMatch(c -> c.getLec() == course);
+
+	            if (isLab) continue;
+
+	            // --- Lecture Pane ---
 	            VBox lectureDetails = new VBox(5,
-            		new Label("Course Code: " + course.getLec().getCourseCode()),
-                    new Label("Section: " + course.getLec().getSection()),
-                    new Label("Schedule: " + course.getLec().getTimes() + " | " + course.getLec().getDays()),
-                    new Label("Room: " + course.getLec().getRoom())
+	                    new Label("Course Code: " + course.getCourseCode()),
+	                    new Label("Section: " + course.getSection()),
+	                    new Label("Schedule: " + course.getTimes() + " | " + course.getDays()),
+	                    new Label("Room: " + course.getRoom())
 	            );
 	            TitledPane lecturePane = new TitledPane("Lecture", lectureDetails);
 	            lecturePane.setExpanded(true);
 
-	            // Lab details pane
+	            // --- Lab Pane ---
 	            VBox labDetails;
-	            if (studentCourses.contains(course.getLec())) {
-	                labDetails = new VBox(5,
-	                    new Label("Course Code: " + course.getCourseCode()),
-	                    new Label("Section: " + course.getSection()),
-	                    new Label("Schedule: " + course.getTimes() + " | " + course.getDays()),
-	                    new Label("Room: " + course.getLec().getRoom())
+	            TitledPane labPane;
 
-	                );
-	            } else {
+	            if (course.getLec() == null) {
+	                // LEC ONLY COURSE
 	                labDetails = new VBox(5, new Label("No associated lab"));
+	            } else {
+	                // COURSE WITH LAB
+	                labDetails = new VBox(5,
+	                        new Label("Course Code: " + course.getLec().getCourseCode()),
+	                        new Label("Section: " + course.getLec().getSection()),
+	                        new Label("Schedule: " + course.getLec().getTimes() + " | " + course.getLec().getDays()),
+	                        new Label("Room: " + course.getLec().getRoom())
+	                );
 	            }
-	            TitledPane labPane = new TitledPane("Lab", labDetails);
+	            labPane = new TitledPane("Lab", labDetails);
 	            labPane.setExpanded(true);
 
-	            // Action buttons
+
+	            // --- Action Buttons ---
 	            Button deleteBtn = new Button("Delete");
 	            deleteBtn.getStyleClass().add("delete-btn");
+
 	            deleteBtn.setOnAction(e -> {
-	                RegSystem.resetTime(calendar, course);
-                    studentCourses.remove(course);
-                    course.getEnrolledStudents().remove(student);
-	                //RegSystem.dropStudentFromOfferedCourse(student, course);
+	                // Remove lecture
+	            	 if (!course.getTimes().equalsIgnoreCase("tba")) RegSystem.resetTime(calendar, course);
+	                course.getEnrolledStudents().remove(student);
+	                studentCourses.remove(course);
 
+	                // If has lab, remove lab too
 	                if (course.getLec() != null) {
-	                    studentCourses.remove(course.getLec());
-	                    course.getLec().getEnrolledStudents().remove(student);
-	                    RegSystem.resetTime(calendar, course.getLec());
-	                    //RegSystem.dropStudentFromOfferedCourse(student, course.getLec());
+	                    OfferedCourse lab = course.getLec();
+	                    if (!course.getLec().getTimes().equalsIgnoreCase("tba")) RegSystem.resetTime(calendar, lab);
+	                    lab.getEnrolledStudents().remove(student);
+	                    studentCourses.remove(lab);
 	                }
+
 	                RegSystem.getStudentManager().updateStudent(student);
-
-                    showToast(root, "Course list updated!", true);
-
+	                showToast(root, "Course list updated!", true);
 
 	                refreshGrid[0].run();
 	            });
 
 	            Button enlistBtn = new Button("Enlist");
 	            enlistBtn.getStyleClass().add("enlist-btn");
-	            enlistBtn.setDisable(true); // You can enable logic later
+	            enlistBtn.setDisable(true);
 
 	            VBox actionBox = new VBox(10, deleteBtn, enlistBtn);
 	            actionBox.setAlignment(Pos.CENTER_LEFT);
 
-	            // Wrap everything in a grid-like HBox
+
+	            // --- Final Row ---
 	            HBox row = new HBox(20, lecturePane, labPane, actionBox);
 	            row.setAlignment(Pos.CENTER_LEFT);
+
 	            courseContainer.getChildren().add(row);
 	        }
 	    };
+
 
 	    // Listener to update whenever studentCourses changes
 	    studentCourses.addListener((ListChangeListener<OfferedCourse>) change -> refreshGrid[0].run());
