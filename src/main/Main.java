@@ -10,7 +10,6 @@
 package main;
 
 import backend.CourseManager;
-import backend.OfferedCourse;
 import backend.RegSystem;
 import frontend.LoadingScreen;
 import javafx.application.Application;
