@@ -333,6 +333,7 @@ public class ContentArea implements ScreenChangeListener {
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/contentArea.css").toExternalForm()); // Add CSS Styling
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/sidebar.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/dashboard.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/enlistment.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/programCourses.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/credits.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/about.css").toExternalForm());

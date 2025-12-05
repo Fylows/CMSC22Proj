@@ -14,8 +14,6 @@ import backend.OfferedCourse;
 import backend.RegSystem;
 import backend.Student;
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
@@ -39,16 +37,19 @@ public class EnlistmentScreen extends VBox {
 	private ObservableList<OfferedCourse> studentCourses = FXCollections.observableList(student.getEnrolledCourses());
 	 
 	public EnlistmentScreen(StackPane parentStack) {
-		root = parentStack;
+		this.root = parentStack;
+		
+		this.getStyleClass().add("enlistment-root");
 		setSpacing(20);
-		setPadding(new Insets(60, 20, 20, 20)); 
-		setStyle("-fx-background-color: white;");
+		
         // ---------- CALENDAR AND ENLISTMENTS TAB ----------
 		
-		VBox calendarContainer = new VBox();
-
+		VBox calendarContainer = new VBox(10);
+		calendarContainer.getStyleClass().add("schedule-grid");
 		calendarContainer.setPadding(new Insets(20));
+		
 		Label header1 = new Label("Schedule");
+		header1.getStyleClass().add("section-title");
 
 		// Column headers (Monday to Saturday)
 		String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
@@ -90,9 +91,6 @@ public class EnlistmentScreen extends VBox {
 		    }
 		}
 
-		// Optional: set grid gaps
-//		calendar.setHgap(1);
-//		calendar.setVgap(1);
 		calendar.setAlignment(Pos.CENTER_LEFT);
 		calendarContainer.getChildren().addAll(header1, calendar);
 		calendarContainer.setAlignment(Pos.CENTER_LEFT);
@@ -107,13 +105,15 @@ public class EnlistmentScreen extends VBox {
 		
 		
 		VBox enlistments = new VBox();
+		enlistments.getStyleClass().add("active-enlistments");
 		enlistments.setPadding(new Insets(20));
 
 		Label header2 = new Label("Active Enlistments");
+		header2.getStyleClass().add("section-title");
 		enlistments.getChildren().add(header2);
 		
 		Label units = new Label("Total units: " + totalUnits);
-				
+		units.setStyle("-fx-font-family: \"Inter\"; -fx-font-size: 14px; -fx-text-fill: #333;");
 		
 		VBox activeEnlistments = createActiveEnlistments();
 		studentCourses.addListener((ListChangeListener<OfferedCourse>) change -> {
@@ -137,6 +137,7 @@ public class EnlistmentScreen extends VBox {
 		HBox enlistmentDetails = new HBox(20);
 		for (int i = 0; i < 3; i++) {
 		    Rectangle rect = new Rectangle(100, 60, colors[i]);
+		    rect.getStyleClass().add("legend-rect");
 
 		    // Create label
 		    Label label = new Label(states[i]);
@@ -159,10 +160,11 @@ public class EnlistmentScreen extends VBox {
         // ---------- COURSE SEARCH ----------
         VBox courseSearch = createCourseSearchGrid(offered);
 		VBox courseSearchContainer = new VBox();
+		courseSearchContainer.getStyleClass().add("search-section");
 
 		Label header3 = new Label("Search Class");
 		courseSearchContainer.getChildren().addAll(header3, courseSearch);
-		
+		header3.getStyleClass().add("section-title");
 		
 		calendarAndCourses.setAlignment(Pos.CENTER);
 		courseSearchContainer.setAlignment(Pos.CENTER);
@@ -183,6 +185,7 @@ public class EnlistmentScreen extends VBox {
 	    filterRow.setAlignment(Pos.CENTER);
 
 	    TextField searchField = new TextField();
+	    searchField.getStyleClass().add("search-field");
 	    searchField.setPromptText("Search by course name or section");
 
 	    ComboBox<Integer> itemsPerPageDropdown = new ComboBox<>();
@@ -199,6 +202,8 @@ public class EnlistmentScreen extends VBox {
 	    // --- PAGINATION ---
 	    Button prevBtn = new Button("Previous");
 	    Button nextBtn = new Button("Next");
+	    prevBtn.getStyleClass().add("pagination-button");
+        nextBtn.getStyleClass().add("pagination-button");
 	    Label pageLabel = new Label("Page 1");
 	    HBox pagination = new HBox(10, prevBtn, pageLabel, nextBtn);
 	    pagination.setAlignment(Pos.CENTER);
@@ -244,6 +249,7 @@ public class EnlistmentScreen extends VBox {
 
 	            // Add button
 	            Button addBtn = new Button("Add");
+	            addBtn.getStyleClass().add("add-btn");
 	            addBtn.setOnAction(e -> {
 	            	int state = RegSystem.enrollStudentInOfferedCourse(student, course, studentCourses);
 	                if (state == 0) {
@@ -365,6 +371,7 @@ public class EnlistmentScreen extends VBox {
 
 	            // Action buttons
 	            Button deleteBtn = new Button("Delete");
+	            deleteBtn.getStyleClass().add("delete-btn");
 	            deleteBtn.setOnAction(e -> {
 	                RegSystem.resetTime(calendar, course);
                     studentCourses.remove(course);
