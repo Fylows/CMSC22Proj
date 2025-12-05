@@ -245,7 +245,7 @@ public class RegSystem {
     @SuppressWarnings("exports")
 	public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
-        int endRow = timeMap.get(courseToEnroll.getEndTime());
+        int endRow = timeMap.get(courseToEnroll.getEndTime()) + 1;
 
         List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
         if (targetCols == null) return;
@@ -296,7 +296,7 @@ public class RegSystem {
     @SuppressWarnings("exports")
 	public static void resetTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
-        int endRow = timeMap.get(courseToEnroll.getEndTime());
+        int endRow = timeMap.get(courseToEnroll.getEndTime()) + 1;
         List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
         if (targetCols == null) return;
 
