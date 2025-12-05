@@ -71,7 +71,7 @@ public class DashboardScreen extends StackPane {
 		int requiredUnits = CourseManager.getTotalRequiredUnits(student.getDegree());
 
 		HBox progressCard = createProgressCard(student);
-		HBox takenCard = createStatCard(completedUnits, "Units Taken (out of " + requiredUnits + ")!");
+		HBox takenCard = createStatCard(completedUnits, "Units Taken (out of " + requiredUnits + ")");
 		HBox allowableCard = createAllowableCard(21, "Allowable Units");
 
 		row.getChildren().addAll(progressCard, takenCard, allowableCard);

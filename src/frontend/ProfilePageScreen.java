@@ -9,21 +9,35 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
-public class ProfilePageScreen extends HBox{
+public class ProfilePageScreen extends StackPane{
 	private final Student student;
+	private final Pane petalPane;
+	private final HBox content;
 	
 	public ProfilePageScreen(Student student) {
 		this.student = student;
-		
-        setSpacing(20);
-        setPadding(new Insets(60, 20, 20, 20));
-        setStyle("-fx-background-color: white;");
         
+		petalPane = new Pane(); // Petal animation for DashBoard only
+		PetalAnimation.start(petalPane, 50, 0.2);
+		petalPane.setMouseTransparent(true);
+		petalPane.setPickOnBounds(false);
+        
+		petalPane.prefWidthProperty().bind(widthProperty());
+		petalPane.prefHeightProperty().bind(heightProperty());
+		
+		content = new HBox();
+        content.setSpacing(20);
+        setPadding(new Insets(80, 20, 20, 20));
+//      setStyle("-fx-background-color: white;");
         
         VBox profileCard = createProfileCard(student);
         VBox profileInfo = createProfileInformation(student);
         
-		getChildren().addAll(profileCard, profileInfo);
+        HBox.setHgrow(profileCard, Priority.ALWAYS); 
+        HBox.setHgrow(profileInfo, Priority.ALWAYS);
+        
+        content.getChildren().addAll(profileCard, profileInfo);
+		getChildren().addAll(petalPane, content);
 	}
 	
 	/***** Left Panel: PROFILE CARD  *****/	
@@ -33,7 +47,7 @@ public class ProfilePageScreen extends HBox{
         profile.setPadding(new Insets(20));
         profile.setSpacing(20);
         profile.setAlignment(Pos.TOP_CENTER);
-        profile.setPrefWidth(300);
+//        profile.setPrefWidth(300);
         profile.setStyle("-fx-background-color: #ffe5ec; -fx-background-radius: 25;");
 
         // PFP 
@@ -110,6 +124,7 @@ public class ProfilePageScreen extends HBox{
         field.setPadding(new Insets(5, 15, 5, 15));
         field.setStyle("-fx-background-color: white; -fx-background-radius: 20; "
                 + "-fx-border-color: #f7a8c9; -fx-border-radius: 20;");
+//        HBox.setHgrow(field, Priority.ALWAYS);
 
         VBox box = new VBox(5, label, field);
         return box;
@@ -124,6 +139,7 @@ public class ProfilePageScreen extends HBox{
         field.setPadding(new Insets(5, 15, 5, 15));
         field.setStyle("-fx-background-color: white; -fx-background-radius: 20; "
                 + "-fx-border-color: #f7a8c9; -fx-border-radius: 20;");
+//        HBox.setHgrow(field, Priority.ALWAYS);
 
         VBox box = new VBox(5, label, field);
         return box;
