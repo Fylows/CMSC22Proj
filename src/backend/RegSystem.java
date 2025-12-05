@@ -120,6 +120,10 @@ public class RegSystem {
         else if (hasTimeConflict(student, course)) { 
             return 4; // Return 4 if current attempt has a time conflict
         } 
+        
+        else if (hasFullTimeConflict(student, course)) { 
+            return 4; 
+        } 
 
         off.add(course);
 
@@ -223,7 +227,47 @@ public class RegSystem {
 
     	}
     
-    // Fills the table cells with the supposed schedule for the course
+    //Method for checking time conflicts for courses with two parts (lab/lecture)
+    private static boolean hasFullTimeConflict(Student student, OfferedCourse courseToEnroll) {
+        ArrayList<OfferedCourse> allEnrolled = new ArrayList<>(student.getEnrolledCourses());
+
+        for (OfferedCourse oc : student.getEnrolledCourses()) {
+            if (oc.getLec() != null && !allEnrolled.contains(oc.getLec()))
+                allEnrolled.add(oc.getLec());
+        }
+
+        List<String> newDays = expandDays(courseToEnroll.getDay());
+
+        for (OfferedCourse enrolled : allEnrolled) {
+            List<String> enrolledDays = expandDays(enrolled.getDay());
+
+            boolean overlapDay = newDays.stream().anyMatch(enrolledDays::contains);
+            if (!overlapDay) continue;
+
+            if (enrolled.conflictsWith(courseToEnroll)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Helper method for turning day codes into their full days
+    private static List<String> expandDays(String dayCode) {
+        if (dayCode == null) return List.of();
+        dayCode = dayCode.trim().toLowerCase();
+        switch(dayCode) {
+            case "mon": return List.of("mon");
+            case "tues": return List.of("tues");
+            case "wed": return List.of("wed");
+            case "thurs": return List.of("thurs");
+            case "fri": return List.of("fri");
+            case "mw": return List.of("mon", "wed");
+            case "tth": return List.of("tues", "thurs");
+            case "wf": return List.of("wed", "fri");
+            default: return List.of(dayCode);
+        }
+    }
+    
     @SuppressWarnings("exports")
 	public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
