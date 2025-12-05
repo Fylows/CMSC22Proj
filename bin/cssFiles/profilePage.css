@@ -1,0 +1,98 @@
+/* Fonts */
+@font-face {
+	font-family: "Poppins";
+	src: url("PoppinsBold.ttf");
+}
+
+@font-face {
+	font-family: "Inter";
+	src: url("Inter.ttf");
+}
+
+@font-face {
+	font-family: "Inter Italic";
+	src: url("InterItalic.ttf");
+}
+
+/* Root container */
+.profile-root {
+	-fx-spacing: 20;
+	-fx-padding: 80 20 20 20; 
+}
+
+/* Left Panel */
+.profile-left-panel {
+	-fx-background-color: ffe5ec;
+	-fx-background-radius: 25;
+	-fx-padding: 20;
+	-fx-spacing: 20;
+	-fx-alignment:top-center; 
+}
+
+.profile-infoBox {
+	-fx-background-color: f9a8c4;
+	-fx-background-radius: 10;
+	-fx-alignment:center-left;
+	-fx-padding: 7;
+}
+
+.profile-items {
+	-fx-background-color: ffe5ec;
+	-fx-background-radius: 10;
+	-fx-alignment:center-left;
+	-fx-padding: 7; 
+}
+
+.profile-items:hover {
+	-fx-background-color: f9a8c4;
+	-fx-background-radius: 10;
+	-fx-alignment:center-left;
+	-fx-padding: 7; 
+}
+
+/* Right Panel */
+.profile-right-panel {
+	-fx-background-color: ffe5ec;
+	-fx-background-radius: 25;
+	-fx-padding: 35;
+	-fx-spacing: 40;
+	-fx-alignment:top-center; 
+}
+
+.profile-field {
+	-fx-padding: 5 15 5 15;
+	-fx-spacing: 20;
+	
+	-fx-background-color: white;
+	-fx-background-radius: 20;
+	
+	-fx-border-color: #f7a8c9;
+	-fx-border-radius: 20;
+	
+	-fx-font-family: "Inter";
+	-fx-font-size: 15px;
+}
+
+
+/* Fonts */
+.profile-header {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 30px;
+}
+
+.profile-degree {
+	-fx-font-family: "Inter";
+	-fx-font-size: 17px;
+	-fx-font-style: italic;
+}
+
+.profile-field-label {
+	-fx-font-family: "Inter";
+	-fx-font-size: 15px;
+	-fx-font-style: bold;
+}
+
+.profile-menu {
+	-fx-font-family: "Poppins";
+	-fx-font-size: 15px;
+}

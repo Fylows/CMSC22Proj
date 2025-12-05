@@ -285,7 +285,8 @@ public class EnlistmentScreen extends VBox {
 	                		case (2) : message = course.getCourseCode() + " is a " + course.getCourse().getType() + " course."; break;
 	                		case (3) : message = "Prerequisites not met."; break;
 	                		case (4) : message = "Course time conflicts"; break;
-	                	}
+	                		case (5) : message = "You have already taken this course"; break;
+ 	                	}
 	                	System.out.println(state);
 	                	showToast(root, message , false);
 	                }

@@ -337,7 +337,8 @@ public class ContentArea implements ScreenChangeListener {
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/programCourses.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/credits.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/cssFiles/about.css").toExternalForm());
-
+		scene.getStylesheets().add(getClass().getResource("/cssFiles/profilePage.css").toExternalForm());
+		
 		// Close sidebar when clicking outside
 		scene.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
 			if (!sidebarVisible) return;
