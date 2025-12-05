@@ -1,19 +1,18 @@
 package frontend;
 
 import backend.Student;
-import javafx.geometry.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 
 public class ProfilePageScreen extends StackPane{
 	private final Student student;
 	private final Pane petalPane;
 	private final HBox content;
 	
+	// Constructor
 	public ProfilePageScreen(Student student) {
 		this.student = student;
         
@@ -38,7 +37,7 @@ public class ProfilePageScreen extends StackPane{
 		getChildren().addAll(petalPane, content);
 	}
 	
-	/***** Left Panel: PROFILE CARD  *****/	
+	// Constructs a Profile Card on the left side
     private VBox createProfileCard(Student student) {
 
         VBox profile = new VBox();
@@ -66,7 +65,7 @@ public class ProfilePageScreen extends StackPane{
         return profile;
     }
 	
-	/***** Right Panel: PROFILE INFORMATION *****/
+	// Constructs the Profile Information on the right side
 	private VBox createProfileInformation(Student student) {
 		 VBox profileInfo = new VBox(30);
         profileInfo.getStyleClass().add("profile-right-panel");
@@ -93,6 +92,7 @@ public class ProfilePageScreen extends StackPane{
         return profileInfo;
 	}	
 	
+	// Creates the short field rows
     private VBox createFieldRow(String labelText, String value) { // Short field rows
         Label label = new Label(labelText);
         label.getStyleClass().add("profile-field-label");
@@ -106,6 +106,7 @@ public class ProfilePageScreen extends StackPane{
         return box;
     }
     
+    // Creates the long field rows
     private VBox createFieldRowWide(String labelText, String value) { // Long field rows
         Label label = new Label(labelText);
         label.getStyleClass().add("profile-field-label");
@@ -149,11 +150,8 @@ public class ProfilePageScreen extends StackPane{
         return box;
     }
     
-    
-
     // Getters
 	public Student getStudent() {
 		return student;
 	}
-	
 }

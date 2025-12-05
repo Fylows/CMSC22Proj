@@ -81,15 +81,15 @@
 }
 
 .profile-degree {
-	-fx-font-family: "Inter";
-	-fx-font-size: 17px;
+	-fx-font-family: "Poppins";
+	-fx-font-size: 18px;
 	-fx-font-style: italic;
 }
 
 .profile-field-label {
 	-fx-font-family: "Inter";
 	-fx-font-size: 15px;
-	-fx-font-style: bold;
+	-fx-font-weight: bold;
 }
 
 .profile-menu {

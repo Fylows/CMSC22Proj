@@ -7,13 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * An Object to store and manage the different Courses
- * 
- * @author Ljiel Saplan
- * @since 1.0
- */
-
 public class CourseManager {
 	// Enum to get the different degrees
 	public enum Degree {

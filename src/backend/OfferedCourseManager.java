@@ -9,11 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * OffereCourseManager
- * 
- * A class for managing all offered courses
- */
 public class OfferedCourseManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -105,7 +100,6 @@ public class OfferedCourseManager implements Serializable {
 
 	    return list;
 	}
-
 	
 	// Persistence Functions (saving/loading)
 	// Saves the entire OfferedCourseManager object to a file

@@ -37,8 +37,6 @@ public class OfferedCourse implements Serializable {
     public static OfferedCourse getLastLec() { return lastLec; }
     public ArrayList<Student> getEnrolledStudents() { return enrolledStudents; }
 
-
-	
     public LocalTime getStartTime() {
         try {
             String start = times.split("-")[0].trim();

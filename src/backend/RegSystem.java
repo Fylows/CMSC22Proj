@@ -30,13 +30,13 @@ public class RegSystem {
         	Map.entry("tth", List.of(2,4)), Map.entry("wf", List.of(3,5))
 	);
     
-    //Constructor
+    // Constructor
     public RegSystem() {
     	RegSystem.studentManager = StudentManager.load();
     	RegSystem.courseManager = OfferedCourseManager.load();
         OfferedCourseManager.save(courseManager);
         
-        // initialize timeMap
+        // Initialize timeMap
         int row = 1;
         for (int hour = 7; hour <= 19; hour++) {
             timeMap.put(LocalTime.of(hour, 0), row++);
@@ -45,16 +45,13 @@ public class RegSystem {
         
     }
 
-    //Adds new students to system
-    //Saves the updated student list
+    // Adds new students to system and saves the updated student list
     public void addStudent(Student s) {
         studentManager.getStudents().add(s);
         studentManager.save();
     }
 
-    // Deletes students from every course they enrolled in
-    // Deletes students from the entire system
-    // Saves the updated list
+    // Deletes students from every course they enrolled in and from the entire system then saves the updated list
     public void deleteStudent(String studentEmail) {
         Student s = getStudent(studentEmail);
         if (s != null) {
@@ -76,7 +73,6 @@ public class RegSystem {
         return studentManager.getStudents();
     }
 
-    
     // Get all currently offered courses in the system
     public static ArrayList<OfferedCourse> getAllCourses() {
         return OfferedCourseManager.getOfferedCourses();
@@ -94,30 +90,15 @@ public class RegSystem {
         }
         return null;
     }
-    /** enrollStudentInOfferedCourse
-     * 
-     * enrolls a student in their chosen course by going through multiple checks, namely:
-     * is student enrolled, is the course in their degree, do they have the prerequisites, is there a time conflict
-     * 
-     * @param student, the student to enroll in the course
-     * @param course, the course to be enrolled in
-     * @param off, observable list of student's courses
-     * @return integers corresponding to the type of error
-     * -1 = null error
-     * 0 = successful 
-     * 1 = already have the course
-     * 2 = not their degree
-     * 3 = prerequisites not met
-     * 4 = has a time conflict
-     * 5 = course has already been completed
-     */
+
+    // Enrolls a student in their chosen course by going through multiple checks
     public static int enrollStudentInOfferedCourse(Student student, OfferedCourse course, ObservableList<OfferedCourse> off) { 
         if (student == null || course == null) return -1; 
 
         boolean alreadyCompleted = student.getCompletedCourses().stream()
                 .anyMatch(c -> c.getCourseCode().equalsIgnoreCase(course.getCourseCode()));
         if (alreadyCompleted) {
-            return 5;
+            return 5; // Return 5 if course has already been completed
         }
 
         boolean alreadyEnrolled = student.getEnrolledCourses().stream()
@@ -125,19 +106,19 @@ public class RegSystem {
                            && !c.getSection().equals(course.getSection()));
 
         if (alreadyEnrolled) {
-            return 1;
+            return 1; // Return 1 if the student already have the course
         }
 
         else if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
-            return 2; 
+            return 2; // Return 2 if the student tries to add a course not in their degree
         }
 
         else if (!hasPrerequisites(student, course)) { 
-            return 3; 
+            return 3; // Return 3 if course prerequisites are not met
         } 
 
         else if (hasTimeConflict(student, course)) { 
-            return 4; 
+            return 4; // Return 4 if current attempt has a time conflict
         } 
 
         off.add(course);
@@ -149,14 +130,14 @@ public class RegSystem {
         studentManager.updateStudent(student);
         studentManager.save(); 
         OfferedCourseManager.save(courseManager); 
-        return 0;
+        return 0; // Return 0 if successful attempt
     }
     
     private static boolean isLecture(OfferedCourse course) {
         return course.getLec() == null;
     }
-    // Removes student from enrolled courses
-    // Saves the updated list
+    
+    // Removes student from enrolled courses and saves the updated list
     public static boolean dropStudentFromOfferedCourse(Student student, OfferedCourse course) { 
     	if (student == null || course == null) return false;
     	
@@ -242,10 +223,11 @@ public class RegSystem {
 
     	}
     
+    // Fills the table cells with the supposed schedule for the course
     @SuppressWarnings("exports")
 	public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
-        int endRow = timeMap.get(courseToEnroll.getEndTime()) + 1;
+        int endRow = timeMap.get(courseToEnroll.getEndTime());
 
         List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
         if (targetCols == null) return;
@@ -293,10 +275,11 @@ public class RegSystem {
         }
     }
 
+    // Removes the fill and resets to its original form
     @SuppressWarnings("exports")
 	public static void resetTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
-        int endRow = timeMap.get(courseToEnroll.getEndTime()) + 1;
+        int endRow = timeMap.get(courseToEnroll.getEndTime());
         List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
         if (targetCols == null) return;
 
@@ -332,6 +315,7 @@ public class RegSystem {
         return null;
     }
     
+    // Getters
     public static StudentManager getStudentManager() { return studentManager; }
     public static OfferedCourseManager getCourseManager() { return courseManager; }
 
