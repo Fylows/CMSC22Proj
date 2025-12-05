@@ -42,11 +42,14 @@ public class OfferedCourseManager implements Serializable {
 
 	        String line;
 	        while ((line = br.readLine()) != null) {
+	        	// Skip header
+	            if (line.isBlank() || line.toLowerCase().contains("course code"))
+	                continue;
 
-	            if (line.isBlank() || line.toLowerCase().contains("course code")) continue;
-
+	            // get parts
 	            String[] parts = line.split(",");
-	            if (parts.length < 7) continue;
+	            if (parts.length < 7)
+	                continue;
 
 	            String code = parts[0].trim();
 	            String section = parts[3].trim();
@@ -54,37 +57,44 @@ public class OfferedCourseManager implements Serializable {
 	            String days = parts[5].trim();
 	            String room = parts[6].trim();
 
+	            // Load base course
 	            Course baseCourse = CourseManager.getCourse(code,
 	                    CourseManager.courseDegreeMap.get(code).name());
-	            if (baseCourse == null) continue;
+	            if (baseCourse == null)
+	                continue;
 
+	            // Create offered course
 	            OfferedCourse oc = new OfferedCourse(baseCourse, section, times, days, room, "1st Semester");
 
+	            // Create unique key: courseCode-section
+	            String lectureKey = code + "-" + section;
+	            
 	            if (isLab(section)) {
-	                // Extract lecture prefix: everything before the dash
-	                String parentSection = section.substring(0, section.indexOf("-"));
 
-	                // Assign parent lecture if it exists
-	                OfferedCourse parentLecture = lectureMap.get(parentSection);
+	                // Parent section is everything before hyphen
+	                String parentSection = section.substring(0, section.indexOf("-"));
+	                String parentKey = code + "-" + parentSection;
+
+	                OfferedCourse parentLecture = lectureMap.get(parentKey);
+
 	                if (parentLecture != null) {
-	                    oc.setLec(parentLecture); // assign instance field
-	                    lecturesWithLabs.add(parentSection);
+	                    oc.setLec(parentLecture);     // link lab → its lecture
+	                    lecturesWithLabs.add(parentKey);
 	                }
 
-	                // Always add the lab
-	                list.add(oc);
+	                list.add(oc); // labs are always added immediately
 
 	            } else {
-	                // Lecture row: store it in the map, do not add yet
-	                lectureMap.put(section, oc);
-	                oc.setLastLec(); // set global static reference
+	                // Lecture — store but do not add yet
+	                lectureMap.put(lectureKey, oc);
+	                oc.setLastLec(); // preserve your existing logic
 	            }
 	        }
 
-	        // After reading CSV, add only lectures that have no labs
-	        for (String lecSection : lectureMap.keySet()) {
-	            if (!lecturesWithLabs.contains(lecSection)) {
-	                list.add(lectureMap.get(lecSection));
+	        // Add only lecture entries that have no labs
+	        for (String key : lectureMap.keySet()) {
+	            if (!lecturesWithLabs.contains(key)) {
+	                list.add(lectureMap.get(key));
 	            }
 	        }
 
@@ -95,6 +105,7 @@ public class OfferedCourseManager implements Serializable {
 
 	    return list;
 	}
+
 	
 	// Persistence Functions (saving/loading)
 	// Saves the entire OfferedCourseManager object to a file

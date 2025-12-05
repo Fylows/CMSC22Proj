@@ -31,8 +31,8 @@ public class Course implements Serializable {
 	
 	// Getters
 	public ArrayList<String> getPrerequisites() {
-		if (prereq.isEmpty() && CourseManager.prereqMap.containsKey(courseCode)) {
-			prereq.addAll(CourseManager.prereqMap.get(courseCode));
+		if (prereq.isEmpty() && CourseManager.prereqEnforcedMap.containsKey(courseCode)) {
+			prereq.addAll(CourseManager.prereqEnforcedMap.get(courseCode));
 		}
 		return prereq;
 	}
