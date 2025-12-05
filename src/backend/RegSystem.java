@@ -202,40 +202,52 @@ public class RegSystem {
     
     // Compares two courses and checks if they have overlapping time frames
     private static boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
-        for (OfferedCourse enrolledCourse : student.getEnrolledCourses()) {
-            if (!enrolledCourse.getTerm().equalsIgnoreCase(courseToEnroll.getTerm())) continue;
+    	for (OfferedCourse enrolledCourse : student.getEnrolledCourses()) {
+    	if (!enrolledCourse.getTerm().equalsIgnoreCase(courseToEnroll.getTerm())) continue;
 
-            if (enrolledCourse.getDay() != null && courseToEnroll.getDay() != null) {
-                String[] days1 = enrolledCourse.getDay().split(",");
-                String[] days2 = courseToEnroll.getDay().split(",");
+    	    if (enrolledCourse.getDay() == null || courseToEnroll.getDay() == null) continue;
 
-                boolean sharesDay = false;
-                for (String d1 : days1) {
-                    for (String d2 : days2) {
-                        if (d1.trim().equalsIgnoreCase(d2.trim())) {
-                            sharesDay = true;
-                            break;
-                        }
-                    }
-                    if (sharesDay) break;
-                }
+    	    String[] days1 = enrolledCourse.getDay().split(",");
+    	    String[] days2 = courseToEnroll.getDay().split(",");
 
-                if (sharesDay) {
-                    boolean overlap =
-                        !(courseToEnroll.getEndTime().isBefore(enrolledCourse.getStartTime()) ||
-                          courseToEnroll.getStartTime().isAfter(enrolledCourse.getEndTime()));
+    	    boolean sharesDay = false;
+    	    for (String d1 : days1) {
+    	        for (String d2 : days2) {
+    	            String a = d1.trim().toLowerCase();
+    	            String b = d2.trim().toLowerCase();
 
-                    if (overlap) {
-                        System.out.println("Time conflict with " +
-                                           enrolledCourse.getCourseCode() +
-                                           " (" + enrolledCourse.getSection() + ")");
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    	            if (a.equals(b)) {
+    	                sharesDay = true;
+    	                break;
+    	            }
+
+    	            if ((a.length() > 1 && a.contains(b)) || (b.length() > 1 && b.contains(a))) {
+    	                sharesDay = true;
+    	                break;
+    	            }
+    	        }
+    	        if (sharesDay) break;
+    	    }
+
+    	    if (!sharesDay) continue;
+
+    	    LocalTime sTime1 = courseToEnroll.getStartTime();
+    	    LocalTime eTime1 = courseToEnroll.getEndTime();
+    	    LocalTime sTime2  = enrolledCourse.getStartTime();
+    	    LocalTime eTime2  = enrolledCourse.getEndTime();
+
+    	    if (sTime1 == null || eTime1 == null || sTime2 == null || eTime2 == null) continue;
+
+    	    if (sTime1.isBefore(eTime2) && sTime2.isBefore(eTime1)) {
+    	        System.out.println("Time conflict with " +
+    	                           enrolledCourse.getCourseCode() +
+    	                           " (" + enrolledCourse.getSection() + ")");
+    	        return true;
+    	    }
+    	}
+    	return false;
+
+    	}
     
     @SuppressWarnings("exports")
 	public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
