@@ -133,17 +133,6 @@ public class RegSystem {
         }
 
         else if (!hasPrerequisites(student, course)) { 
-            System.out.println("Enrollment failed: prerequisites not met."); 
-            System.out.println("Pre requisites of course: "); 
-
-            for (String c : course.getCourse().getPrerequisites()) {
-                System.out.println(c); 
-            }
-            System.out.println("Finished courses: "); 
-            for (Course c : student.getCompletedCourses()) {
-                System.out.println(c.getCourseCode()); 
-            }
-
             return 3; 
         } 
 
@@ -246,9 +235,6 @@ public class RegSystem {
     	    if (sTime1 == null || eTime1 == null || sTime2 == null || eTime2 == null) continue;
 
     	    if (sTime1.isBefore(eTime2) && sTime2.isBefore(eTime1)) {
-    	        System.out.println("Time conflict with " +
-    	                           enrolledCourse.getCourseCode() +
-    	                           " (" + enrolledCourse.getSection() + ")");
     	        return true;
     	    }
     	}
