@@ -43,7 +43,6 @@ public class EnlistmentScreen extends VBox {
 		setSpacing(20);
 		
         // ---------- CALENDAR AND ENLISTMENTS TAB ----------
-		
 		VBox calendarContainer = new VBox(10);
 		calendarContainer.getStyleClass().add("schedule-grid");
 		calendarContainer.setPadding(new Insets(20));
@@ -66,9 +65,9 @@ public class EnlistmentScreen extends VBox {
 		// Add column headers
 		for (int col = 0; col < days.length; col++) {
 		    Label dayLabel = new Label(days[col]);
-		    dayLabel.setStyle("-fx-font-weight: bold; -fx-alignment: center;");
+		    dayLabel.getStyleClass().add("calendar-day-label");
 		    StackPane headerPane = new StackPane(dayLabel);
-		    headerPane.setPrefSize(80, 30);
+		    headerPane.setPrefSize(80, 40);
 		    calendar.add(headerPane, col + 1, 0); // +1 because column 0 is for time labels
 		}
 
@@ -76,13 +75,13 @@ public class EnlistmentScreen extends VBox {
 		for (int row = 0; row < times.size(); row++) {
 		    // Time label in first column
 		    Label timeLabel = new Label(times.get(row));
-		    timeLabel.setPrefSize(160, 90);
-		    timeLabel.setStyle("-fx-font-size: 11; -fx-alignment: center;");
+		    timeLabel.setPrefSize(80, 40);
+		    timeLabel.getStyleClass().add("calendar-time-label");
 		    calendar.add(timeLabel, 0, row + 1); // +1 because row 0 is for column headers
 
 		    // Cells for each day
 		    for (int col = 0; col < days.length; col++) {
-		        Rectangle cell = new Rectangle(100, 40);
+		        Rectangle cell = new Rectangle(80, 30);
 		        cell.setFill(Color.WHITE);
 		        cell.setStroke(Color.BLACK);
 
@@ -136,11 +135,12 @@ public class EnlistmentScreen extends VBox {
 
 		HBox enlistmentDetails = new HBox(20);
 		for (int i = 0; i < 3; i++) {
-		    Rectangle rect = new Rectangle(100, 60, colors[i]);
+		    Rectangle rect = new Rectangle(100, 80, colors[i]);
 		    rect.getStyleClass().add("legend-rect");
 
 		    // Create label
 		    Label label = new Label(states[i]);
+		    label.getStyleClass().add("legend-label");
 
 		    // StackPane to put label on top of rectangle
 		    StackPane stack = new StackPane();

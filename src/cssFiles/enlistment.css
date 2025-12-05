@@ -15,7 +15,7 @@
 /* -------------- ROOT CONTAINER ---------------- */
 .enlistment-root {
     -fx-background-color: linear-gradient(to bottom, #ffeef3, #ffdae6);
-    -fx-padding: 60, 20, 20, 20; 
+    -fx-padding: 40 20 20 20;
 }
 
 /* -------------- HEADERS ---------------- */
@@ -34,13 +34,21 @@
     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.10), 10, 0, 0, 4);
 }
 
-/* Time/day labels */
-.schedule-grid .label {
+/* Time & day labels */
+.calendar-day-label {
     -fx-font-family: "Inter";
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
 }
 
-/* Calendar course-filled cells */
+.calendar-time-label {
+    -fx-font-family: "Inter";
+    -fx-font-size: 11px;
+    -fx-alignment: center;
+}
+
+/* Calendar filled blocks */
 .course-block {
     -fx-background-color: #ff8bbd;
     -fx-background-radius: 8;
@@ -56,16 +64,41 @@
     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 6);
 }
 
-/* Legend boxes */
-.legend-rect {
-    -fx-background-radius: 12;
-    -fx-padding: 10;
+.units-label {
     -fx-font-family: "Inter";
-    -fx-font-size: 13px;
-    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
 }
 
-/* -------------- SEARCH BOX ---------------- */
+.course-code-label {
+    -fx-font-family: "Inter";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Legend rectangles */
+.legend-rect-0 {
+    -fx-fill: #f8a5c2;
+}
+.legend-rect-1 {
+    -fx-fill: #81b8ff;
+}
+.legend-rect-2 {
+    -fx-fill: #42d6c6;
+}
+
+.legend-rect {
+    -fx-arc-height: 15;
+    -fx-arc-width: 15;
+}
+
+.legend-label {
+    -fx-font-family: "Poppins"; 
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+/* -------------- SEARCH SECTION ---------------- */
 .search-section {
     -fx-background-color: #ffe6ef;
     -fx-padding: 25;
@@ -78,38 +111,42 @@
     -fx-background-radius: 10;
     -fx-padding: 8;
     -fx-font-family: "Inter";
+    -fx-font-size: 14px;
 }
 
 .pagination-button {
     -fx-background-color: #ff9ac3;
     -fx-text-fill: white;
     -fx-background-radius: 10;
+    -fx-font-family: "Inter";
 }
 
-/* Add button */
+/* Add & Delete buttons */
 .add-btn {
     -fx-background-color: #ff8bbd;
     -fx-text-fill: white;
     -fx-background-radius: 12;
+    -fx-font-family: "Inter";
 }
-
-/* Delete button */
 .delete-btn {
     -fx-background-color: #ff6b81;
     -fx-text-fill: white;
     -fx-background-radius: 12;
+    -fx-font-family: "Inter";
 }
 
 /* Toasts */
 .success-toast {
-    -fx-background-color: #50c878;
+    -fx-background-color: #4CAF50;
     -fx-text-fill: white;
     -fx-font-size: 15px;
     -fx-background-radius: 8;
+    -fx-padding: 10;
 }
 .error-toast {
-    -fx-background-color: #ff4c61;
+    -fx-background-color: #f44336;
     -fx-text-fill: white;
     -fx-font-size: 15px;
     -fx-background-radius: 8;
+    -fx-padding: 10;
 }
