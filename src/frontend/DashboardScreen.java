@@ -36,6 +36,9 @@ public class DashboardScreen extends StackPane {
 
 		VBox welcomeCard = createWelcomeCard(student); // Welcome Card
 		HBox statsRow = createStatsRow(student); // Stats Row
+		
+        HBox.setHgrow(welcomeCard, Priority.ALWAYS); 
+        HBox.setHgrow(statsRow, Priority.ALWAYS);
 
 		content.getChildren().addAll(welcomeCard, statsRow);
 		getChildren().addAll(petalPane, content);
