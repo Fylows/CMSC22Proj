@@ -72,8 +72,6 @@ public class ProfilePageScreen extends HBox{
         return profile;
     }
 	
-	
-	
 	/***** Right Panel: PROFILE INFORMATION *****/
 	private VBox createProfileInformation(Student student) {
 		 VBox profileInfo = new VBox(30);

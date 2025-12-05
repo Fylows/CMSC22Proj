@@ -12,10 +12,10 @@ import javafx.stage.Stage;
 
 public class WelcomeScreen {
 	private Stage stage; // Reference to main window (Stage)
-
+	private StudentManager manager;
+	
 	// Constructor
 	@SuppressWarnings("exports")
-	private StudentManager manager;
 	public WelcomeScreen(Stage stage) {
 		this.stage = stage;
 		this.manager = RegSystem.getStudentManager();
