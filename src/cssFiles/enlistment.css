@@ -65,8 +65,10 @@
 }
 
 .units-label {
-    -fx-font-family: "Inter";
-    -fx-font-size: 15px;
+    -fx-font-family: "Poppins";
+    -fx-font-size: 16px;
+	-fx-alignment: center;
+	-fx-text-alignment: center;
 }
 
 .course-code-label {
@@ -125,6 +127,23 @@
     -fx-background-radius: 12;
     -fx-font-family: "Inter";
 	-fx-font-size: 14px;
+}
+
+/* Courses Details */
+.course-title {
+    -fx-font-family: "Poppins";
+    -fx-font-size: 14px;
+}
+
+.course-details {
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+}
+
+.course-row {
+    -fx-background-color: #ffd0dc;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
 }
 
 /* Add & Delete buttons */

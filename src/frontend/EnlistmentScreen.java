@@ -112,7 +112,7 @@ public class EnlistmentScreen extends VBox {
 		enlistments.getChildren().add(header2);
 		
 		Label units = new Label("Total units: " + totalUnits);
-		units.setStyle("-fx-font-family: \"Inter\"; -fx-font-size: 14px; -fx-text-fill: #333;");
+		units.getStyleClass().add("units-label");
 		
 		VBox activeEnlistments = createActiveEnlistments();
 		studentCourses.addListener((ListChangeListener<OfferedCourse>) change -> {
@@ -155,7 +155,7 @@ public class EnlistmentScreen extends VBox {
 		    enlistmentDetails.getChildren().add(stack);
 		}
 		
-		enlistments.getChildren().addAll(enlistmentDetails,units,activeEnlistments);
+		enlistments.getChildren().addAll(enlistmentDetails, units, activeEnlistments);
 		HBox calendarAndCourses = new HBox(calendarContainer, enlistments);
         // ---------- COURSE SEARCH ----------
         VBox courseSearch = createCourseSearchGrid(offered);
@@ -232,21 +232,24 @@ public class EnlistmentScreen extends VBox {
 
 	            // Course code label
 	            Label codeLabel = new Label(course.getCourseCode());
-	            codeLabel.setPrefWidth(120); // Set fixed column width
-	            codeLabel.setMinWidth(120);
+	            codeLabel.setPrefWidth(100); // Set fixed column width
+	            codeLabel.setMinWidth(100);
+	            codeLabel.getStyleClass().add("course-title");
 
 	            // Lecture details
 	            OfferedCourse lecture = course.getLec() != null ? course.getLec() : course;
 	            VBox lectureBox = new VBox(3);
-	            lectureBox.setPrefWidth(200); // Consistent column width
-	            lectureBox.setMinWidth(200);
+	            lectureBox.setPrefWidth(180); // Consistent column width
+	            lectureBox.setMinWidth(180);
+	            lectureBox.getStyleClass().add("course-details");
 	            lectureBox.getChildren().add(new Label("Lecture: " + lecture.getCourseCode() + " - " + lecture.getSection()));
 	            lectureBox.getChildren().add(new Label("Schedule: " + lecture.getTimes()));
 
 	            // Lab details if exists
 	            VBox labBox = new VBox(3);
-	            labBox.setPrefWidth(200); // Consistent column width
-	            labBox.setMinWidth(200);
+	            labBox.setPrefWidth(180); // Consistent column width
+	            labBox.setMinWidth(180);
+	            labBox.getStyleClass().add("course-details");
 	            if (course.getLec() != null) {
 	                labBox.getChildren().add(new Label("Lab: " + course.getCourseCode() + " - " + course.getSection()));
 	                labBox.getChildren().add(new Label("Schedule: " + course.getTimes()));
@@ -283,12 +286,16 @@ public class EnlistmentScreen extends VBox {
 
 	            // Row HBox with separate columns
 	            HBox row = new HBox(20, codeLabel, lectureBox, labBox, addBtn);
+	            row.getStyleClass().add("course-row");
 	            row.setAlignment(Pos.CENTER);
+	            row.setMaxWidth(700); // don't expand beyond preferred width
 	            gridContainer.getChildren().add(row);
+	            gridContainer.setAlignment(Pos.CENTER);
 	        }
 
 	        // Update page label
 	        pageLabel.setText("Page " + (currentPage[0] + 1) + " of " + ((totalItems + itemsPerPage[0] - 1) / itemsPerPage[0]));
+	        pageLabel.getStyleClass().add("course-details");
 	    };
 
 	    // --- LISTENERS ---
