@@ -37,7 +37,6 @@ public class StudentManager implements Serializable {
 		StudentManager fallback = new StudentManager(new ArrayList<Student>());
 		
 		if (!Files.exists(STORAGE_PATH)) {
-			System.out.println("Student manager did not load");
 			return fallback; // If file does not exist, return a default value
 		}
 		
@@ -73,7 +72,7 @@ public class StudentManager implements Serializable {
 
 		// Checks if email is in a valid up.edu.ph format
 		if (!email.matches("^[\\w.-]+@up\\.edu\\.ph$")) { // ^ start while $ end of string; accepts letters and numbers before @up.edu.ph
-			return "Invalid email format.";
+			return "Invalid email format. Please use @up.edu.ph.";
 		}
 
 		// Password must have a minimum length of 6 characters
@@ -83,7 +82,7 @@ public class StudentManager implements Serializable {
 
 		// Checks if email already exists
 		if (findByEmail(email) != null) {
-			return "Email is already registered. Try adding numbers";
+			return "Email is already registered. Try adding numbers.";
 		}
 
 		// Creates the new student

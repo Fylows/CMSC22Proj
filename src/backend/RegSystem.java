@@ -227,7 +227,7 @@ public class RegSystem {
 
     	}
     
-    //Method for checking time conflicts for courses with two parts (lab/lecture)
+    // Method for checking time conflicts for courses with two parts (lab/lecture)
     private static boolean hasFullTimeConflict(Student student, OfferedCourse courseToEnroll) {
         ArrayList<OfferedCourse> allEnrolled = new ArrayList<>(student.getEnrolledCourses());
 
@@ -251,7 +251,7 @@ public class RegSystem {
         return false;
     }
 
-    //Helper method for turning day codes into their full days
+    // Helper method for turning day codes into their full days
     private static List<String> expandDays(String dayCode) {
         if (dayCode == null) return List.of();
         dayCode = dayCode.trim().toLowerCase();
