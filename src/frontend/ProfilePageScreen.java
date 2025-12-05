@@ -87,6 +87,8 @@ public class ProfilePageScreen extends StackPane{
 
         infoGrid.add(createFieldRowWide("Email:", student.getEmail()), 0, 2, 2, 1);
         infoGrid.add(createFieldRow("Date of Birth:", student.getBirthdate()), 0, 3, 2, 1);
+        
+        infoGrid.add(createFieldRow("Sex:", student.getSex()), 1, 3);
 
         profileInfo.getChildren().addAll(header, infoGrid);
         return profileInfo;
