@@ -43,6 +43,7 @@ public class EnlistmentScreen extends VBox {
 		this.getStyleClass().add("enlistment-root");
 		setSpacing(20);
 		
+		
         // ---------- CALENDAR AND ENLISTMENTS TAB ----------
 		VBox calendarContainer = new VBox(10);
 		calendarContainer.getStyleClass().add("schedule-grid");

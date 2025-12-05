@@ -109,51 +109,47 @@ public class RegSystem {
      * 2 = not their degree
      * 3 = prerequisites not met
      * 4 = has a time conflict
+     * 5 = course has already been completed
      */
     public static int enrollStudentInOfferedCourse(Student student, OfferedCourse course, ObservableList<OfferedCourse> off) { 
-    	if (student == null || course == null) return -1; 
+        if (student == null || course == null) return -1; 
 
-    	boolean alreadyEnrolled = student.getEnrolledCourses().stream()
-    	        .anyMatch(c -> c.getCourseCode().equals(course.getCourseCode())
-    	                   && !c.getSection().equals(course.getSection()));
-    	
-    	if (alreadyEnrolled) {
-    		return 1;
-    	}
-    	
-    	else if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
-    		return 2; 
-    	}
-    	
-    	else if (!hasPrerequisites(student, course)) { 
-    		System.out.println("Enrollment failed: prerequisites not met."); 
-    		System.out.println("Pre requisites of course: "); 
+        boolean alreadyCompleted = student.getCompletedCourses().stream()
+                .anyMatch(c -> c.getCourseCode().equalsIgnoreCase(course.getCourseCode()));
+        if (alreadyCompleted) {
+            return 5;
+        }
 
-    		for (String c : course.getCourse().getPrerequisites()) {
-        		System.out.println(c); 
-    		}
-    		System.out.println("Finished courses: "); 
-    		for (Course c : student.getCompletedCourses()) {
-        		System.out.println(c.getCourseCode()); 
-    		}
-    		
-    		return 3; 
-    	} 
+        boolean alreadyEnrolled = student.getEnrolledCourses().stream()
+                .anyMatch(c -> c.getCourseCode().equals(course.getCourseCode())
+                           && !c.getSection().equals(course.getSection()));
 
-    	else if (hasTimeConflict(student, course)) { 
-    		return 4; 
-    	} 
-    	
-    	off.add(course);
-	    // auto-enroll lecture for labs
-		if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
-	        //student.getEnrolledCourses().add(course.getLec());
-	        off.add(course.getLec());
-		}
-		studentManager.updateStudent(student);
-		studentManager.save(); 
-		OfferedCourseManager.save(courseManager); 
-		return 0;
+        if (alreadyEnrolled) {
+            return 1;
+        }
+
+        else if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
+            return 2; 
+        }
+
+        else if (!hasPrerequisites(student, course)) { 
+            return 3; 
+        } 
+
+        else if (hasTimeConflict(student, course)) { 
+            return 4; 
+        } 
+
+        off.add(course);
+
+        if (!isLecture(course) && !student.getEnrolledCourses().contains(course.getLec())) {
+            off.add(course.getLec());
+        }
+
+        studentManager.updateStudent(student);
+        studentManager.save(); 
+        OfferedCourseManager.save(courseManager); 
+        return 0;
     }
     
     private static boolean isLecture(OfferedCourse course) {
@@ -239,9 +235,6 @@ public class RegSystem {
     	    if (sTime1 == null || eTime1 == null || sTime2 == null || eTime2 == null) continue;
 
     	    if (sTime1.isBefore(eTime2) && sTime2.isBefore(eTime1)) {
-    	        System.out.println("Time conflict with " +
-    	                           enrolledCourse.getCourseCode() +
-    	                           " (" + enrolledCourse.getSection() + ")");
     	        return true;
     	    }
     	}
