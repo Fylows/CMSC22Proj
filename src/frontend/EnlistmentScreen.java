@@ -149,7 +149,7 @@ public class EnlistmentScreen extends VBox {
 
 		    // Add tooltip
 		    Tooltip tooltip = new Tooltip(tooltips[i]);
-		    Tooltip.install(stack, tooltip);  // attach tooltip to the StackPane
+		    Tooltip.install(stack, tooltip); // Attach tooltip to the StackPane
 
 		    // Add to HBox
 		    enlistmentDetails.getChildren().add(stack);
