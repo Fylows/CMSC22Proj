@@ -1,0 +1,167 @@
+/* -------------- FONTS ---------------- */
+@font-face {
+    font-family: "Poppins";
+    src: url("PoppinsBold.ttf");
+}
+@font-face {
+    font-family: "Inter";
+    src: url("Inter.ttf");
+}
+@font-face {
+    font-family: "Inter Italic";
+    src: url("InterItalic.ttf");
+}
+
+/* -------------- ROOT CONTAINER ---------------- */
+.enlistment-root {
+    -fx-background-color: linear-gradient(to bottom, #ffeef3, #ffdae6);
+    -fx-padding: 40 20 20 20;
+}
+
+/* -------------- HEADERS ---------------- */
+.section-title {
+    -fx-font-family: "Poppins";
+    -fx-font-size: 28px;
+    -fx-text-fill: #c7446e;
+    -fx-padding: 0 0 10 0;
+}
+
+/* -------------- SCHEDULE GRID ---------------- */
+.schedule-grid {
+    -fx-background-color: #ffffffcc;
+    -fx-padding: 20;
+    -fx-background-radius: 18;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.10), 10, 0, 0, 4);
+}
+
+/* Time & day labels */
+.calendar-day-label {
+    -fx-font-family: "Inter";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.calendar-time-label {
+    -fx-font-family: "Inter";
+    -fx-font-size: 11px;
+    -fx-alignment: center;
+}
+
+/* Calendar filled blocks */
+.course-block {
+    -fx-background-color: #ff8bbd;
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-padding: 4;
+}
+
+/* -------------- ACTIVE ENLISTMENTS BOX ---------------- */
+.active-enlistments {
+    -fx-background-color: #ffffffdd;
+    -fx-padding: 20;
+    -fx-background-radius: 18;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 6);
+}
+
+.units-label {
+    -fx-font-family: "Inter";
+    -fx-font-size: 15px;
+}
+
+.course-code-label {
+    -fx-font-family: "Inter";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Legend rectangles */
+.legend-rect-0 {
+    -fx-fill: #f8a5c2;
+}
+.legend-rect-1 {
+    -fx-fill: #81b8ff;
+}
+.legend-rect-2 {
+    -fx-fill: #42d6c6;
+}
+
+.legend-rect {
+    -fx-arc-height: 15;
+    -fx-arc-width: 15;
+}
+
+.legend-label {
+    -fx-font-family: "Poppins"; 
+    -fx-font-weight: 600;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+/* -------------- SEARCH SECTION ---------------- */
+.search-section {
+    -fx-background-color: #ffe6ef;
+    -fx-padding: 25;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);
+}
+
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+}
+
+.items-dropdown {
+    -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+}
+
+.pagination-button {
+    -fx-background-color: #ff6b81;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-font-family: "Inter";
+	-fx-font-size: 14px;
+}
+
+/* Add & Delete buttons */
+.add-btn {
+    -fx-background-color: #ff6b81;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-font-family: "Inter";
+	-fx-font-size: 14px;
+}
+.delete-btn {
+    -fx-background-color: #ff6b81;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-font-family: "Inter";
+	-fx-font-size: 14px;
+}
+
+.enlist-btn {
+    -fx-background-radius: 12;
+    -fx-font-family: "Inter";
+	-fx-font-size: 14px;
+}
+
+
+/* Toasts */
+.success-toast {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+.error-toast {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}

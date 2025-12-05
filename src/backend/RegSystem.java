@@ -112,14 +112,6 @@ public class RegSystem {
      */
     public static int enrollStudentInOfferedCourse(Student student, OfferedCourse course, ObservableList<OfferedCourse> off) { 
     	if (student == null || course == null) return -1; 
-//    	for (OfferedCourse oc : courseManager.getOfferedCourses()) { 
-//    		if (oc.getCourseCode().equalsIgnoreCase(course.getCourseCode()) && 
-//    				oc.getTerm().equalsIgnoreCase(course.getTerm()) && 
-//    				oc.getEnrolledStudents().contains(student)) { 
-//    			System.out.println("Enrollment failed: already enrolled in another section of " + course.getCourseCode()); 
-//    			return false; 
-//    			} 
-//    		} 
 
     	boolean alreadyEnrolled = student.getEnrolledCourses().stream()
     	        .anyMatch(c -> c.getCourseCode().equals(course.getCourseCode())
@@ -311,10 +303,6 @@ public class RegSystem {
             }
         }
     }
-
-
-
-    
 
     // Helper to get a cell from a GridPane
     private static Node getNodeFromGridPane(GridPane grid, int col, int row) {

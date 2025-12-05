@@ -232,15 +232,21 @@ public class EnlistmentScreen extends VBox {
 
 	            // Course code label
 	            Label codeLabel = new Label(course.getCourseCode());
+	            codeLabel.setPrefWidth(120); // Set fixed column width
+	            codeLabel.setMinWidth(120);
 
 	            // Lecture details
 	            OfferedCourse lecture = course.getLec() != null ? course.getLec() : course;
 	            VBox lectureBox = new VBox(3);
+	            lectureBox.setPrefWidth(200); // Consistent column width
+	            lectureBox.setMinWidth(200);
 	            lectureBox.getChildren().add(new Label("Lecture: " + lecture.getCourseCode() + " - " + lecture.getSection()));
 	            lectureBox.getChildren().add(new Label("Schedule: " + lecture.getTimes()));
 
 	            // Lab details if exists
 	            VBox labBox = new VBox(3);
+	            labBox.setPrefWidth(200); // Consistent column width
+	            labBox.setMinWidth(200);
 	            if (course.getLec() != null) {
 	                labBox.getChildren().add(new Label("Lab: " + course.getCourseCode() + " - " + course.getSection()));
 	                labBox.getChildren().add(new Label("Schedule: " + course.getTimes()));
@@ -250,6 +256,7 @@ public class EnlistmentScreen extends VBox {
 
 	            // Add button
 	            Button addBtn = new Button("Add");
+	            addBtn.setPrefWidth(80); // Keeps all buttons aligned
 	            addBtn.getStyleClass().add("add-btn");
 	            addBtn.setOnAction(e -> {
 	            	int state = RegSystem.enrollStudentInOfferedCourse(student, course, studentCourses);

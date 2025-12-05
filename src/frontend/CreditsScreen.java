@@ -92,6 +92,7 @@ public class CreditsScreen extends BorderPane {
 		Label refs = new Label(
 			"Baeldung. (n.d.). Java email validation with regex. https://www.baeldung.com/java-email-validation-regex\n\n" +
 			"Coolors. (n.d.). Trending color palettes. https://coolors.co/palettes/trending\n\n" +
+			"Google Fonts. (n.d). Free fonts. https://fonts.google.com\n\n" +
 			"Icons8. (n.d.). Free icons. https://icons8.com\n\n" +
 			"Institute of Computer Science, University of the Philippines Los Baños. (n.d.). Degree programs. https://ics.uplb.edu.ph/degree-programs/\n\n" +
 			"Land Book. (n.d.). UI Design Gallery. https://land-book.com"

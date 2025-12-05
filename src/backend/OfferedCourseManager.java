@@ -38,8 +38,7 @@ public class OfferedCourseManager implements Serializable {
 	    Set<String> lecturesWithLabs = new HashSet<>();
 
 	    try (BufferedReader br = new BufferedReader(
-	            new InputStreamReader(OfferedCourseManager.class.getResourceAsStream(
-	                    "/dataset/course_offerings.csv")))) {
+	            new InputStreamReader(OfferedCourseManager.class.getResourceAsStream("/dataset/course_offerings.csv")))) {
 
 	        String line;
 	        while ((line = br.readLine()) != null) {
