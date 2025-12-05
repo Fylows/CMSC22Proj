@@ -1,7 +1,6 @@
 package frontend;
 
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
 
@@ -42,7 +41,6 @@ public class EnlistmentScreen extends VBox {
 		
 		this.getStyleClass().add("enlistment-root");
 		setSpacing(20);
-		
 		
         // ---------- CALENDAR AND ENLISTMENTS TAB ----------
 		VBox calendarContainer = new VBox(10);
@@ -287,7 +285,6 @@ public class EnlistmentScreen extends VBox {
 	                		case (4) : message = "Course time conflicts"; break;
 	                		case (5) : message = "You have already taken this course"; break;
  	                	}
-	                	System.out.println(state);
 	                	showToast(root, message , false);
 	                }
 	            });
@@ -445,16 +442,13 @@ public class EnlistmentScreen extends VBox {
 	public void showToast(StackPane root, String message, boolean success) {
 	    Label toast = new Label(message);
 	    toast.toFront();
-	    toast.setTextFill(Color.WHITE);
-	    toast.setFont(Font.font(16));
-	    toast.setStyle("-fx-background-radius: 8; -fx-padding: 10px;");
 	    toast.setAlignment(Pos.CENTER);
 
 	    // Background color
 	    if (success) {
-	        toast.setStyle(toast.getStyle() + "-fx-background-color: #4CAF50;"); // green
+	    	toast.getStyleClass().add("success-toast"); // green
 	    } else {
-	        toast.setStyle(toast.getStyle() + "-fx-background-color: #f44336;"); // red
+	    	toast.getStyleClass().add("error-toast"); // red
 	    }
 
 	    // Center in StackPane

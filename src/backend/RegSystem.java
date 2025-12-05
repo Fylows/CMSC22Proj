@@ -224,8 +224,7 @@ public class RegSystem {
     	    }
     	}
     	return false;
-
-    	}
+    }
     
     // Method for checking time conflicts for courses with two parts (lab/lecture)
     private static boolean hasFullTimeConflict(Student student, OfferedCourse courseToEnroll) {
