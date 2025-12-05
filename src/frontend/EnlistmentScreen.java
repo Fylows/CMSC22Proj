@@ -111,8 +111,11 @@ public class EnlistmentScreen extends VBox {
 		header2.getStyleClass().add("section-title");
 		enlistments.getChildren().add(header2);
 		
-		Label units = new Label("Total units: " + totalUnits);
+		Label units = new Label("Total Units: " + totalUnits);
 		units.getStyleClass().add("units-label");
+		
+		HBox unitsWrapper = new HBox(units);
+		unitsWrapper.setAlignment(Pos.CENTER);
 		
 		VBox activeEnlistments = createActiveEnlistments();
 		studentCourses.addListener((ListChangeListener<OfferedCourse>) change -> {
@@ -155,8 +158,9 @@ public class EnlistmentScreen extends VBox {
 		    enlistmentDetails.getChildren().add(stack);
 		}
 		
-		enlistments.getChildren().addAll(enlistmentDetails, units, activeEnlistments);
+		enlistments.getChildren().addAll(enlistmentDetails, unitsWrapper, activeEnlistments);
 		HBox calendarAndCourses = new HBox(calendarContainer, enlistments);
+		
         // ---------- COURSE SEARCH ----------
         VBox courseSearch = createCourseSearchGrid(offered);
 		VBox courseSearchContainer = new VBox();
@@ -175,7 +179,7 @@ public class EnlistmentScreen extends VBox {
 	    ObservableList<OfferedCourse> allCourses = FXCollections.observableArrayList(allOfferedCourses);
 
 	    final int[] currentPage = {0};
-	    final int[] itemsPerPage = {10};
+	    final int[] itemsPerPage = {5};
 
 	    VBox container = new VBox(10);
 	    container.setPadding(new Insets(10));
@@ -186,7 +190,7 @@ public class EnlistmentScreen extends VBox {
 
 	    TextField searchField = new TextField();
 	    searchField.getStyleClass().add("search-field");
-	    searchField.setPromptText("Search by course name or section");
+	    searchField.setPromptText("Search by course code or section");
 
 	    ComboBox<Integer> itemsPerPageDropdown = new ComboBox<>();
 	    itemsPerPageDropdown.getItems().addAll(5, 10, 15, 20);
@@ -194,6 +198,7 @@ public class EnlistmentScreen extends VBox {
 	    itemsPerPageDropdown.getStyleClass().add("items-dropdown");
 
 	    filterRow.getChildren().addAll(new Label("Filter:"), searchField, new Label("Items per page:"), itemsPerPageDropdown);
+	    filterRow.getStyleClass().add("course-details");
 	    container.getChildren().add(filterRow);
 
 	    // --- LIST GRID ---
@@ -205,6 +210,7 @@ public class EnlistmentScreen extends VBox {
 	    Button nextBtn = new Button("Next");
 	    prevBtn.getStyleClass().add("pagination-button");
         nextBtn.getStyleClass().add("pagination-button");
+        
 	    Label pageLabel = new Label("Page 1");
 	    HBox pagination = new HBox(10, prevBtn, pageLabel, nextBtn);
 	    pagination.setAlignment(Pos.CENTER);
@@ -232,23 +238,23 @@ public class EnlistmentScreen extends VBox {
 
 	            // Course code label
 	            Label codeLabel = new Label(course.getCourseCode());
-	            codeLabel.setPrefWidth(100); // Set fixed column width
-	            codeLabel.setMinWidth(100);
+	            codeLabel.setPrefWidth(110); // Set fixed column width
+	            codeLabel.setMinWidth(110);
 	            codeLabel.getStyleClass().add("course-title");
 
 	            // Lecture details
 	            OfferedCourse lecture = course.getLec() != null ? course.getLec() : course;
 	            VBox lectureBox = new VBox(3);
-	            lectureBox.setPrefWidth(180); // Consistent column width
-	            lectureBox.setMinWidth(180);
+	            lectureBox.setPrefWidth(200); // Consistent column width
+	            lectureBox.setMinWidth(200);
 	            lectureBox.getStyleClass().add("course-details");
 	            lectureBox.getChildren().add(new Label("Lecture: " + lecture.getCourseCode() + " - " + lecture.getSection()));
 	            lectureBox.getChildren().add(new Label("Schedule: " + lecture.getTimes() + " | " + lecture.getDays()));
 
 	            // Lab details if exists
 	            VBox labBox = new VBox(3);
-	            labBox.setPrefWidth(180); // Consistent column width
-	            labBox.setMinWidth(180);
+	            labBox.setPrefWidth(200); // Consistent column width
+	            labBox.setMinWidth(200);
 	            labBox.getStyleClass().add("course-details");
 	            if (course.getLec() != null) {
 	                labBox.getChildren().add(new Label("Lab: " + course.getCourseCode() + " - " + course.getSection()));
@@ -288,7 +294,7 @@ public class EnlistmentScreen extends VBox {
 	            HBox row = new HBox(20, codeLabel, lectureBox, labBox, addBtn);
 	            row.getStyleClass().add("course-row");
 	            row.setAlignment(Pos.CENTER);
-	            row.setMaxWidth(700); // don't expand beyond preferred width
+	            row.setMaxWidth(730);
 	            gridContainer.getChildren().add(row);
 	            gridContainer.setAlignment(Pos.CENTER);
 	        }
@@ -350,6 +356,9 @@ public class EnlistmentScreen extends VBox {
 
 	        if (studentCourses.isEmpty()) {
 	            Label emptyLabel = new Label("No active enlistment. Use the section below to add classes.");
+	            emptyLabel.getStyleClass().add("units-label");
+	            emptyLabel.setWrapText(true);
+	            emptyLabel.setMaxWidth(450);
 	            courseContainer.getChildren().add(emptyLabel);
 	            return;
 	        }
