@@ -1,9 +1,9 @@
 /***********************************************************
-	 *  A JavaFX-based application that implements a user management system (AMIS Style)
-	 *  (Insert more here)
+	 *  A JavaFX-based application that implements a user management system for enrollment (similar to AMIS of UPLB)
+	 *  This is designed to help students easily browse their courses from their institute and plan their enrollment for the upcoming semesters
 	 *
-	 * @author Saplan, Perlas, Castaneda, Alquinto
-	 * @created_date 2025-11-xx xx:xx
+	 * @author Ljiel Saplan, Mikhail Perlas, Alethea Castañeda, Carlos Alquinto
+	 * @created_date 2025-11-11 11:11
 	 *
 	 ***********************************************************/
 
