@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class StudentManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private static ArrayList<Student> students; // List of registered students
+	private ArrayList<Student> students; // List of registered students
 	private static final Path STORAGE_PATH = Path.of("src/storage/students.txt");
 
 	// Constructor
@@ -23,15 +23,16 @@ public class StudentManager implements Serializable {
 
     // Persistence Functions (saving/loading)
 	// Saves the entire StudentManager object to a file
-	public static void save() {
+	public void save() {
 		try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(STORAGE_PATH))) { // Put in the try block so it automatically closes at the end
-			out.writeObject(StudentManager.students); // Writes all the students
+			out.writeObject(this.students); // Writes all the students
 		} catch (IOException e) {
 			e.printStackTrace(); // Prints a detailed error report to the console
 		}
 	}
 
 	// Load a StudentManager from a file (returns null if something fails)
+	@SuppressWarnings("unchecked")
 	public static StudentManager load() {
 		StudentManager fallback = new StudentManager(new ArrayList<Student>());
 		
@@ -57,7 +58,7 @@ public class StudentManager implements Serializable {
 				break;
 			}
 		}
-		StudentManager.save(); // Persist all students
+		save(); // Persist all students
 	}
 
 	// Logic for Sign-Up Screen
@@ -88,7 +89,7 @@ public class StudentManager implements Serializable {
 		// Creates the new student
 		Student newStudent = new Student(firstName, middleName, lastName, suffix, email, birthday, sex, password, degree);
 		students.add(newStudent);
-		StudentManager.save(); // Saves the student after signing-up
+		save(); // Saves the student after signing-up
 
 		return "SUCCESS";
 	}

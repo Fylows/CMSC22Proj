@@ -11,7 +11,6 @@ package main;
 
 import backend.CourseManager;
 import backend.RegSystem;
-import backend.Student;
 import frontend.LoadingScreen;
 import javafx.application.Application;
 import javafx.scene.image.Image;

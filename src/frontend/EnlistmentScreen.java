@@ -36,6 +36,7 @@ public class EnlistmentScreen extends VBox {
 	private StackPane root;
 	private ObservableList<OfferedCourse> studentCourses = FXCollections.observableList(student.getEnrolledCourses());
 	 
+	@SuppressWarnings("exports")
 	public EnlistmentScreen(StackPane parentStack) {
 		this.root = parentStack;
 		
@@ -415,6 +416,7 @@ public class EnlistmentScreen extends VBox {
 	    return vbox;
 	}
 	
+	@SuppressWarnings("exports")
 	public void showToast(StackPane root, String message, boolean success) {
 	    Label toast = new Label(message);
 	    toast.toFront();
