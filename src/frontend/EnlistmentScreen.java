@@ -241,7 +241,7 @@ public class EnlistmentScreen extends VBox {
 	            lectureBox.setPrefWidth(200); // Consistent column width
 	            lectureBox.setMinWidth(200);
 	            lectureBox.getChildren().add(new Label("Lecture: " + lecture.getCourseCode() + " - " + lecture.getSection()));
-	            lectureBox.getChildren().add(new Label("Schedule: " + lecture.getTimes()));
+	            lectureBox.getChildren().add(new Label("Schedule: " + lecture.getTimes() + " | " + lecture.getDays()));
 
 	            // Lab details if exists
 	            VBox labBox = new VBox(3);
@@ -249,7 +249,7 @@ public class EnlistmentScreen extends VBox {
 	            labBox.setMinWidth(200);
 	            if (course.getLec() != null) {
 	                labBox.getChildren().add(new Label("Lab: " + course.getCourseCode() + " - " + course.getSection()));
-	                labBox.getChildren().add(new Label("Schedule: " + course.getTimes()));
+	                labBox.getChildren().add(new Label("Schedule: " + course.getTimes() + " | " + course.getDays()));
 	            } else {
 	                labBox.getChildren().add(new Label("No associated lab"));
 	            }
@@ -355,7 +355,7 @@ public class EnlistmentScreen extends VBox {
 	            VBox lectureDetails = new VBox(5,
             		new Label("Course Code: " + course.getLec().getCourseCode()),
                     new Label("Section: " + course.getLec().getSection()),
-                    new Label("Schedule: " + course.getLec().getTimes()),
+                    new Label("Schedule: " + course.getLec().getTimes() + " | " + course.getLec().getDays()),
                     new Label("Room: " + course.getLec().getRoom())
 	            );
 	            TitledPane lecturePane = new TitledPane("Lecture", lectureDetails);
@@ -367,7 +367,7 @@ public class EnlistmentScreen extends VBox {
 	                labDetails = new VBox(5,
 	                    new Label("Course Code: " + course.getCourseCode()),
 	                    new Label("Section: " + course.getSection()),
-	                    new Label("Schedule: " + course.getTimes()),
+	                    new Label("Schedule: " + course.getTimes() + " | " + course.getDays()),
 	                    new Label("Room: " + course.getLec().getRoom())
 
 	                );

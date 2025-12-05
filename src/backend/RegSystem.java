@@ -118,22 +118,29 @@ public class RegSystem {
     	                   && !c.getSection().equals(course.getSection()));
     	
     	if (alreadyEnrolled) {
-    		System.out.println("Enrollment failed: already enrolled in another section of " + course.getCourseCode());
     		return 1;
     	}
     	
     	else if (!student.getDegree().equalsIgnoreCase(course.getCourse().getType())) {
-    		System.out.println("Enrollment failed: not your degree"); 
     		return 2; 
     	}
     	
     	else if (!hasPrerequisites(student, course)) { 
     		System.out.println("Enrollment failed: prerequisites not met."); 
+    		System.out.println("Pre requisites of course: "); 
+
+    		for (String c : course.getCourse().getPrerequisites()) {
+        		System.out.println(c); 
+    		}
+    		System.out.println("Finished courses: "); 
+    		for (Course c : student.getCompletedCourses()) {
+        		System.out.println(c.getCourseCode()); 
+    		}
+    		
     		return 3; 
     	} 
 
     	else if (hasTimeConflict(student, course)) { 
-    		System.out.println("Enrollment failed: schedule conflict."); 
     		return 4; 
     	} 
     	

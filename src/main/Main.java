@@ -31,9 +31,6 @@ public class Main extends Application {
 		public static void main(String[] args) {
 			CourseManager.loadFromCSV();
 			RegSystem system = new RegSystem();
-			for (OfferedCourse oc : RegSystem.getAllCourses()) {
-				System.out.println(oc.getCourseCode());
-			}
 			launch(args); // Starts the JavaFX application
 		}
 	}
