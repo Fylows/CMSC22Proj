@@ -72,13 +72,14 @@ public class DashboardScreen extends StackPane {
 
 		HBox progressCard = createProgressCard(student);
 		HBox takenCard = createStatCard(completedUnits, "Units Taken (out of " + requiredUnits + ")!");
-		HBox allowableCard = createStatCard(21, "Allowable Units");
+		HBox allowableCard = createAllowableCard(21, "Allowable Units");
 
 		row.getChildren().addAll(progressCard, takenCard, allowableCard);
 
 		return row;
 	}
 	
+	// Leftmost box
 	private HBox createProgressCard(Student student) {
 	    int completed = student.getTotalCompletedUnits();
 	    int required = CourseManager.getTotalRequiredUnits(student.getDegree());
@@ -94,8 +95,11 @@ public class DashboardScreen extends StackPane {
 
 	    Label subLabel = new Label("of units completed");
 	    subLabel.getStyleClass().add("stat-label");
+	    
+	    Label subLabel1 = new Label ("(core major courses)");
+//	    subLabel.getStyleClass().add("stat-label");
 
-	    VBox textBox = new VBox(5, percentLabel, subLabel);
+	    VBox textBox = new VBox(5, percentLabel, subLabel, subLabel1);
 	    textBox.setAlignment(Pos.CENTER_LEFT);
 
 	    // 
@@ -107,15 +111,42 @@ public class DashboardScreen extends StackPane {
 	    return card;
 	}
 	
+	// Middle Box
 	private HBox createStatCard(int value, String label) {
 		HBox card = new HBox();
 		card.getStyleClass().add("dashboard-stat-card");
-
-		Label valueLabel = new Label(String.valueOf(value));
-		valueLabel.getStyleClass().add("stat-value");
-
+		
 		Label textLabel = new Label(label);
 		textLabel.getStyleClass().add("stat-label");
+		
+		Label subLabel1 = new Label ("(core major courses)");
+//	    subLabel.getStyleClass().add("stat-label");
+
+	    VBox textBox = new VBox(5, textLabel, subLabel1);
+	    textBox.setAlignment(Pos.CENTER_LEFT);
+		
+		Label valueLabel = new Label(String.valueOf(value));
+		valueLabel.getStyleClass().add("stat-value");
+		
+		ImageView separator = new ImageView(new Image(getClass().getResourceAsStream("/resources/line.png"))); // Hamburger Icon
+		separator.setFitWidth(50);
+		separator.setFitHeight(50);
+
+		card.getChildren().addAll(textBox, separator, valueLabel);
+
+		return card;
+	}
+	
+	// Rightmost Box
+	private HBox createAllowableCard(int value, String label) {
+		HBox card = new HBox();
+		card.getStyleClass().add("dashboard-stat-card");
+		
+		Label textLabel = new Label(label);
+		textLabel.getStyleClass().add("stat-label");
+		
+		Label valueLabel = new Label(String.valueOf(value));
+		valueLabel.getStyleClass().add("stat-value");
 		
 		ImageView separator = new ImageView(new Image(getClass().getResourceAsStream("/resources/line.png"))); // Hamburger Icon
 		separator.setFitWidth(50);
@@ -125,6 +156,8 @@ public class DashboardScreen extends StackPane {
 
 		return card;
 	}
+	
+	
 	
 	// To create donut chart
 		private StackPane createDonutChart(Student student) {
