@@ -10,7 +10,6 @@ import java.util.Map;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-//import backend.CourseManager.Degree;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -25,10 +24,10 @@ public class RegSystem {
     private final static Map<LocalTime, Integer> timeMap = new LinkedHashMap<>();
    
     private final static Map<String, List<Integer>> dayMap = Map.ofEntries(
-        	Map.entry("mon", List.of(0)), Map.entry("tues", List.of(1)),
-        	Map.entry("wed", List.of(2)), Map.entry("thurs", List.of(3)),
-        	Map.entry("fri", List.of(4)), Map.entry("mw", List.of(0,2)),
-        	Map.entry("tth", List.of(1,3)), Map.entry("wf", List.of(2,4))
+        	Map.entry("mon", List.of(1)), Map.entry("tues", List.of(2)),
+        	Map.entry("wed", List.of(3)), Map.entry("thurs", List.of(4)),
+        	Map.entry("fri", List.of(5)), Map.entry("mw", List.of(1,3)),
+        	Map.entry("tth", List.of(2,4)), Map.entry("wf", List.of(3,5))
 	);
     
     //Constructor
@@ -204,8 +203,6 @@ public class RegSystem {
         return meetsPrereqs; 
     }
     
-    
-
     // Compares two courses and checks if they have overlapping time frames
     private static boolean hasTimeConflict(Student student, OfferedCourse courseToEnroll) {
         for (OfferedCourse enrolledCourse : student.getEnrolledCourses()) {
@@ -243,7 +240,8 @@ public class RegSystem {
         return false;
     }
     
-    public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
+    @SuppressWarnings("exports")
+	public static void fillTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
         int endRow = timeMap.get(courseToEnroll.getEndTime());
 
@@ -293,7 +291,8 @@ public class RegSystem {
         }
     }
 
-    public static void resetTime(GridPane timeTable, OfferedCourse courseToEnroll) {
+    @SuppressWarnings("exports")
+	public static void resetTime(GridPane timeTable, OfferedCourse courseToEnroll) {
         int startRow = timeMap.get(courseToEnroll.getStartTime());
         int endRow = timeMap.get(courseToEnroll.getEndTime());
         List<Integer> targetCols = dayMap.get(courseToEnroll.getDay().toLowerCase());
