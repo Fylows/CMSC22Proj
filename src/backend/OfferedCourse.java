@@ -113,14 +113,5 @@ public class OfferedCourse implements Serializable {
     	
     	if (s1 == null || e1 == null || s2 == null || e2 == null) return false;
     	return s1.isBefore(e2) && s2.isBefore(e1);
-    }
-
-    
-    // View State
-    public void viewState() {
-        System.out.printf("%s | Section: %s | Days: %s | Time: %s | Room: %s%n",
-                baseCourse.getCourseCode(), section, days, times, room);
-    }
-
-	
+    }	
 }
