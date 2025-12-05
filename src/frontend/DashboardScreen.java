@@ -92,7 +92,6 @@ public class DashboardScreen extends StackPane {
 	    // Donut chart
 	    StackPane donutChart = createDonutChart(student);
 
-
 	    // Text beside donut chart
 	    Label percentLabel = new Label(percent + "%");
 	    percentLabel.getStyleClass().add("stat-value");
@@ -101,7 +100,6 @@ public class DashboardScreen extends StackPane {
 	    subLabel.getStyleClass().add("stat-label");
 	    
 	    Label subLabel1 = new Label ("(core major courses)");
-//	    subLabel.getStyleClass().add("stat-label");
 
 	    VBox textBox = new VBox(5, percentLabel, subLabel, subLabel1);
 	    textBox.setAlignment(Pos.CENTER_LEFT);
@@ -124,7 +122,6 @@ public class DashboardScreen extends StackPane {
 		textLabel.getStyleClass().add("stat-label");
 		
 		Label subLabel1 = new Label ("(core major courses)");
-//	    subLabel.getStyleClass().add("stat-label");
 
 	    VBox textBox = new VBox(5, textLabel, subLabel1);
 	    textBox.setAlignment(Pos.CENTER_LEFT);
@@ -162,7 +159,6 @@ public class DashboardScreen extends StackPane {
 	}
 	
 	private VBox createAnnouncement() {
-		
 		VBox announcementBox = new VBox();
 		announcementBox.getStyleClass().add("dashboard-welcome-card");
 		
@@ -179,6 +175,7 @@ public class DashboardScreen extends StackPane {
 		VBox announcementContent = new VBox();
 		announcementContent.getChildren().addAll(header, announcementArea);
 		announcementContent.getStyleClass().add("dashboard-welcome-card");
+		announcementContent.setAlignment(Pos.TOP_LEFT);
 		
 		return announcementContent;	
 	}
