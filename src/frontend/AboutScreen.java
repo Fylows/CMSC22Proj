@@ -84,7 +84,7 @@ public class AboutScreen extends BorderPane {
 
         // Navigation image helper
 		ImageView navImg = new ImageView(new Image(getClass().getResourceAsStream("/resources/navigation.png")));
-		navImg.setFitWidth(800);      // bigger image
+		navImg.setFitWidth(800);
 		navImg.setPreserveRatio(true);
 
 		Text desc = new Text(
@@ -108,11 +108,21 @@ public class AboutScreen extends BorderPane {
 	private VBox createHowToUseSection() {
 		VBox box = new VBox(10);
 		box.getStyleClass().add("about-section");
+		box.setAlignment(Pos.TOP_CENTER);
 
 		Label header = new Label("How to Use the Enrollment System");
 		header.getStyleClass().add("section-header");
 		header.setAlignment(Pos.CENTER);
 		header.setMaxWidth(Double.MAX_VALUE);
+		
+		// Enlistment image helper
+		ImageView enlistImg1 = new ImageView(new Image(getClass().getResourceAsStream("/resources/enlistment1.png")));
+		enlistImg1.setFitWidth(800);
+		enlistImg1.setPreserveRatio(true);
+
+		ImageView enlistImg2 = new ImageView(new Image(getClass().getResourceAsStream("/resources/enlistment2.png")));
+		enlistImg2.setFitWidth(800);
+		enlistImg2.setPreserveRatio(true);		
 
 		Text steps = new Text(
 			"1. Browse available courses.\n" +
@@ -123,8 +133,12 @@ public class AboutScreen extends BorderPane {
 			"6. Submit — the system validates everything.\n"
 		);
 		steps.getStyleClass().add("section-text");
+		
+		// Wrap steps in an HBox so it aligns left even when the section is centered
+		HBox stepsWrapper = new HBox(steps);
+		stepsWrapper.setAlignment(Pos.CENTER_LEFT);
 
-		box.getChildren().addAll(header, steps);
+		box.getChildren().addAll(header, enlistImg1, enlistImg2, stepsWrapper);
 		
 		return box;
 	}

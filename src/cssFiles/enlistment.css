@@ -15,7 +15,7 @@
 /* -------------- ROOT CONTAINER ---------------- */
 .enlistment-root {
     -fx-background-color: linear-gradient(to bottom, #ffeef3, #ffdae6);
-    -fx-padding: 40 20 20 20;
+    -fx-padding: 75 20 20 20;
 }
 
 /* -------------- HEADERS ---------------- */
