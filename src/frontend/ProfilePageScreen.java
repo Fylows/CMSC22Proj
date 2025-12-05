@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
 public class ProfilePageScreen extends HBox{
@@ -35,11 +36,16 @@ public class ProfilePageScreen extends HBox{
         profile.setPrefWidth(300);
         profile.setStyle("-fx-background-color: #ffe5ec; -fx-background-radius: 25;");
 
-        // PFP Placeholder
-        Region pfpPlaceholder = new Region();
-        pfpPlaceholder.setPrefSize(150, 150);
-        pfpPlaceholder.setStyle("-fx-background-color: white; -fx-background-radius: 75;");
+        // PFP 
+		ImageView profilePic = new ImageView(new Image(getClass().getResourceAsStream("/resources/defaultPFP.png")));
+		profilePic.setFitHeight(200);
+		profilePic.setFitWidth(200);
+		profilePic.setPreserveRatio(true);
 
+		// Correct clipping
+		Circle clip = new Circle(100, 100, 100);
+		profilePic.setClip(clip);
+		
         Label degree = new Label(student.getDegree());
         degree.setFont(Font.font(20));
 
@@ -61,7 +67,7 @@ public class ProfilePageScreen extends HBox{
     		grades.setStyle("-fx-background-color: #ffe5ec; -fx-background-radius: 8;"));
 
         
-        profile.getChildren().addAll(pfpPlaceholder, degree, infoBox, contactInfo, grades);
+        profile.getChildren().addAll(profilePic, degree, infoBox, contactInfo, grades);
 
         return profile;
     }
