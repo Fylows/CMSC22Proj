@@ -102,7 +102,6 @@ public class EnlistmentScreen extends VBox {
 			}
 		}
 		
-		
 		VBox enlistments = new VBox();
 		enlistments.getStyleClass().add("active-enlistments");
 		enlistments.setPadding(new Insets(20));
@@ -135,7 +134,7 @@ public class EnlistmentScreen extends VBox {
 
 		HBox enlistmentDetails = new HBox(20);
 		for (int i = 0; i < 3; i++) {
-		    Rectangle rect = new Rectangle(100, 80, colors[i]);
+		    Rectangle rect = new Rectangle(120, 60, colors[i]);
 		    rect.getStyleClass().add("legend-rect");
 
 		    // Create label
@@ -191,6 +190,7 @@ public class EnlistmentScreen extends VBox {
 	    ComboBox<Integer> itemsPerPageDropdown = new ComboBox<>();
 	    itemsPerPageDropdown.getItems().addAll(5, 10, 15, 20);
 	    itemsPerPageDropdown.setValue(itemsPerPage[0]);
+	    itemsPerPageDropdown.getStyleClass().add("items-dropdown");
 
 	    filterRow.getChildren().addAll(new Label("Filter:"), searchField, new Label("Items per page:"), itemsPerPageDropdown);
 	    container.getChildren().add(filterRow);
@@ -351,7 +351,7 @@ public class EnlistmentScreen extends VBox {
                     new Label("Room: " + course.getLec().getRoom())
 	            );
 	            TitledPane lecturePane = new TitledPane("Lecture", lectureDetails);
-	            lecturePane.setExpanded(false);
+	            lecturePane.setExpanded(true);
 
 	            // Lab details pane
 	            VBox labDetails;
@@ -367,7 +367,7 @@ public class EnlistmentScreen extends VBox {
 	                labDetails = new VBox(5, new Label("No associated lab"));
 	            }
 	            TitledPane labPane = new TitledPane("Lab", labDetails);
-	            labPane.setExpanded(false);
+	            labPane.setExpanded(true);
 
 	            // Action buttons
 	            Button deleteBtn = new Button("Delete");
@@ -393,9 +393,10 @@ public class EnlistmentScreen extends VBox {
 	            });
 
 	            Button enlistBtn = new Button("Enlist");
+	            enlistBtn.getStyleClass().add("enlist-btn");
 	            enlistBtn.setDisable(true); // You can enable logic later
 
-	            HBox actionBox = new HBox(10, deleteBtn, enlistBtn);
+	            VBox actionBox = new VBox(10, deleteBtn, enlistBtn);
 	            actionBox.setAlignment(Pos.CENTER_LEFT);
 
 	            // Wrap everything in a grid-like HBox
@@ -406,7 +407,7 @@ public class EnlistmentScreen extends VBox {
 	    };
 
 	    // Listener to update whenever studentCourses changes
-	    studentCourses.addListener((javafx.collections.ListChangeListener<OfferedCourse>) change -> refreshGrid[0].run());
+	    studentCourses.addListener((ListChangeListener<OfferedCourse>) change -> refreshGrid[0].run());
 
 	    // Initial build
 	    refreshGrid[0].run();
@@ -442,8 +443,4 @@ public class EnlistmentScreen extends VBox {
 	    fade.setOnFinished(e -> root.getChildren().remove(toast));
 	    fade.play();
 	}
-
-
-
-
 }

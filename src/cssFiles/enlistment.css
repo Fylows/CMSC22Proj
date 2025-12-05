@@ -114,26 +114,41 @@
     -fx-font-size: 14px;
 }
 
-.pagination-button {
-    -fx-background-color: #ff9ac3;
-    -fx-text-fill: white;
-    -fx-background-radius: 10;
+.items-dropdown {
     -fx-font-family: "Inter";
+    -fx-font-size: 14px;
+}
+
+.pagination-button {
+    -fx-background-color: #ff6b81;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-font-family: "Inter";
+	-fx-font-size: 14px;
 }
 
 /* Add & Delete buttons */
 .add-btn {
-    -fx-background-color: #ff8bbd;
+    -fx-background-color: #ff6b81;
     -fx-text-fill: white;
     -fx-background-radius: 12;
     -fx-font-family: "Inter";
+	-fx-font-size: 14px;
 }
 .delete-btn {
     -fx-background-color: #ff6b81;
     -fx-text-fill: white;
     -fx-background-radius: 12;
     -fx-font-family: "Inter";
+	-fx-font-size: 14px;
 }
+
+.enlist-btn {
+    -fx-background-radius: 12;
+    -fx-font-family: "Inter";
+	-fx-font-size: 14px;
+}
+
 
 /* Toasts */
 .success-toast {
