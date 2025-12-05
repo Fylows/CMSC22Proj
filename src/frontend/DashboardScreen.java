@@ -15,7 +15,7 @@ public class DashboardScreen extends StackPane {
 	private final Student student;
 	private final Pane petalPane;
 	private final VBox content;
-    
+	
 	private final ScreenChangeListener listener;
 
 	// Constructor
@@ -36,11 +36,12 @@ public class DashboardScreen extends StackPane {
 
 		VBox welcomeCard = createWelcomeCard(student); // Welcome Card
 		HBox statsRow = createStatsRow(student); // Stats Row
+		VBox announcementCard = createAnnouncement();
 		
         HBox.setHgrow(welcomeCard, Priority.ALWAYS); 
         HBox.setHgrow(statsRow, Priority.ALWAYS);
 
-		content.getChildren().addAll(welcomeCard, statsRow);
+		content.getChildren().addAll(welcomeCard, statsRow, announcementCard);
 		getChildren().addAll(petalPane, content);
 	}
 
@@ -75,7 +76,7 @@ public class DashboardScreen extends StackPane {
 
 		HBox progressCard = createProgressCard(student);
 		HBox takenCard = createStatCard(completedUnits, "Units Taken (out of " + requiredUnits + ")");
-		HBox allowableCard = createAllowableCard(21, "Allowable Units");
+		HBox allowableCard = createAllowableCard(20, "Allowable Units");
 
 		row.getChildren().addAll(progressCard, takenCard, allowableCard);
 
@@ -160,45 +161,65 @@ public class DashboardScreen extends StackPane {
 		return card;
 	}
 	
-	
+	private VBox createAnnouncement() {
+		
+		VBox announcementBox = new VBox();
+		announcementBox.getStyleClass().add("dashboard-welcome-card");
+		
+		Label header = new Label("Announcements");
+		header.getStyleClass().add("dashboard-announcement-header");
+		
+		Label announcement = new Label("No new announcements at the moment!");
+		announcement.getStyleClass().add("dashboard-announcement-content");
+		
+		VBox announcementArea = new VBox();
+		announcementArea.getChildren().addAll(announcement);
+		announcementArea.getStyleClass().add("dashboard-announcement");
+		
+		VBox announcementContent = new VBox();
+		announcementContent.getChildren().addAll(header, announcementArea);
+		announcementContent.getStyleClass().add("dashboard-welcome-card");
+		
+		return announcementContent;	
+	}
 	
 	// To create donut chart
-		private StackPane createDonutChart(Student student) {
-			int completedUnits = student.getTotalCompletedUnits();
-			int requiredUnits = CourseManager.getTotalRequiredUnits(student.getDegree());
-			int remainingUnits = requiredUnits - completedUnits;
-			
-			PieChart pieChart = new PieChart();
-			PieChart.Data completedData = new PieChart.Data("Completed", completedUnits);
-			PieChart.Data remainingData = new PieChart.Data("Remaining", remainingUnits);
-			
-			pieChart.getData().addAll(completedData, remainingData);
-			
-			// Apply custom colors per chart segment
-			String completedColor = "#6f7df4";
-		    String remainingColor = "#b0d1f9";
-		    
-		    // Removing white border
-		    String borderRemovalStyle = "-fx-border-color: #f7c6d2; -fx-stroke: #f7c6d2; -fx-stroke-width: 0;";
+	private StackPane createDonutChart(Student student) {
+		int completedUnits = student.getTotalCompletedUnits();
+		int requiredUnits = CourseManager.getTotalRequiredUnits(student.getDegree());
+		int remainingUnits = requiredUnits - completedUnits;
+		
+		PieChart pieChart = new PieChart();
+		PieChart.Data completedData = new PieChart.Data("Completed", completedUnits);
+		PieChart.Data remainingData = new PieChart.Data("Remaining", remainingUnits);
+		
+		pieChart.getData().addAll(completedData, remainingData);
+		
+		// Apply custom colors per chart segment
+		String completedColor = "#6f7df4";
+	    String remainingColor = "#b0d1f9";
+	    
+	    // Removing white border
+	    String borderRemovalStyle = "-fx-border-color: #f7c6d2; -fx-stroke: #f7c6d2; -fx-stroke-width: 0;";
 
-		    completedData.getNode().setStyle("-fx-pie-color: " + completedColor + "; " + borderRemovalStyle); 
-		    remainingData.getNode().setStyle("-fx-pie-color: " + remainingColor + "; " + borderRemovalStyle);
-			
+	    completedData.getNode().setStyle("-fx-pie-color: " + completedColor + "; " + borderRemovalStyle); 
+	    remainingData.getNode().setStyle("-fx-pie-color: " + remainingColor + "; " + borderRemovalStyle);
+		
 
-			pieChart.setLabelsVisible(false);   // removes text on slices
-			pieChart.setLegendVisible(false); 	// removes legends
-			
-			// Creates the chart hole
-			Circle innerCircle = new Circle();
-	        innerCircle.setRadius(30); 
-	        innerCircle.setFill(Color.web("#f7c6d2"));
-			
-			StackPane donutChart = new StackPane(pieChart, innerCircle); // Creates the donut chart
-		    donutChart.setPrefSize(120, 120); // Fixed size for chart
-			donutChart.setAlignment(Pos.CENTER);
-			 	
-			return donutChart;
-		}
+		pieChart.setLabelsVisible(false);   // removes text on slices
+		pieChart.setLegendVisible(false); 	// removes legends
+		
+		// Creates the chart hole
+		Circle innerCircle = new Circle();
+        innerCircle.setRadius(30); 
+        innerCircle.setFill(Color.web("#f7c6d2"));
+		
+		StackPane donutChart = new StackPane(pieChart, innerCircle); // Creates the donut chart
+	    donutChart.setPrefSize(120, 120); // Fixed size for chart
+		donutChart.setAlignment(Pos.CENTER);
+		 	
+		return donutChart;
+	}
 
 	// Getters
 	public Student getStudent() {

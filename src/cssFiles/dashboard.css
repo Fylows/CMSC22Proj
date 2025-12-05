@@ -62,6 +62,25 @@
 	-fx-alignment: center;
 }
 
+/* Announcement */
+.dashboard-announcement {
+	-fx-background-color: #fef6f8;
+	-fx-background-radius: 20;
+	
+}
+
+.dashboard-announcement-content{
+	-fx-spacing: 5 15 5 15;
+	-fx-font-family: "Inter";
+	-fx-font-size: 15;
+}
+
+.dashboard-announcement-header{
+	-fx-spacing: 5 15 5 15;
+	-fx-font-family: "Poppins";
+	-fx-font-size: 20;
+}
+
 /* Stat value (big number) */
 .stat-value {
 	-fx-font-family: "Poppins";
